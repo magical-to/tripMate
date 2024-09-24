@@ -1,0 +1,58 @@
+/* 상단바 전체 스타일 */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* padding: 10px 50px; */
+    background-color: #fff;
+    border-bottom: 1px solid #bfbfbf;
+    /* position: fixed; */
+    width: 100%;
+    top: 0;
+    left: 0;
+    /* z-index: 1000; */
+  }
+  
+  /* 왼쪽 로고 및 텍스트 */
+  .header-left {
+    display: flex;
+    align-items: center;
+  }
+  
+  .logo {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+  }
+  
+  .header-left h1 {
+    font-size: 24px;
+    color: #f4b6e6;
+    margin: 0;
+  }
+  
+  /* 오른쪽 사용자 아이콘과 로그인 버튼 */
+  .header-right {
+    display: flex;
+    align-items: center;
+  }
+  
+  .user-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+  }
+  
+  /* 로그인 버튼 스타일 */
+  .login-button {
+    background-color: #fcd4f0;
+    /* border: none; */
+    color: #000;
+    font-size: 16px;
+    cursor: pointer;
+    /* position: absolute; */
+    top: 20px;
+    right: 50px;
+    /* transition: color 0.3s ease; */
+  }
+
