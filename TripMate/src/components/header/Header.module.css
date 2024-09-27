@@ -1,0 +1,57 @@
+.header {
+  width: 100%;
+  height: 100px;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid lightgray;
+}
+
+.header_logo {
+  width: auto;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.header_logo_image {
+  width: 100px;
+  height: 100px;
+}
+
+.header_logo_text {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  font-size: 2rem;
+  color: pink;
+}
+
+.header_login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  gap: 1rem;
+}
+
+.header_login_text {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  font-size: 1.8rem;
+  color: gray;
+}
+
+.header_mytrip_text {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  font-size: 1.8rem;
+  color: pink;
+}
+
+.header_login_image {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
