@@ -1,0 +1,29 @@
+.gotogether-container {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* 좀 더 강조된 그림자 */
+    padding: 20px;
+    width: 90%; /* 화면에 맞게 유동적인 너비 */
+    max-width: 400px; /* 최대 너비 설정 */
+    margin: 0 auto; /* 중앙 정렬 */
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.invite-button {
+    display: block;
+    width: 100%;
+    padding: 12px; /* 여유로운 패딩 */
+    background-color: #fcd4f0; /* 더 선명한 핑크색 */
+    color: #fff;
+    border-radius: 6px; /* 둥근 모서리 */
+    cursor: pointer;
+    font-size: 16px;
+    text-align: center;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* 부드러운 애니메이션 */
+}
+
+.invite-button:hover {
+    background-color: #fcd4f0; /* 호버 시 색상 변화 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 호버 시 그림자 강조 */
+}

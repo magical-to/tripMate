@@ -1,0 +1,46 @@
+/* 홈 페이지 전체 스타일 */
+.home-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* height: 100vh; */
+    padding: 0 50px;
+    background-color: white;
+}
+
+/* 왼쪽 텍스트와 버튼 영역 */
+.home-left {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.home-left h1 {
+    font-size: 36px;
+    font-weight: bold;
+    color: #000;
+    margin-bottom: 20px;
+}
+
+.home-left p {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+/* 이미지 지도 부분 */
+.home-right img {
+    width: 600px;
+    height: auto;
+    border-radius: 10px;
+}
+
+.home-button {
+    background-color: #fcd4f0; /* 배경 색상 */
+    color: black;              /* 글자 색상 */
+    border-radius: 10px;       /* 둥근 모서리 */
+    padding: 10px 20px;        /* 안쪽 여백 */
+    font-size: 16px;           /* 글자 크기 */
+    cursor: pointer;           /* 커서 모양 */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* 부드러운 색상 변화와 크기 변화 */
+  }
