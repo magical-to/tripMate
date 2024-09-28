@@ -19,8 +19,8 @@ const Login = () => {
       navigate('/plan'); // plan 페이지로 리다이렉트
     } 
     catch (error) {
-        console.error('Login error:', error);
-        // 로그인 실패 후의 처리 (예: 에러 메시지 표시)
+      console.error('Login error:', error);
+      // 로그인 실패 후의 처리 (예: 에러 메시지 표시)
     }
   };
 
@@ -36,7 +36,6 @@ const Login = () => {
         <div className="login-form">
           <Form
             id="user_id"
-            // label="아이디"
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
@@ -46,7 +45,6 @@ const Login = () => {
   
           <Form
             id="password"
-            // label="비밀번호"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -65,12 +63,12 @@ const Login = () => {
           <Button
             onClick={goSignup}
             text="회원가입"
-            className='go-signup-button'
+            className="go-signup-button"
           />
         </div>
       </div>
     </div>
-  );  
+  );
 };
 
 export default Login;

@@ -30,7 +30,7 @@ body, html {
   }
   
   /* Form 컴포넌트 스타일 */
-  .signup-username, .signup-password, .signup-confirm-password {
+  .signup-username, .signup-password, .signup-confirm-password, .user_email {
     margin-bottom: 15px;
   }
   

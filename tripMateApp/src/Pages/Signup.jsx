@@ -10,6 +10,7 @@ const SignUp = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [email, setEmail] = useState('');  
   const navigate = useNavigate();
 
   // API 관련 함수
@@ -66,6 +67,14 @@ const SignUp = () => {
             onChange={(e) => setConfirmPassword(e.target.value)}
             placeholder="비밀번호 확인"
             className="signup-confirm-password"
+          />
+          <Form
+            id="user_email"
+            type="email"  // 이메일 타입으로 변경
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="이메일"
+            className="signup-email"
           />
           <Button
             onClick={handleSignUp}
