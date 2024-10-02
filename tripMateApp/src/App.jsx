@@ -7,6 +7,8 @@ import SignUp from './Pages/SignUp';
 import Plan from './Pages/Plan';
 import GoTogether from './Pages/GoTogether';
 import GoAlone from './Pages/GoAlone';
+// import Ham from './Pages/ham';
+import Chat from './Pages/Chat';
 
 const App = () => {
   return (
@@ -18,6 +20,8 @@ const App = () => {
         <Route path="/plan" element={<Plan />} />
         <Route path="/gotogether" element={<GoTogether />} />
         <Route path="/goalone" element={<GoAlone />} />
+        {/* <Route path="/ham" element={<Ham />} /> */}
+        <Route path="/chat" element={<Chat />} />
       </Routes>
     </BrowserRouter>
   );

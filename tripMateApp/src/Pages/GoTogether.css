@@ -1,29 +1,102 @@
+/* 전체 컨테이너 */
 .gotogether-container {
     background-color: #fff;
     border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* 좀 더 강조된 그림자 */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     padding: 20px;
-    width: 90%; /* 화면에 맞게 유동적인 너비 */
-    max-width: 400px; /* 최대 너비 설정 */
-    margin: 0 auto; /* 중앙 정렬 */
+    width: 90%;
+    max-width: 600px; /* 중앙에서 조금 더 넓게 */
+    margin: 0 auto;
     box-sizing: border-box;
     text-align: center;
+    margin-top: 20px;
+}
+
+/* 친구 아이디 입력 폼과 초대 버튼 수평 배치 */
+.friend-invite-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px; /* 입력 폼과 버튼 사이의 간격 */
+    margin-top: 20px;
+}
+
+.friendid-form {
+    width: 100%;
+    flex: 1; /* 입력 폼이 버튼보다 넓게 차지 */
+    padding: 10px; /* 입력 필드 내부 패딩 */
+    font-size: 16px;
+    border: none;
 }
 
 .invite-button {
-    display: block;
-    width: 100%;
-    padding: 12px; /* 여유로운 패딩 */
-    background-color: #fcd4f0; /* 더 선명한 핑크색 */
+    padding: 10px 20px; /* 버튼 크기 조정 */
+    background-color: #fcd4f0;
     color: #fff;
-    border-radius: 6px; /* 둥근 모서리 */
+    border-radius: 6px;
     cursor: pointer;
     font-size: 16px;
-    text-align: center;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* 부드러운 애니메이션 */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .invite-button:hover {
-    background-color: #fcd4f0; /* 호버 시 색상 변화 */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 호버 시 그림자 강조 */
+    background-color: #ffb6c1;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 호버 시 그림자 효과 */
 }
+
+/* 초대한 친구 목록 스타일 */
+.invited-friends-list {
+    margin-top: 20px;
+    border: 2px solid #f4f4f4;
+    border-radius: 10px;
+    padding: 15px;
+    text-align: left; /* 목록을 왼쪽 정렬 */
+
+
+}
+
+.invited-friends-list h2 {
+    margin-bottom: 30px;
+    color: #fcd4f0;
+    border-bottom: 1px solid #eee;
+}
+
+.invited-friends-list ul {
+    list-style-type: none; /* 기본 목록 점 제거 */
+    padding: 0;
+}
+
+.invited-friends-list p {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.invited-friends-list p:last-child {
+    border-bottom: none; /* 마지막 친구 아이템에 경계선 제거 */
+}
+
+/* 채팅방 이동 버튼 */
+.go-chat-button {
+    display: block;
+    margin: 20px auto; /* 중앙에 배치 */
+    padding: 12px 20px;
+    background-color: #fcd4f0;
+    color: #fff;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.go-chat-button:hover {
+    background-color: #ffedf0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.error-message {
+    color: red;
+    margin-top: 10px;
+}
+
