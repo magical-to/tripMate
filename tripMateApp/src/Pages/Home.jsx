@@ -31,21 +31,14 @@ const Home = () => {
           <h1>여행 준비의 모든 것, TripMate와 함께!</h1>
           <p>간편하게 여행 계획을 세워보세요.</p>
           <div className="button-container">
-            {/* Button 컴포넌트로 PLAN! 버튼 구현, 클릭 시 handlePlanClick 호출 */}
             <Button 
               text="PLAN!!" 
               // onClick={handlePlanClick} 
               onClick={() => navigate('/go')}
             />
-            {/* Button 컴포넌트로 로그인 버튼 구현 */}
-            <Button 
-              text="로그인" 
-              onClick={() => navigate('/login')} 
-            />
           </div>
         </div>
         <div className="home-right">
-          {/* 여행 이미지를 넣을 수 있는 공간 */}
           <img src="지도 이미지 경로" alt="Map" />
         </div>
       </div>

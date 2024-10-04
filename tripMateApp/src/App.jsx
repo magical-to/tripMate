@@ -4,10 +4,10 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './Pages/Home';
 import Login from './Pages/Login';
 import SignUp from './Pages/SignUp';
-import Plan from './Pages/Plan';
+import Go from './Pages/Go';
 import GoTogether from './Pages/GoTogether';
-import GoAlone from './Pages/GoAlone';
-// import Ham from './Pages/ham';
+import GoAlone from './Pages/Plan';
+import Plan from './Pages/Plan';
 import Chat from './Pages/Chat';
 
 const App = () => {
@@ -17,9 +17,9 @@ const App = () => {
         <Route path="/" element={<Home />} /> 
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
-        <Route path="/plan" element={<Plan />} />
+        <Route path="/go" element={<Go />} />
         <Route path="/gotogether" element={<GoTogether />} />
-        <Route path="/goalone" element={<GoAlone />} />
+        <Route path="/plan" element={<Plan />} />
         {/* <Route path="/ham" element={<Ham />} /> */}
         <Route path="/chat" element={<Chat />} />
       </Routes>

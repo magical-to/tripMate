@@ -42,9 +42,25 @@
     height: 24px;
     margin-right: 10px;
   }
+
+  .user-id {
+    border: 1px solid black;
+  }
   
   /* 로그인 버튼 스타일 */
   .login-button {
+    background-color: #fcd4f0;
+    /* border: none; */
+    color: #000;
+    font-size: 16px;
+    cursor: pointer;
+    /* position: absolute; */
+    top: 20px;
+    right: 50px;
+    /* transition: color 0.3s ease; */
+  }
+
+  .logout-button {
     background-color: #fcd4f0;
     /* border: none; */
     color: #000;

@@ -7,19 +7,19 @@ import Header from '../Components/Header';
 import './Login.css';
 
 const Login = () => {
-  const [username, setUsername] = useState('');
+  const [userid, setUserid] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
   // API 관련 함수
   const handleLogin = async () => {
     try {
-      const data = await login(username, password);
-      console.log('Login successful:', data);
-      navigate('/plan'); // plan 페이지로 리다이렉트
+      const data = await login(userid, password);
+      console.log('로그인 성공: ', data);
+      navigate('/'); // (after login) main 페이지로 리다이렉트
     } 
     catch (error) {
-      console.error('Login error:', error);
+      console.error('로그인 에러: ', error);
       // 로그인 실패 후의 처리 (예: 에러 메시지 표시)
     }
   };
@@ -37,8 +37,8 @@ const Login = () => {
           <Form
             id="user_id"
             type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            value={userid}
+            onChange={(e) => setUserid(e.target.value)}
             placeholder="아이디"
             className="login-username"
           />
