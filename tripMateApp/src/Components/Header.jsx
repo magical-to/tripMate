@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import './Header.css';
 import Button from './Button';
 
-// 토큰값 디코딩 함수
+// 토큰값 디코딩 함수 
 function parseJwt(token) {
   const base64Url = token.split('.')[1];
   const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
