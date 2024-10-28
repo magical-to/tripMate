@@ -3,12 +3,13 @@ import { useNavigate } from 'react-router-dom';
 // import { isTokenValid } from '../utils/tokenUtils'; // 파일 경로에 맞춰 임포트
 import Header from '../Components/Header';  // Header 컴포넌트 경로
 import Button from '../Components/Button';  // Button 컴포넌트 경로
+import MapImage from '../assets/Map.png';  // 이미지 경로 임포트
 import './Home.css';  // Home 페이지의 CSS 파일
 
 const Home = () => {
   const navigate = useNavigate();
 
-  // PLAN 버튼 클릭 시 호출되는 함수
+    // PLAN 버튼 클릭 시 호출되는 함수
   // const handlePlanClick = () => {
   //   const token = localStorage.getItem('access_token'); // 로컬 스토리지에서 토큰 가져오기
     
@@ -33,13 +34,12 @@ const Home = () => {
           <div className="button-container">
             <Button 
               text="PLAN!!" 
-              // onClick={handlePlanClick} 
               onClick={() => navigate('/go')}
             />
           </div>
         </div>
         <div className="home-right">
-          <img src="지도 이미지 경로" alt="Map" />
+          <img src={MapImage} alt="Map" />
         </div>
       </div>
     </div>
