@@ -6,6 +6,7 @@
     /* height: 100vh; */
     padding: 0 50px;
     background-color: white;
+    margin-top: 80px;
 }
 
 /* 왼쪽 텍스트와 버튼 영역 */
@@ -13,6 +14,7 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    margin-left: 100px;
 }
 
 .home-left h1 {
@@ -25,22 +27,45 @@
 .home-left p {
     font-size: 18px;
     color: #333;
+    margin-left: 110px;
     margin-bottom: 30px;
 }
 
 /* 이미지 지도 부분 */
 .home-right img {
-    width: 600px;
+    margin-top: 120px;
+    margin-right: 100px;
+    width: 400px;
     height: auto;
     border-radius: 10px;
 }
 
-.home-button {
-    background-color: #fcd4f0; /* 배경 색상 */
-    color: black;              /* 글자 색상 */
-    border-radius: 10px;       /* 둥근 모서리 */
-    padding: 10px 20px;        /* 안쪽 여백 */
-    font-size: 16px;           /* 글자 크기 */
-    cursor: pointer;           /* 커서 모양 */
-    transition: background-color 0.3s ease, transform 0.3s ease; /* 부드러운 색상 변화와 크기 변화 */
-  }
+/* PLAN!! 버튼 스타일 */
+.button-container button {
+    background-color: #fcd4f0;  /* 배경 색상 */
+    color: black;               /* 글자 색상 */
+    width: 150px;
+    height: 50px;
+    margin-left: 150px;
+    border: none;
+    border-radius: 10px;        /* 둥근 모서리 */
+    padding: 15px 30px;         /* 넓은 안쪽 여백 */
+    font-size: 18px;            /* 글자 크기 */
+    font-weight: bold;          /* 글자 두께 */
+    cursor: pointer;            /* 커서 모양 */
+    transition: background-color 0.4s ease, transform 0.2s ease; /* 부드러운 애니메이션 */
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
+}
+
+/* 버튼 호버 효과 */
+.button-container button:hover {
+    background-color: #ff9ed6;  /* 호버 시 배경 색상 */
+    transform: scale(1.05);     /* 약간 확대 */
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2); /* 그림자 강화 */
+}
+
+/* 버튼 클릭 효과 */
+.button-container button:active {
+    transform: scale(0.95);     /* 클릭 시 살짝 축소 */
+    background-color: #ff77b5;  /* 클릭 시 색상 변화 */
+}
