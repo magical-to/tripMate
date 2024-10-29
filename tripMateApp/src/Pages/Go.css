@@ -16,14 +16,16 @@
     margin-top: 250px;
 }
 
+
 /* 버튼 컨테이너: 버튼을 가로로 정렬 */
 .button-container {
     display: flex;
-    gap: 10px; /* 버튼 사이 간격 */
+    gap: 200px; /* 버튼 사이 간격 */
+    margin-left: 0px;
 }
 
 
-/* 버튼 스타일 */
+/* 공통 버튼 스타일 */
 button {
     background-color: #fcd4f0;
     color: #000;
@@ -32,7 +34,27 @@ button {
     font-size: 16px !important;
     cursor: pointer;
     transition: background-color 0.3s, transform 0.1s;
+    border-radius: 10px;
 }
+
+/* next-button 스타일 */
+.next-button {
+    margin-left: 200px; /* 오른쪽으로 밀기 */
+    margin-top: 10px;
+}
+
+/* back-button 스타일 */
+.back-button {
+    margin-left: 0px;  /* 왼쪽 간격 제거 */
+    margin-right: 10px; /* 오른쪽으로 간격 */
+    color: black;
+}
+
+.back-button:hover {
+    background-color: #ff9ed6;
+    transform: scale(1.05);
+}
+
 
 /* 호버 시 색상 및 크기 변화를 위한 애니메이션 */
 button:hover {
