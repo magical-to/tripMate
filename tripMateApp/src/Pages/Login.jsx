@@ -15,7 +15,7 @@ const Login = () => {
   const handleLogin = async () => {
     try {
       const data = await login(userid, password);
-      console.log('로그인 성공: ', data);
+      console.log('로그인 성공');
       navigate('/'); // (after login) main 페이지로 리다이렉트
     } 
     catch (error) {
@@ -54,7 +54,7 @@ const Login = () => {
           <Button 
             onClick={handleLogin} 
             text="로그인" 
-            className="login-button" 
+            className="login-button"
           />
           <div className="remember-me">
             <input type="checkbox" id="remember" />
