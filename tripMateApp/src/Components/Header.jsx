@@ -43,7 +43,7 @@ const Header = ({ showButton = true }) => {
 
   // 내 여정으로 가는 함수
   const navigateToJourney = () => {
-    navigate(''); // 내 여정 페이지로 이동 
+    navigate('/mytrip'); // 내 여정 페이지로 이동 
   }
 
   useEffect(() => {
