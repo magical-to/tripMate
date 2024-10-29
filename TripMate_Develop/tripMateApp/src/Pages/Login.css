@@ -1,0 +1,96 @@
+/* 전체 페이지 스타일 설정 */
+body, html {
+  height: 100%;
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+/* 전체 로그인 컨테이너 스타일 */
+.login-container {
+  border: 1px solid red;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* height: 100vh; */
+  padding: 20px;
+  /* background-color: #f1f1f1; */
+}
+
+/* 로그인 폼 컨테이너 스타일 */
+.login-form {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+/* Form 컴포넌트 스타일 */
+.login-username, .login-password {
+  margin-bottom: 15px;
+}
+
+#user_id {
+  /* border: 1px solid red; */
+  width: 100%;
+}
+
+#password {
+  /* border: 1px solid red; */
+  width: 100%;
+}
+
+/* 버튼 스타일 */
+.login-button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background-color: #fcd4f0;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  text-align: center;
+}
+
+.go-signup-button {
+  background: none;
+  border-bottom: 1px solid black; 
+  font-size: 13px;
+  /* padding: 10px 0; */
+  text-align: center;
+  
+}
+
+.login-button:hover {
+  background-color: #ff85bc;
+}
+
+/* 제목 스타일 */
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #fcd4f0;
+}
+
+/* Remember me 체크박스 스타일 */
+.remember-me {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.remember-me input {
+  margin-right: 8px;
+}
+
+.remember-me label {
+  font-size: 14px;
+  color: #666;
+}
+
