@@ -1,6 +1,6 @@
-/* 공통 Button css */
 .button {
-  border: none;
-  /* border-radius: 5px; */
-  cursor: pointer;
+  border: 1px solid red;
+  width: 5vw;
+  height: 4vh;
+
 }

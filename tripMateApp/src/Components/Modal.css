@@ -14,6 +14,7 @@
 
 /* 모달 콘텐츠 */
 .modal-content {
+  border: 3px solid #FFE3F7;
   background-color: white;
   padding: 20px;
   border-radius: 8px;
@@ -64,8 +65,9 @@
   border: none;
   padding: 10px 20px;
   cursor: pointer;
-  border-radius: 5px;
+  border-radius: 30px;
   transition: background-color 0.3s;
+  margin-left: 200px !important;
 }
 
 /* 버튼에 마우스를 올렸을 때의 효과 */
@@ -93,4 +95,12 @@ ul {
 ul li {
   padding: 5px 0;
   border-bottom: 1px solid #ddd;
+}
+
+.header-modal {
+  background-color: rgba(0, 0, 0, 0);
+  position: absolute;
+  top: -20vw;
+  left: 89.5vw;
+  width: 10vw;
 }

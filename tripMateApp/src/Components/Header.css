@@ -46,6 +46,8 @@
 
   .user-id {
     border: 1px solid black;
+    font-size: 1.5vw;
+    margin-right: 0.5vw;
   }
   
   /* 로그인 버튼 스타일 */

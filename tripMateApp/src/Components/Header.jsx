@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Header.css';
 import Button from './Button';
+import Modal from './Modal';
 
 // 토큰값 디코딩 함수 
 function parseJwt(token) {
@@ -22,8 +23,26 @@ function parseJwt(token) {
 }
 
 const Header = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [userId, setUserId] = useState('');
   const navigate = useNavigate();
+
+  // 로그아웃 함수
+  const handleLogout = () => {
+    localStorage.removeItem('access_token'); // 토큰 삭제
+    navigate('/'); // 메인 페이지로 이동
+    setUserId(''); // 상태 업데이트로 UI 리렌더링
+  };
+
+  // 모달 열기/닫기 함수
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
+  };
+
+  // 내 여정으로 가는 함수
+  const navigateToJourney = () => {
+    navigate(''); // 내 여정 페이지로 이동 
+  }
 
   useEffect(() => {
     const token = localStorage.getItem('access_token');
@@ -38,13 +57,6 @@ const Header = () => {
     }
   }, []);
 
-  // 로그아웃 함수
-  const handleLogout = () => {
-    localStorage.removeItem('access_token'); // 토큰 삭제
-    navigate('/'); // 메인 페이지로 이동
-    setUserId(''); // 상태 업데이트로 UI 리렌더링
-  };
-
   return (
     <header className="header">
       <div className="header-left">
@@ -58,19 +70,33 @@ const Header = () => {
         <h1>TripMate</h1>
       </div>
       <div className="header-right">
-        <img 
-          src="https://img.icons8.com/material-outlined/24/000000/user.png" 
-          alt="User Icon" 
-          className="user-icon" 
-        />
         {userId ? (
           <>
-            <span className="user-id">{userId}</span> {/* userId 표시 */}
-            <Button
+            <span className="user-id">{userId}님</span> {/* userId 표시 */}
+            {/* <Button
               text="로그아웃"
               onClick={handleLogout}
               className="logout-button"
+            /> */}
+            {/* 유저 아이콘 이미지를 누르면 모달로 로그아웃, 내 여정 띄우기 */}
+            <img
+              src="https://img.icons8.com/material-outlined/24/000000/user.png"
+              alt="User Icon"
+              className="user-icon"
+              onClick={toggleModal}
+              style={{ cursor: 'pointer' }}
             />
+            {isModalOpen && (
+              <Modal 
+                onClose={toggleModal} 
+                customClass="header-modal" >
+                <div className="button-group">
+                  <button onClick={handleLogout} customClass="logout-button">로그아웃</button>
+                  <button onClick={navigateToJourney} customClass="journey-button">내 여정으로 가기</button>
+                </div>
+                <p>여기에 내용을 추가하세요.</p>
+              </Modal>
+            )}
           </>
         ) : (
           <Button 
