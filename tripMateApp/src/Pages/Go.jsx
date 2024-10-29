@@ -113,29 +113,29 @@ export default function Go() {
                         </>
                     )}
                 
-                    {step === 3 && (
-                        <>
-                            <h2>STEP 3: 여행 시간을 설정하세요</h2>
-                            <input
-                                type="time"
-                                value={startTime}
-                                onChange={(e) => setStartTime(e.target.value)}
-                            />
-                            <input
-                                type="time"
-                                value={endTime}
-                                onChange={(e) => setEndTime(e.target.value)}
-                            />
-                            <div className="modal-buttons">
-                                <button className="back-button" onClick={handlePreviousStep}>
+                {step === 3 && (
+                    <div className="time-container">
+                        <h2>STEP 3: 여행 시간을 설정하세요</h2>
+                        <input
+                        type="time"
+                        value={startTime}
+                        onChange={(e) => setStartTime(e.target.value)}
+                        />
+                        <input
+                         type="time"
+                         value={endTime}
+                         onChange={(e) => setEndTime(e.target.value)}
+                         />
+                         <div className="modal-buttons">
+                            <button className="back-button" onClick={handlePreviousStep}>
+                            </button>
+                            <button className="next-button2" onClick={handleNextStep}>
+                                다음
                                 </button>
-                                <button className="next-button" onClick={handleNextStep}>
-                                    다음
-                                </button>
-                            </div>
-                        </>
-                    )}
-                
+                                </div>
+                                </div>
+                            )}
+
                     {!isSolo && step === 4 && (
                         <>
                             <h2>STEP 4: 친구를 초대하세요</h2>
