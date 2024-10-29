@@ -72,77 +72,106 @@ export default function Go() {
 
                 {isModalOpen && (
                     <Modal
-                        onClose={handleCloseModal}
-                        onBack={handlePreviousStep}
-                        onNext={handleNextStep}
-                    >
-                        {step === 1 && (
-                            <>
-                                <h2>STEP 1: 여행 제목을 입력하세요</h2>
-                                <input
-                                    type="text"
-                                    placeholder="여행 제목을 입력하세요"
-                                    value={title}
-                                    onChange={(e) => setTitle(e.target.value)}
-                                />
-                                <button onClick={handleNextStep}>다음</button>
-                            </>
-                        )}
-
-                        {step === 2 && (
-                            <>
-                                <h2>STEP 2: 여행 일정을 선택하세요</h2>
-                                <Calendar
-                                    selectRange={true}
-                                    onChange={setSelectedRange}
-                                    value={selectedRange}
-                                />
-                                <button onClick={handleNextStep}>다음</button>
-                            </>
-                        )}
-
-                        {step === 3 && (
-                            <>
-                                <h2>STEP 3: 여행 시간을 설정하세요</h2>
-                                <input
-                                    type="time"
-                                    value={startTime}
-                                    onChange={(e) => setStartTime(e.target.value)}
-                                />
-                                <input
-                                    type="time"
-                                    value={endTime}
-                                    onChange={(e) => setEndTime(e.target.value)}
-                                />
-                                <button onClick={handleNextStep}>다음</button>
-                            </>
-                        )}
-
-                        {!isSolo && step === 4 && (
-                            <>
-                                <h2>STEP 4: 친구를 초대하세요</h2>
-                                <input
-                                    type="text"
-                                    placeholder="친구 아이디 입력"
-                                    value={friendId}
-                                    onChange={(e) => setFriendId(e.target.value)}
-                                />
-                                <button onClick={handleAddFriend}>친구 추가</button>
-                                <ul>
-                                    {friendsList.map((friend, index) => (
-                                        <li key={index}>{friend}</li>
-                                    ))}
-                                </ul>
-                            </>
-                        )}
-
-                        {step === 5 && (
-                            <>
-                                <h2>모든 설정이 완료되었습니다!</h2>
-                                <p>잠시만 기다려 주세요...</p>
-                            </>
-                        )}
-                    </Modal>
+                    onClose={handleCloseModal}
+                    onBack={handlePreviousStep}
+                    onNext={handleNextStep}
+                >
+                    {step === 1 && (
+                        <>
+                            <h2>STEP 1: 여행 제목을 입력하세요</h2>
+                            <input
+                                type="text"
+                                placeholder="여행 제목을 입력하세요"
+                                value={title}
+                                onChange={(e) => setTitle(e.target.value)}
+                            />
+                            <div className="modal-buttons">
+                                <button className="next-button" onClick={handleNextStep}>
+                                    다음
+                                </button>
+                            </div>
+                        </>
+                    )}
+                
+                    {step === 2 && (
+                        <>
+                            <h2>STEP 2: 여행 일정을 선택하세요</h2>
+                            <Calendar
+                                className="calender-custom"
+                                selectRange={true}
+                                onChange={setSelectedRange}
+                                value={selectedRange}
+                            />
+                            <div className="modal-buttons">
+                                <button className="back-button" onClick={handlePreviousStep}>
+                                </button>
+                                <button className="next-button" onClick={handleNextStep}>
+                                    다음
+                                </button>
+                            </div>
+                        </>
+                    )}
+                
+                    {step === 3 && (
+                        <>
+                            <h2>STEP 3: 여행 시간을 설정하세요</h2>
+                            <input
+                                type="time"
+                                value={startTime}
+                                onChange={(e) => setStartTime(e.target.value)}
+                            />
+                            <input
+                                type="time"
+                                value={endTime}
+                                onChange={(e) => setEndTime(e.target.value)}
+                            />
+                            <div className="modal-buttons">
+                                <button className="back-button" onClick={handlePreviousStep}>
+                                </button>
+                                <button className="next-button" onClick={handleNextStep}>
+                                    다음
+                                </button>
+                            </div>
+                        </>
+                    )}
+                
+                    {!isSolo && step === 4 && (
+                        <>
+                            <h2>STEP 4: 친구를 초대하세요</h2>
+                            <input
+                                type="text"
+                                placeholder="친구 아이디 입력"
+                                value={friendId}
+                                onChange={(e) => setFriendId(e.target.value)}
+                            />
+                            <button onClick={handleAddFriend}>친구 추가</button>
+                            {error && <p className="error-message">{error}</p>}
+                            <ul>
+                                {friendsList.map((friend, index) => (
+                                    <li key={index}>{friend}</li>
+                                ))}
+                            </ul>
+                            <div className="modal-buttons">
+                                <button className="back-button" onClick={handlePreviousStep}>
+                                </button>
+                                <button className="next-button" onClick={handleNextStep}>
+                                    다음
+                                </button>
+                            </div>
+                        </>
+                    )}
+                
+                    {step === 5 && (
+                        <>
+                            <h2>모든 설정이 완료되었습니다!</h2>
+                            <p>잠시만 기다려 주세요...</p>
+                            <div className="modal-buttons">
+                                <button className="back-button" onClick={handlePreviousStep}>
+                                </button>
+                            </div>
+                        </>
+                    )}
+                </Modal>                
                 )}
             </div>
         </div>
