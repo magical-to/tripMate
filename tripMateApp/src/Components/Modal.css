@@ -64,8 +64,9 @@
   border: none;
   padding: 10px 20px;
   cursor: pointer;
-  border-radius: 5px;
+  border-radius: 30px;
   transition: background-color 0.3s;
+  margin-left: 200px !important;
 }
 
 /* 버튼에 마우스를 올렸을 때의 효과 */
