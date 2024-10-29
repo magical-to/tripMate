@@ -1,4 +1,3 @@
-/* Go 페이지 전체 레이아웃 */
 .go-container {
     display: flex;
     flex-direction: column;
@@ -7,7 +6,6 @@
     min-height: 100vh;
 }
 
-/* 본문 콘텐츠 정렬 */
 .content {
     display: flex;
     flex-direction: column;
@@ -16,24 +14,61 @@
     margin-top: 250px;
 }
 
-
-/* 버튼 컨테이너: 버튼을 가로로 정렬 */
 .button-container {
     display: flex;
-    gap: 200px; /* 버튼 사이 간격 */
+    gap: 200px;
     margin-left: 0px;
+    font-size: 14px;
 }
 
-/* 다음 버튼 */
+.button-container button {
+    background-color: #fcd4f0;
+    color: black;
+    width: 150px;
+    height: 50px;
+    border: none;
+    border-radius: 10px;
+    padding: 15px 30px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.4s ease, transform 0.2s ease;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+}
+
 .next-button {
-    margin-left: 200px; /* 오른쪽으로 밀기 */
-    margin-top: 10px;
+    background-color: pink;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 30px;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+    border-bottom-right-radius: 30px;
+    border-bottom-left-radius: 30px;
+    transition: background-color 0.3s;
+    margin-left: 200px;
 }
 
-/* 뒤로가기 버튼 */
+.next-button2 {
+    background-color: pink;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 30px;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+    border-bottom-right-radius: 30px;
+    border-bottom-left-radius: 30px;
+    transition: background-color 0.3s;
+    margin-right: 0px;
+}
+
 .back-button {
-    margin-left: 0px;  /* 왼쪽 간격 제거 */
-    margin-right: 10px; /* 오른쪽으로 간격 */
+    margin-left: 0px;
+    margin-right: 10px;
     color: black;
 }
 
@@ -43,11 +78,28 @@
 }
 
 .step-modal input[type='text'] {
-  width: calc(100% - 20px);
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 2px solid #ddd;
-  border-radius: 5px;
-  font-size: 1rem;
-  box-sizing: border-box;
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+.time-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.time-container input[type='time'] {
+    width: 50%;
+    padding: 10px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
 }
