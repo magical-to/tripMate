@@ -72,6 +72,7 @@ export default function Go() {
 
                 {isModalOpen && (
                     <Modal
+                    customClass="step-modal"
                     onClose={handleCloseModal}
                     onBack={handlePreviousStep}
                     onNext={handleNextStep}

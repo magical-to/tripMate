@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import './Header.css';
 import Button from './Button';
 import Modal from './Modal';
+import userIcon from '../assets/user.png';
+
 
 // 토큰값 디코딩 함수 
 function parseJwt(token) {
@@ -22,7 +24,7 @@ function parseJwt(token) {
   return JSON.parse(jsonPayload);
 }
 
-const Header = () => {
+const Header = ({ showButton = true }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userId, setUserId] = useState('');
   const navigate = useNavigate();
@@ -70,40 +72,42 @@ const Header = () => {
         <h1>TripMate</h1>
       </div>
       <div className="header-right">
-        {userId ? (
-          <>
-            <span className="user-id">{userId}님</span> {/* userId 표시 */}
-            {/* <Button
-              text="로그아웃"
-              onClick={handleLogout}
-              className="logout-button"
-            /> */}
-            {/* 유저 아이콘 이미지를 누르면 모달로 로그아웃, 내 여정 띄우기 */}
-            <img
-              src="https://img.icons8.com/material-outlined/24/000000/user.png"
-              alt="User Icon"
-              className="user-icon"
-              onClick={toggleModal}
-              style={{ cursor: 'pointer' }}
+        {showButton && (
+          userId ? (
+            <>
+              <span className="user-id">{userId}님</span> {/* userId 표시 */}
+              <img
+                src={userIcon}
+                alt="User Icon"
+                className="user-icon"
+                onClick={toggleModal}
+                style={{ cursor: 'pointer' }}
+              />
+              {isModalOpen && (
+                <Modal 
+                  onClose={toggleModal} 
+                  customClass="header-modal" 
+                >
+                  <Button
+                    onClick={handleLogout}
+                    text="로그아웃"
+                    customClass="logout-button"
+                  />
+                  <Button
+                    onClick={navigateToJourney}
+                    text="내 여정"
+                    customClass="go-mytrip"
+                  />
+                </Modal>
+              )}
+            </>
+          ) : (
+            <Button 
+              text="로그인" 
+              onClick={() => navigate('/login')}
+              customClass="login-button"
             />
-            {isModalOpen && (
-              <Modal 
-                onClose={toggleModal} 
-                customClass="header-modal" >
-                <div className="button-group">
-                  <button onClick={handleLogout} customClass="logout-button">로그아웃</button>
-                  <button onClick={navigateToJourney} customClass="journey-button">내 여정으로 가기</button>
-                </div>
-                <p>여기에 내용을 추가하세요.</p>
-              </Modal>
-            )}
-          </>
-        ) : (
-          <Button 
-            text="로그인" 
-            onClick={() => navigate('/login')}
-            className="login-button"
-          />
+          )
         )}
       </div>
     </header>

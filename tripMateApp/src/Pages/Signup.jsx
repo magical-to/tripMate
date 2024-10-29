@@ -79,7 +79,7 @@ const SignUp = () => {
           <Button
             onClick={handleSignUp}
             text="회원가입"
-            className='signup-button'
+            customClass='signup-button'
           />
         </form>
       </div>

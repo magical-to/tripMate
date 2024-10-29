@@ -54,7 +54,7 @@ const Login = () => {
           <Button 
             onClick={handleLogin} 
             text="로그인" 
-            className="login-button"
+            customClass="login-button"
           />
           <div className="remember-me">
             <input type="checkbox" id="remember" />
@@ -63,7 +63,7 @@ const Login = () => {
           <Button
             onClick={goSignup}
             text="회원가입"
-            className="go-signup-button"
+            customClass="go-signup-button"
           />
         </div>
       </div>

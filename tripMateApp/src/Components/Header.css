@@ -45,33 +45,41 @@
   }
 
   .user-id {
-    border: 1px solid black;
     font-size: 1.5vw;
     margin-right: 0.5vw;
   }
   
-  /* 로그인 버튼 스타일 */
-  .login-button {
-    background-color: #fcd4f0;
-    /* border: none; */
-    color: #000;
-    font-size: 16px;
-    cursor: pointer;
-    /* position: absolute; */
-    top: 20px;
-    right: 50px;
-    /* transition: color 0.3s ease; */
+/* 로그인 버튼 스타일 */
+.login-button {
+  background-color: #fcd4f0;
+  border: none;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  /* position: absolute; */
+  top: 20px;
+  right: 50px;
+  transition: color 0.3s ease;
+}
+
+  .logout-button, .go-mytrip {
+    background: none;
+    border: none;
+    border-bottom: 1px solid black; 
+    font-size: 15px;
+    text-align: center;
+    display: block;
+    margin-bottom: 10px;
+    text-align: center;
+    justify-content: center;
+    margin-left: 1.5vw;
   }
 
-  .logout-button {
-    background-color: #fcd4f0;
-    /* border: none; */
-    color: #000;
-    font-size: 16px;
-    cursor: pointer;
-    /* position: absolute; */
-    top: 20px;
-    right: 50px;
-    /* transition: color 0.3s ease; */
+  .header .header-modal {
+    background-color: rgba(0, 0, 0, 0);
+    position: absolute;
+    top: -20vw;
+    left: 89.5vw;
+    width: 10vw;
   }
-
+  

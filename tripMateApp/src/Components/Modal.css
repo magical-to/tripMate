@@ -67,23 +67,12 @@
   cursor: pointer;
   border-radius: 30px;
   transition: background-color 0.3s;
-  margin-left: 200px !important;
+  margin-left: 200px;
 }
 
 /* 버튼에 마우스를 올렸을 때의 효과 */
 .next-button:hover {
   background-color: darkpink;
-}
-
-/* 입력 필드 스타일 */
-input[type="text"], input[type="time"] {
-  width: calc(100% - 20px);
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 2px solid #ddd;
-  border-radius: 5px;
-  font-size: 1rem;
-  box-sizing: border-box;
 }
 
 /* 친구 목록 스타일 */
@@ -97,10 +86,5 @@ ul li {
   border-bottom: 1px solid #ddd;
 }
 
-.header-modal {
-  background-color: rgba(0, 0, 0, 0);
-  position: absolute;
-  top: -20vw;
-  left: 89.5vw;
-  width: 10vw;
-}
+
+

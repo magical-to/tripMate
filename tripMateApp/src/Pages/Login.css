@@ -1,18 +1,10 @@
-/* 전체 페이지 스타일 설정 */
-body, html {
-  height: 100%;
-  margin: 0;
-  font-family: Arial, sans-serif;
-}
-
 /* 전체 로그인 컨테이너 스타일 */
 .login-container {
-  border: 1px solid red;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  /* height: 100vh; */
+  height: auto;
   padding: 20px;
   /* background-color: #f1f1f1; */
 }
@@ -23,8 +15,9 @@ body, html {
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 20px;
-  width: 100%;
-  max-width: 400px;
+  width: 30vw;
+  height: auto;
+  max-width: 30vw;
   box-sizing: border-box;
   text-align: center;
 }
@@ -55,15 +48,14 @@ body, html {
   cursor: pointer;
   font-size: 16px;
   text-align: center;
+  margin-right: 0.5vw;
 }
 
 .go-signup-button {
   background: none;
   border-bottom: 1px solid black; 
   font-size: 13px;
-  /* padding: 10px 0; */
   text-align: center;
-  
 }
 
 .login-button:hover {
@@ -92,5 +84,23 @@ h2 {
 .remember-me label {
   font-size: 14px;
   color: #666;
+}
+
+.login-button {
+  background-color: #fcd4f0;
+  border: none;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  /* position: absolute; */
+  top: 20px;
+  right: 50px;
+  transition: color 0.3s ease;
+}
+
+.go-signup-button {
+  border: none;
+  border-bottom: 1px solid #767676;
+  color: #767676;
 }
 

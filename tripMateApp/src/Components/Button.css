@@ -1,6 +1,17 @@
-.button {
-  border: 1px solid red;
-  width: 5vw;
-  height: 4vh;
+/* 공통 버튼 스타일 */
+/* .button {
+    background-color: #fcd4f0;
+    color: #000;
+    border: none;
+    padding: 8px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.1s;
+    border-radius: 10px;
+} */
 
-}
+/* 호버 시 색상 및 크기 변화를 위한 애니메이션 */
+/* button:hover {
+  background-color: #ff9ed6;
+  transform: scale(1.05); 
+} */
