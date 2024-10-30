@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { io } from "socket.io-client";
 import './Chat2.css';
+import Button from "./Button";
+import Form from "./Form";
 
 const Chat2 = () => {
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
   const token = localStorage.getItem('access_token');
-  const room = 'testRoom';
+//   const room = 'trip_id';
+  const room = 'testRoom'
 
   useEffect(() => {
     if (!token) {
@@ -46,7 +49,7 @@ const Chat2 = () => {
 
     // 자신이 보낸 메시지를 화면에 표시
     const myMessage = {
-      sender: "You",
+      sender: "나",
       content: message,
       createdAt: new Date().toISOString(), 
     };
@@ -82,23 +85,33 @@ const Chat2 = () => {
 
   const renderMessages = () =>
     messages.map((msg, index) => (
-      <p key={index}>
-        {msg.sender}: {msg.content} {msg.createdAt}
-      </p>
+        <div key={index} className="message">
+            <p className="message-sender">{msg.sender}</p>
+            <p className="message-content">{msg.content}</p>
+            <p className="message-time">{msg.createdAt}</p>
+        </div>
     ));
 
   return (
-    <div>
+    <div className="border">
+        <h2>여행 제목</h2>
+        <h3>장성원, 정진교, 윤재형, 최윤서님이 초대되었습니다.</h3>
       <div id="messages">{renderMessages()}</div>
-      <input
-        type="text"
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-        placeholder="Type a message"
-      />
-      <button onClick={sendMessage}>Send</button>
-      <button onClick={joinRoom}>Join Room</button>
-      <button onClick={leaveRoom}>Leave Room</button>
+      <div className="message-footer">
+        <Form 
+            value={message}
+            type="text"
+            onChange={(e) => setMessage(e.target.value)}
+            placeholder="메세지를 입력해주세요."
+            className="message-form"
+            /> 
+        <Button 
+            text="전송"
+            onClick={sendMessage}
+            customClass="send-button" 
+            />
+      </div>
+      
     </div>
   );
 };
