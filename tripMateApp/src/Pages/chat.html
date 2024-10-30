@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat Test</title>
+  <script src="https://cdn.socket.io/4.3.2/socket.io.min.js"></script>
+</head>
+
+<body>
+  <div id="messages"></div>
+  <input type="text" id="messageInput" placeholder="Type a message">
+  <button onclick="sendMessage()">Send</button>
+  <button onclick="joinRoom()">Join Room</button>
+  <button onclick="leaveRoom()">Leave Room</button>
+
+  <script>
+
+
+    const token = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjksInVzZXJpZCI6ImpqYW5nMTIiLCJ1c2VyZW1haWwiOiJqamFuZzYyNTFAZ21haWwuY29tIiwiaWF0IjoxNzI4ODg2OTU4LCJleHAiOjE3Mjg5MjI5NTh9.FFUZ7b5WNSfxzG3w750IalTmEZ5l1G1dBN2TX00L0Pk';
+    const room = 'testRoom';
+
+    // fetchChatHistory();
+
+    const socket = io('http://localhost:3000/chat', {
+      auth: {
+        token: `${token}`
+      }
+    });
+
+    socket.on('connect', () => {
+      console.log('Connected to server');
+      fetchChatHistory();
+    });
+
+    socket.on('message', (message) => {
+      console.log(message);
+      appendMessage(message);
+    });
+
+    function sendMessage() {
+      const messageInput = document.getElementById('messageInput');
+      const message = messageInput.value;
+      socket.emit('message', { room: room, content: message });
+      messageInput.value = '';
+      // appendMessage({ sender: 'You', content: message, createdAt: new Date().toLocaleString() });
+    }
+
+    function joinRoom() {
+      socket.emit('joinRoom', { room: room });
+    }
+
+    function leaveRoom() {
+      socket.emit('leaveRoom', { room: room });
+    }
+
+    socket.on('joinedRoom', (room) => {
+      console.log(`Joined room: ${room}`);
+    });
+
+    socket.on('leftRoom', (room) => {
+      console.log(`Left room: ${room}`);
+    });
+
+    function fetchChatHistory() {
+      fetch(`http://localhost:3000/chat/${room}`, {
+        headers: {
+          'Authorization': token
+        }
+      })
+        .then(response => response.json())
+        .then(messages => {
+          console.log(messages);
+          const messagesDiv = document.getElementById('messages');
+          messagesDiv.innerHTML = '';
+          messages.forEach(message => appendMessage(message));
+        })
+        .catch(error => console.error('Error fetching chat history:', error));
+    }
+
+    function appendMessage(message) {
+      const messagesDiv = document.getElementById('messages');
+      messagesDiv.innerHTML += `<p>${message.sender}: ${message.content}   ${message.createdAt}</p>`;
+    }
+
+  </script>
+</body>
+
+</html>

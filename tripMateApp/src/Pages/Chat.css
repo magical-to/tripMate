@@ -16,7 +16,7 @@
     margin-top: 5px;
     font-size: 12px;
     color: #888;
-    border: 1px solid green;
+    /* border: 1px solid green; */
     text-align: center; /* 텍스트 중앙 정렬 */
   }
   
@@ -25,7 +25,8 @@
     overflow-y: auto;
     padding-bottom: 10px;
     border-bottom: 1px solid #ddd;
-    border: 1px solid red;
+    height: 10vh;
+    /* border: 1px solid red; */
   }
   
   .message-item {
@@ -47,7 +48,7 @@
     font-size: 15px;
     color: #888;
     margin-bottom: 5px;
-    border: 1px solid red;
+    /* border: 1px solid red; */
   }
   
   .message-text {
@@ -56,21 +57,22 @@
     border-radius: 10px;
     max-width: 70%;
     word-wrap: break-word;
-    border: 1px solid blue;
+    /* border: 1px solid blue; */
   }
   
   .message-time {
     font-size: 12px;
     color: #aaa;
     margin-top: 5px;
-    border: 1px solid green;
+    /* border: 1px solid green; */
   }
   
   .message-input-container {
     display: flex;
     align-items: center;
     padding: 10px 0;
-    border: 1px solid purple;
+
+    /* border: 1px solid purple; */
   }
   
   .input-group.message-input {
@@ -88,7 +90,7 @@
     max-width: 40px; /* 아이콘의 최대 가로 크기를 40px로 제한 */
     max-height: 40px; /* 아이콘의 최대 높이를 40px로 제한 */
     margin-right: 10px; /* 이미지와 입력 필드 사이에 여백 추가 */
-    border: 1px solid red;
+    /* border: 1px solid red; */
   }
   
   .message-input .form-input {

@@ -4,7 +4,6 @@ import { validateFriendId } from '../Services/authService';
 import Slider from 'react-slick'; // react-slick 임포트
 import Header from '../Components/Header';
 import Button from '../Components/Button';
-import SmallChatComponent from '../Components/SmallChatComponent';
 import 'slick-carousel/slick/slick.css'; // slick 기본 CSS
 import 'slick-carousel/slick/slick-theme.css'; // slick 테마 CSS
 import './Home.css'; 
@@ -55,7 +54,6 @@ const Home = () => {
 
   return (
     <div>
-      <SmallChatComponent />
       <Header />
       <div className="home-container">
         <div className="home-left">
