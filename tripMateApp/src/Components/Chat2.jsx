@@ -8,12 +8,11 @@ const Chat2 = () => {
   const token = localStorage.getItem('access_token');
   const room = 'testRoom';
 
-  // 소켓 초기화 및 연결
   useEffect(() => {
     if (!token) {
-        console.error("로컬 스토리지에 토큰값이 없습니다.");
-        return;
-      }
+      console.error("로컬 스토리지에 토큰값이 없습니다.");
+      return;
+    }
 
     const socket = io('wss://www.daebak.store/chat', {
       auth: { token }
@@ -41,14 +40,22 @@ const Chat2 = () => {
     };
   }, []);
 
-  // 메시지 전송 함수
+  // 메세지 전송 함수
   const sendMessage = () => {
     const socket = io('wss://www.daebak.store/chat');
+
+    // 자신이 보낸 메시지를 화면에 표시
+    const myMessage = {
+      sender: "You",
+      content: message,
+      createdAt: new Date().toISOString(), 
+    };
+    setMessages((prevMessages) => [...prevMessages, myMessage]);
+
     socket.emit('message', { room, content: message });
     setMessage("");
   };
 
-  // 방 참여 및 나가기 함수
   const joinRoom = () => {
     const socket = io('wss://www.daebak.store/chat');
     socket.emit('joinRoom', { room });
@@ -59,7 +66,6 @@ const Chat2 = () => {
     socket.emit('leaveRoom', { room });
   };
 
-  // 채팅 기록 불러오기
   const fetchChatHistory = async () => {
     try {
       const response = await fetch(`https://www.daebak.store/chat/${room}`, {
@@ -74,7 +80,6 @@ const Chat2 = () => {
     }
   };
 
-  // 메시지 표시 함수
   const renderMessages = () =>
     messages.map((msg, index) => (
       <p key={index}>
