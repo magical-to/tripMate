@@ -4,36 +4,35 @@
     right: 10px;
     z-index: 1000;
     cursor: pointer;
-
-}
-
-.close-button {
-    border: 2px solid rgb(220, 220, 220);
-    background-color: rgb(220, 220, 220);
-}
-
-
-
-/* .chat-window {
-    width: 250px;
-    height: 300px;
-    background-color: white;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    padding: 10px;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
+    border: 1px solid red;
+    height: auto;
 }
 
 .chat-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    border: 1px solid blue;
 }
 
-.close-button {
-    cursor: pointer;
-} */
+.chat-title {
+    background-color: rgb(237, 237, 237);
+    height: 7vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;     
+    margin: 0;
+    padding: 0;
+}
+
+.chat-close-button {
+    background-color: #fff;
+    width: 100%;
+    border: none;
+    color: black;
+}
+
+
+
+
+
 
 .chat-icon {
     width: 40px;

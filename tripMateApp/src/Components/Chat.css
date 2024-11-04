@@ -1,0 +1,68 @@
+.chat-entry {
+    
+    padding: 0 20px;
+    background-color: rgb(255, 255, 255);
+    overflow-y: auto; 
+}
+
+/* 멤버 말고 날짜로 변경 */
+.chat-member {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30vw;
+    margin: 1% auto; 
+    padding: 1%;
+    border-radius: 1vw;
+    
+    color: #9A9A9A;
+    font-size: 1vw;
+    background-color: #EFEFEF;
+    border: 1px solid red;
+}
+
+.past-messages {
+    border: 1px solid blue;
+}
+
+.message {
+    /* border: 1px solid black; */
+    margin: 1vw;
+}
+
+.message-time {
+    background-color: #EFEFEF;
+}
+
+
+
+.send-button {
+    background-color: #FFE3F7;
+    border: none;
+    margin-left: 1vw;
+    height: auto;
+
+}
+
+.message-footer {
+    border: 1px solid red;
+    
+    /* margin-left: 30%; */
+}
+
+.message-sender {
+    font-size: 15px;
+    color: #888;
+    margin-bottom: 5px;
+}
+
+
+
+.message-content {
+    background-color: #FFE3F7;
+    
+}
+
+.message-form {
+    /* border: 2px solid red; */
+}

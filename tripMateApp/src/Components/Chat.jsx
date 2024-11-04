@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { io } from "socket.io-client";
-import './Chat2.css';
+import './Chat.css';
 import Button from "./Button";
 import Form from "./Form";
+import Header from "./Header";
 
-const Chat2 = () => {
+const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
   const token = localStorage.getItem('access_token');
@@ -69,6 +70,7 @@ const Chat2 = () => {
     socket.emit('leaveRoom', { room });
   };
 
+  // 채팅 기록 가져오기
   const fetchChatHistory = async () => {
     try {
       const response = await fetch(`https://www.daebak.store/chat/${room}`, {
@@ -84,36 +86,45 @@ const Chat2 = () => {
   };
 
   const renderMessages = () =>
+    // 날짜 형식 변경
+    // console.log("변경된 날짜 출력: ");
+    // const changedDate = messages[0].createdAt;
+    // // console.log(changedDate);
+    
+
     messages.map((msg, index) => (
         <div key={index} className="message">
-            <p className="message-sender">{msg.sender}</p>
-            <p className="message-content">{msg.content}</p>
             <p className="message-time">{msg.createdAt}</p>
+            {/* <p className="message-sender">{msg.sender}</p>
+            <p className="message-content">{msg.content}</p> */}
+            
         </div>
     ));
 
   return (
-    <div className="border">
-        <h2>여행 제목</h2>
-        <h3>장성원, 정진교, 윤재형, 최윤서님이 초대되었습니다.</h3>
-      <div id="messages">{renderMessages()}</div>
-      <div className="message-footer">
-        <Form 
-            value={message}
-            type="text"
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder="메세지를 입력해주세요."
-            className="message-form"
-            /> 
-        <Button 
-            text="전송"
-            onClick={sendMessage}
-            customClass="send-button" 
-            />
+    <div>
+      <Header />
+      <div className="chat-entry">
+        <div className="past-messages">{renderMessages()}</div>
+        <div className="message-footer">
+          <Form 
+              value={message}
+              type="text"
+              onChange={(e) => setMessage(e.target.value)}
+              placeholder="메세지를 입력해주세요."
+              className="message-form"
+              /> 
+          <Button 
+              text="전송"
+              onClick={sendMessage}
+              customClass="send-button" 
+              />
+        </div>
+        
       </div>
-      
     </div>
+    
   );
 };
 
-export default Chat2;
+export default Chat;
