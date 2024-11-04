@@ -85,22 +85,41 @@ const Chat = () => {
     }
   };
 
-  const renderMessages = () =>
-    // 날짜 형식 변경
-    // console.log("변경된 날짜 출력: ");
-    // const changedDate = messages[0].createdAt;
-    // // console.log(changedDate);
-    
+  // 같은 날짜끼리 그룹화하기
+  const groupMessagesByDate = () => {
+    const groupedMessages = {}; // 빈 객체 (key: 날짜, value: 메세지 배열)
 
-    messages.map((msg, index) => (
-        <div key={index} className="message">
-            <p className="message-time">{msg.createdAt}</p>
-            {/* <p className="message-sender">{msg.sender}</p>
-            <p className="message-content">{msg.content}</p> */}
-            
-        </div>
+    messages.forEach(msg => {
+      const date = new Date(msg.createdAt).toISOString().split('T')[0]; // '2024-10-13'
+      if (!groupedMessages[date]) {
+        groupedMessages[date] = [];
+      }
+      groupedMessages[date].push(msg);
+    });
+    console.log(groupedMessages);
+    return groupedMessages;
+  };
+
+
+
+  const renderMessages = () => {
+    const groupedMessages = groupMessagesByDate();
+    return Object.keys(groupedMessages).map(date => (
+      <div key={date} className="message-group">
+        <h3 className="message-date">{date}</h3>
+        {groupedMessages[date].map((msg, index) => (
+          <div key={index} className={`message ${msg.sender === "나" ? "my-message-list" : "other-message-list"}`}>
+            <p className="message-sender">{msg.sender}</p>
+            <p className="message-content">{msg.content}</p>
+            <p className="message-time">{new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+          </div>
+        ))}
+      </div>
     ));
+  };
 
+
+  
   return (
     <div>
       <Header />
@@ -117,7 +136,7 @@ const Chat = () => {
           <Button 
               text="전송"
               onClick={sendMessage}
-              customClass="send-button" 
+              customClass="message-send-button" 
               />
         </div>
         
