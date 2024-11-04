@@ -13,7 +13,7 @@
     justify-content: center;
     width: 100%;
     height: 5%;
-    margin: 1% auto; 
+    margin: 3% auto; 
     padding: 1%;
     border-radius: 0.5vw;
     
@@ -32,7 +32,7 @@
 
 /* 모든 메세지 */
 .message {
-    margin: 1vw;
+    margin: 0.5vw 0vw;
 }
 
 /* 내 메세지 (sender, content) */
@@ -55,7 +55,7 @@
 .message-content {
     background-color: #FFE3F7;
     display: inline-block;
-    padding: 0.5% 1.5%;
+    padding: 0.5% 3%;
     border-radius: 0.8vw;
     margin: 0;
 

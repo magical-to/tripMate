@@ -1,7 +1,7 @@
 .chat-container {
-    border: 1px solid red;
-    width: 30%; 
-    height: 50vh;
+    /* border: 1px solid red; */
+    width: 25%; 
+    height: 60vh;
 
     
     transform: scale(0.8); /* 축소 비율 조정 */
@@ -11,7 +11,6 @@
 
 .chat-header {
     background-color: rgb(229, 229, 229);
-    border: 3px solid green;
     display: flex; 
     height: 5vh;
     /* justify-content: space-between;  */
@@ -20,18 +19,29 @@
 .chat-title {
     display: flex;
     align-items: center;
-    
+    text-align: center;
+    font-weight: 600;
+    color: rgb(60, 60, 60);
+    padding-left: 10vw;
 }
 
 .chat-close-button {
-    margin-left: auto; 
+    border: none;
+    background-color: rgb(229, 229, 229);
+    margin-left: auto;
+    color: rgb(60, 60, 60);
 }
 .chat-icon {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background-color: lightblue;
+    background-color: #FFE3F7;
     display: flex;
     justify-content: center;
     align-items: center;
 } 
+
+/* .chat-icon-img {
+    width: 3vw;
+    height: auto;
+} */

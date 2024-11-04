@@ -3,6 +3,7 @@ import Draggable from "react-draggable";
 import Chat from "./Chat";
 import './DraggableIconChat.css';
 import Button from "./Button";
+import chatImg from "../assets/chat.png"
 
 const DraggableIconChat = () => {
     const [isChatOpen, setIsChatOpen] = useState(false);
@@ -32,7 +33,7 @@ const DraggableIconChat = () => {
                     </div>
                 ) : (
                     <div className="chat-icon" onClick={handleIconClick}>
-                        👾
+                        ✉️
                     </div>
                 )}
             
