@@ -7,7 +7,7 @@ import SignUp from './Pages/Signup';
 import Go from './Pages/Go';
 import Mytrip from './Pages/Mytrip';
 import Plan from './Pages/Plan';
-
+import Chat from './Components/Chat';
 
 const App = () => {
   return (
@@ -19,7 +19,7 @@ const App = () => {
         <Route path="/go" element={<Go />} />
         <Route path="/mytrip" element={<Mytrip />} />
         <Route path="/plan" element={<Plan />} />
-        <Route path="/chat2" element={<Chat2 />} />
+        <Route path="/chat" element={<Chat />} />
       </Routes>
     </BrowserRouter>
   );
