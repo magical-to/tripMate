@@ -3,7 +3,7 @@ import { io } from "socket.io-client";
 import './Chat.css';
 import Button from "./Button";
 import Form from "./Form";
-import Header from "./Header";
+// import Header from "./Header";
 
 const Chat = () => {
   const [messages, setMessages] = useState([]);
@@ -122,9 +122,9 @@ const Chat = () => {
   
   return (
     <div>
-      <Header />
-      <div className="chat-entry">
-        <div className="past-messages">{renderMessages()}</div>
+      {/* <Header /> */}
+      <div className="entire-chat">
+        <div className="entire-messages">{renderMessages()}</div>
         <div className="message-footer">
           <Form 
               value={message}

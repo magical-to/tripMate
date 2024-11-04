@@ -17,10 +17,9 @@ const DraggableIconChat = () => {
 
     return (
         <Draggable>
-            <div className="draggable-container">
             
                 {isChatOpen ? (
-                    <div>
+                    <div className="chat-container"> 
                         <div className="chat-header">
                             <h3 className="chat-title">여행 제목</h3>
                             <Button
@@ -36,7 +35,7 @@ const DraggableIconChat = () => {
                         👾
                     </div>
                 )}
-            </div>
+            
         </Draggable>
     );
 };

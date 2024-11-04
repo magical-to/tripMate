@@ -5,7 +5,6 @@ const Plan = () => {
     return (
         <>
             <DraggableIcon />
-            <h1>Plan 페이지</h1>
         </>
     );
 

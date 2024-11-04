@@ -1,39 +1,31 @@
-.draggable-container {
-    position: fixed;
-    bottom: 10px;
-    right: 10px;
-    z-index: 1000;
-    cursor: pointer;
+.chat-container {
     border: 1px solid red;
-    height: auto;
+    width: 30%; 
+    height: 50vh;
+
+    
+    transform: scale(0.8); /* 축소 비율 조정 */
+    transform-origin: top left; /* 변환 기준점 설정 */
+    overflow: scroll;
 }
 
 .chat-header {
-    border: 1px solid blue;
+    background-color: rgb(229, 229, 229);
+    border: 3px solid green;
+    display: flex; 
+    height: 5vh;
+    /* justify-content: space-between;  */
 }
 
 .chat-title {
-    background-color: rgb(237, 237, 237);
-    height: 7vh;
     display: flex;
-    justify-content: center;
-    align-items: center;     
-    margin: 0;
-    padding: 0;
+    align-items: center;
+    
 }
 
 .chat-close-button {
-    background-color: #fff;
-    width: 100%;
-    border: none;
-    color: black;
+    margin-left: auto; 
 }
-
-
-
-
-
-
 .chat-icon {
     width: 40px;
     height: 40px;
@@ -42,4 +34,4 @@
     display: flex;
     justify-content: center;
     align-items: center;
-}
+} 
