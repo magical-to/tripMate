@@ -6,7 +6,14 @@
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
-  
+
+  .map-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
   
   .route-button {
     margin-bottom: 10px;
@@ -26,9 +33,7 @@
     background-color: #ff9ed6;
   }
   
-
   .kakao-map {
     width: 100%;
-    height: 400px;
-    position: relative
+    height: 500px;
   }
