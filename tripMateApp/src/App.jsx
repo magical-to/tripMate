@@ -5,9 +5,10 @@ import Home from './Pages/Home';
 import Login from './Pages/Login';
 import SignUp from './Pages/Signup';
 import Go from './Pages/Go';
-import Chat from './Pages/Chat';
+import Chat from './Components/Chat';
 import Mytrip from './Pages/Mytrip';
 import Map from './Pages/Map';
+import Plan from './Pages/Plan';
 
 const App = () => {
   return (
@@ -20,6 +21,7 @@ const App = () => {
         <Route path="/chat" element={<Chat />} />
         <Route path="/mytrip" element={<Mytrip />} />
         <Route path="/map" element={<Map />} />
+        <Route path="/plan" element={<Plan />} />
       </Routes>
     </BrowserRouter>
   );
