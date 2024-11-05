@@ -1,6 +1,7 @@
 const API_URL_LOGIN = 'https://www.daebak.store/auth/login';
 const API_URL_SIGNUP = 'https://www.daebak.store/member';
-const API_URL_USER_SESSION = 'https://www.daebak.store/auth/logincheck';
+const API_URL_USER_SESSION = 'https://www.daebak.store/participants/searchparticipant?searchedname=';
+const API_URL_LOGIN_CHECK = 'https://www.daebak.store/auth/logincheck';
 
 // 로그인 함수
 export const login = async (userid, password) => {
@@ -58,9 +59,27 @@ export const signup = async (userid, password, useremail) => {
 };
 
 // 사용자 유효성 검사 함수
-export const validateFriendId = async (access_token) => {
+export const validateFriendId = async (freindId) => {
   try {
-    const response = await fetch(API_URL_USER_SESSION, {
+    const response = await fetch(API_URL_USER_SESSION+`${freindId}`, {
+      method: 'GET',
+    });
+
+    if (!response.ok) {
+      const data = await response.json();
+      throw new Error(data.message || '존재하지 않는 아이디입니다.');
+    }
+    return await response.json(); // 유효한 경우 데이터 반환
+
+  } catch (error) {
+    throw new Error(error.message || '서버에 문제가 발생했습니다.');
+  }
+};
+
+// 로그인 체크 함수
+export const loginCheck = async (access_token) => {
+  try {
+    const response = await fetch(API_URL_LOGIN_CHECK, {
       method: 'GET',
       headers: {
         'Authorization': `${access_token}`,  // 

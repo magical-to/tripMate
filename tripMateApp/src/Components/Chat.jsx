@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 import './Chat.css';
 import Button from "./Button";
@@ -9,8 +9,8 @@ const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
   const token = localStorage.getItem('access_token');
-//   const room = 'trip_id';
-  const room = 'testRoom'
+  const room = 'testRoom';
+  const socketRef = useRef(null);
 
   useEffect(() => {
     if (!token) {
@@ -18,37 +18,26 @@ const Chat = () => {
       return;
     }
 
-    const socket = io('wss://www.daebak.store/chat', {
+    socketRef.current = io('wss://www.daebak.store/chat', {
       auth: { token }
     });
 
-    socket.on('connect', () => {
+    socketRef.current.on('connect', () => {
       console.log('Connected to server');
       fetchChatHistory();
     });
 
-    socket.on('message', (newMessage) => {
+    socketRef.current.on('message', (newMessage) => {
       setMessages((prevMessages) => [...prevMessages, newMessage]);
     });
 
-    socket.on('joinedRoom', (room) => {
-      console.log(`Joined room: ${room}`);
-    });
-
-    socket.on('leftRoom', (room) => {
-      console.log(`Left room: ${room}`);
-    });
-
     return () => {
-      socket.disconnect();
+      socketRef.current.disconnect();
     };
   }, []);
 
   // 메세지 전송 함수
   const sendMessage = () => {
-    const socket = io('wss://www.daebak.store/chat');
-
-    // 자신이 보낸 메시지를 화면에 표시
     const myMessage = {
       sender: "나",
       content: message,
@@ -56,18 +45,8 @@ const Chat = () => {
     };
     setMessages((prevMessages) => [...prevMessages, myMessage]);
 
-    socket.emit('message', { room, content: message });
+    socketRef.current.emit('message', { room: room, content: message });
     setMessage("");
-  };
-
-  const joinRoom = () => {
-    const socket = io('wss://www.daebak.store/chat');
-    socket.emit('joinRoom', { room });
-  };
-
-  const leaveRoom = () => {
-    const socket = io('wss://www.daebak.store/chat');
-    socket.emit('leaveRoom', { room });
   };
 
   // 채팅 기록 가져오기
@@ -99,6 +78,8 @@ const Chat = () => {
     console.log(groupedMessages);
     return groupedMessages;
   };
+
+  // const appendMessages
 
 
 

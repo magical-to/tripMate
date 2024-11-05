@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { validateFriendId } from '../Services/authService'; 
+import { loginCheck } from '../Services/authService'; 
 import Slider from 'react-slick';
 import Header from '../Components/Header';
 import Button from '../Components/Button';
@@ -34,7 +35,7 @@ const Home = () => {
     const token = localStorage.getItem('access_token');
   
     if (token) {
-      const isUserValid = await validateFriendId(token);
+      const isUserValid = await loginCheck(token);
   
       if (isUserValid) {
         navigate('/go');
