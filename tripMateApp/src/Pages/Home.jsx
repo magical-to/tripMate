@@ -4,6 +4,7 @@ import { validateFriendId } from '../Services/authService';
 import Slider from 'react-slick';
 import Header from '../Components/Header';
 import Button from '../Components/Button';
+import SmallChatComponent from '../Components/SmallChatComponent';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import './Home.css'; 
@@ -53,6 +54,7 @@ const Home = () => {
 
   return (
     <div>
+      <SmallChatComponent />
       <Header />
       <div className="home-container">
         <div className="home-left">
