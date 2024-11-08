@@ -13,7 +13,7 @@ const DraggableIconChat = () => {
     };
 
     const handleCloseChat = () => {
-        setIsChatOpen(false);
+        setIsChatOpen(false); 
     };
 
     return (

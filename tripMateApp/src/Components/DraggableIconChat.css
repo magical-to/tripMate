@@ -2,11 +2,13 @@
     border: 1px solid #9A9A9A;
     width: 25%; 
     height: 60vh;
-
-    
     transform: scale(0.8); /* 축소 비율 조정 */
     transform-origin: top left; /* 변환 기준점 설정 */
     overflow: scroll;
+    /* 오른쪽 하단에 배치 */
+    position: fixed; 
+    bottom: 10px; 
+    right: 10px; 
 }
 
 .chat-header {
@@ -31,6 +33,7 @@
     margin-left: auto;
     color: rgb(60, 60, 60);
 }
+
 .chat-icon {
     width: 40px;
     height: 40px;
@@ -39,6 +42,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    /* 오른쪽 하단에 배치 */
+    position: absolute;
+    bottom: 10px; 
+    right: 10px;
 } 
 
 /* .chat-icon-img {
