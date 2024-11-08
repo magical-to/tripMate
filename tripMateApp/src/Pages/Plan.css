@@ -1,0 +1,41 @@
+/* 전체 컨테이너 스타일 */
+.plan-list {
+    border: 5px solid #e9e9e9ac;
+    background-color: #f9f9f9; 
+    border-radius: 8px; 
+    max-width: 500px;
+    
+}
+
+/* 각 여행 일정 항목 스타일 */
+.plan-item {
+    background-color: #ffffff; 
+    border: 1px solid #e0e0e0;
+    border-radius: 5px; 
+    padding: 15px;
+}
+
+/* 호버 시 효과 */
+.plan-item:hover {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* 호버 시 그림자 효과 */
+}
+
+/* 버튼 스타일 */
+.go-calculate-button {
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    padding: 10px 20px;
+    background-color: #FFDDEE;
+    color: white; 
+    border: none;
+    border-radius: 5px; 
+    cursor: pointer;
+    transition: background-color 0.3s; /* 호버 효과를 위한 전환 */
+}
+
+/* 버튼 호버 시 효과 */
+.go-calculate-button:hover {
+    background-color: #df88c6; /* 호버 시 배경색 변경 */
+}
+
