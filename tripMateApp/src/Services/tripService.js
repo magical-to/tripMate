@@ -48,11 +48,12 @@ export const createTrip = async (title, selectedRange, startTime, endTime) => {
     console.log(memberData);
 
     try {
-        const response = await axios.post(`https://www.daebak.store/trips/${tripId}/invite`, memberData, {
+        const response = await axios.post(`https://www.daebak.store/participants/${tripId}/invite`, memberData, {
             headers: {
                 'Authorization': `${token}` // 인증 토큰을 헤더에 추가
             }
         });
+        console.log("친구 초대 완료~");
         return response.data;
     }
     catch (error) {
