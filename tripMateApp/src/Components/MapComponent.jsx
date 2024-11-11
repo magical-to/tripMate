@@ -12,8 +12,9 @@ const MapComponent = () => {
   const [endAddress, setEndAddress] = useState('');
   const [startCoords, setStartCoords] = useState(null);
   const [endCoords, setEndCoords] = useState(null);
-  const [startMarker, setStartMarker] = useState(null);
-  const [endMarker, setEndMarker] = useState(null);
+  const [markers, setMarkers] = useState([]);
+  const [keyword, setKeyword] = useState('');
+  const [placesList, setPlacesList] = useState([]);
 
   const loadKakaoMapScript = () => {
     return new Promise((resolve, reject) => {
@@ -35,7 +36,7 @@ const MapComponent = () => {
       }
     });
   };
-  
+
   useEffect(() => {
     loadKakaoMapScript()
       .then(() => {
@@ -45,7 +46,7 @@ const MapComponent = () => {
       })
       .catch((error) => console.error('카카오맵 로딩 오류:', error));
   }, []);
-  
+
   const initMap = () => {
     const mapContainer = mapRef.current;
     const mapOption = {
@@ -58,12 +59,8 @@ const MapComponent = () => {
     setMap(kakaoMap);
     setGeocoder(kakaoGeocoder);
   };
-  
+
   const displayMarker = (latLng, title) => {
-    if (!map) {
-      console.error('지도 객체가 초기화되지 않았습니다.');
-      return;
-    }
     const marker = new window.kakao.maps.Marker({
       position: latLng,
       map: map,
@@ -76,12 +73,12 @@ const MapComponent = () => {
   };
 
   const getCoordinates = (address, setCoords, setMarkerTitle) => {
-    if (!geocoder) {
-      console.error('Geocoder가 초기화되지 않았습니다.');
-      return;
-    }
-    
     return new Promise((resolve, reject) => {
+      if (!geocoder) {
+        console.error('Geocoder가 초기화되지 않았습니다.');
+        return;
+      }
+      
       geocoder.addressSearch(address, (result, status) => {
         if (status === window.kakao.maps.services.Status.OK) {
           const coords = {
@@ -99,7 +96,6 @@ const MapComponent = () => {
       });
     });
   };
-  
 
   const handleSearch = async () => {
     try {
@@ -167,13 +163,42 @@ const MapComponent = () => {
     }
   };
 
-  const handleKakaoMapLink = () => {
-    if (startCoords && endCoords) {
-      const url = `https://map.kakao.com/link/to/목적지,${endCoords.lat},${endCoords.lng}`;
-      window.open(url, '_blank');
-    } else {
-      alert('출발지와 목적지를 설정해주세요.');
+  const handleKeywordSearch = () => {
+    if (!keyword.trim()) {
+      alert('키워드를 입력해주세요!');
+      return;
     }
+
+    const ps = new window.kakao.maps.services.Places();
+    ps.keywordSearch(keyword, (data, status) => {
+      if (status === window.kakao.maps.services.Status.OK) {
+        displayPlaces(data);
+      } else if (status === window.kakao.maps.services.Status.ZERO_RESULT) {
+        alert('검색 결과가 존재하지 않습니다.');
+      } else {
+        alert('검색 중 오류가 발생했습니다.');
+      }
+    });
+  };
+
+  const displayPlaces = (places) => {
+    removeMarkers();
+    const bounds = new window.kakao.maps.LatLngBounds();
+    const newMarkers = places.map((place) => {
+      const placePosition = new window.kakao.maps.LatLng(place.y, place.x);
+      const marker = displayMarker(placePosition, place.place_name);
+      bounds.extend(placePosition);
+      return marker;
+    });
+
+    setMarkers(newMarkers);
+    setPlacesList(places);
+    map.setBounds(bounds);
+  };
+
+  const removeMarkers = () => {
+    markers.forEach((marker) => marker.setMap(null));
+    setMarkers([]);
   };
 
   return (
@@ -194,13 +219,27 @@ const MapComponent = () => {
         <button onClick={handleSearch} className="route-button">
           경로 검색
         </button>
-        <button onClick={handleKakaoMapLink} className="route-button">
-          카카오 지도에서 길찾기
+        <input
+          type="text"
+          placeholder="키워드 입력"
+          value={keyword}
+          onChange={(e) => setKeyword(e.target.value)}
+        />
+        <button onClick={handleKeywordSearch} className="route-button">
+          장소 검색
         </button>
       </div>
+      <ul className="places-list">
+        {placesList.map((place, index) => (
+          <li key={index} className="place-item">
+            {place.place_name}
+          </li>
+        ))}
+      </ul>
       <div ref={mapRef} className="kakao-map"></div>
     </div>
   );
+  
 };
 
 export default MapComponent;
