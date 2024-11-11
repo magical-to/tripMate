@@ -5,6 +5,7 @@ import DraggableIcon from "../Components/DraggableIcon";
 import axios from "axios";
 import Header from "../Components/Header";
 import Button from "../Components/Button";
+import MapComponent from "../Components/MapComponent";
 import cal_img from "../assets/계산기.png";
 import "./Plan.css"
 
@@ -56,6 +57,16 @@ const Plan = () => {
                     customClass="go-calculate-button" 
                     imageSrc={cal_img}
                 />
+            </div>
+            <div className="map-content">
+                <div className="places-list">
+                <h3>검색 결과</h3>
+                <MapComponent />
+                </div>
+
+                <div className="kakao-map-container">
+                <MapComponent />
+                </div>
             </div>
         </div>
         

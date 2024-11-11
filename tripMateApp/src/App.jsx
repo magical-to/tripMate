@@ -7,7 +7,6 @@ import SignUp from './Pages/Signup';
 import Go from './Pages/Go';
 import Chat from './Components/Chat';
 import Mytrip from './Pages/Mytrip';
-import Map from './Pages/Map';
 import Plan from './Pages/Plan';
 import Calculate from './Pages/calculate';
 
@@ -21,7 +20,6 @@ const App = () => {
         <Route path="/go" element={<Go />} />
         <Route path="/chat" element={<Chat />} />
         <Route path="/mytrip" element={<Mytrip />} />
-        <Route path="/map" element={<Map />} />
         <Route path="/plan" element={<Plan />} />
         <Route path="/calculate" element={<Calculate />} />
       </Routes>
