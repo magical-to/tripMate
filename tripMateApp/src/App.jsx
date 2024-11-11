@@ -9,6 +9,7 @@ import Chat from './Components/Chat';
 import Mytrip from './Pages/Mytrip';
 import Map from './Pages/Map';
 import Plan from './Pages/Plan';
+import Calculate from './Pages/calculate';
 
 const App = () => {
   return (
@@ -22,6 +23,7 @@ const App = () => {
         <Route path="/mytrip" element={<Mytrip />} />
         <Route path="/map" element={<Map />} />
         <Route path="/plan" element={<Plan />} />
+        <Route path="/calculate" element={<Calculate />} />
       </Routes>
     </BrowserRouter>
   );
