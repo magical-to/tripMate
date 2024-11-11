@@ -1,39 +1,70 @@
-.tmap {
-    width: 100%;
-    max-width: 800px;
-    height: 400px;
-    margin-top: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
+.map-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 20px;
+}
 
-  .map-container {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .route-button {
-    margin-bottom: 10px;
-    margin-top: 30px;
-    width: 800px;
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #fcd4f0;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .route-button:hover {
-    background-color: #ff9ed6;
-  }
-  
-  .kakao-map {
-    width: 100%;
-    height: 500px;
-  }
+.map-content {
+  display: flex;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.input-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  justify-content: center;
+  width: 100%;
+}
+
+.kakao-map-container, .places-list {
+  flex: 1;
+}
+
+
+.input-container input[type="text"] {
+  flex: 1;
+}
+
+.input-container .route-button:last-child {
+  margin-right: 0;
+}
+
+.route-button {
+  height: 35px;
+  padding: 0 15px;
+}
+
+.kakao-map {
+  flex: 1;
+  height: 500px;
+}
+
+.places-list {
+  width: 230px;
+  max-height: 500px;
+  overflow-y: auto;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background-color: #f9f9f9;
+  padding: 10px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+  margin-top: 100px;
+}
+
+.place-item {
+  padding: 5px;
+  border-bottom: 1px solid #ddd;
+  cursor: pointer;
+}
+
+.place-item:hover {
+  background-color: #f0f0f0;
+}
