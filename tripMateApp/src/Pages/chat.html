@@ -14,13 +14,14 @@
     <script>
         const socket = io('wss://www.daebak.store/chat', {
             auth: {
-                token: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEzLCJ1c2VyaWQiOiJhZG1pbiIsInVzZXJlbWFpbCI6ImFkbWluQG5hdmVyLmNvbSIsImlhdCI6MTczMTA0NTk4NiwiZXhwIjoxNzMxMDgxOTg2fQ.DY0sqkvK-bvK6a2ddYrHmSwjCiwzi5dZBvvs9_RME-Y'
+                token: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEwLCJ1c2VyaWQiOiJjaG9pIiwidXNlcmVtYWlsIjoiY2hvZXl1bnNlbzQwNjBAbmF2ZXIuY29tIiwiaWF0IjoxNzMxNDU4ODg4LCJleHAiOjE3MzE0OTQ4ODh9.6AYIAGTcMF1_SgZeThzR6ndH9ffp33wjgsMOqEOeSXs'
             }
         });
 
         socket.on('connect', () => {
-            console.log('Connected');
-            socket.emit('joinRoom', { room: 'testRoom' });
+            console.log('소켓 연결 성공!');
+            socket.emit('joinRoom', { room: "70" });
+            console.log("testRoom 번째 방 입장 중..");
         });
 
         // 메세지 수신
@@ -33,7 +34,7 @@
 
         function sendMessage() {
             const messageInput = document.getElementById('messageInput');
-            socket.emit('message', { room: 'testRoom', content: messageInput.value });
+            socket.emit('message', { room: '70', content: messageInput.value });
             messageInput.value = '';
         }
     </script>

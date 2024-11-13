@@ -5,18 +5,17 @@ import './Chat.css';
 import Button from "./Button";
 import Form from "./Form";
 
-const Chat = () => {
+const Chat = ({ tripId }) => {
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
   const token = localStorage.getItem('access_token');
-  const room = 'testRoom';
+  const room = String(tripId);
+  console.log(room);
   const socket = useRef(null); // useRef를 사용하여 socket을 정의
 
   useEffect(() => {
     socket.current = io('wss://www.daebak.store/chat', {
-      auth: {
-          auth: {token}
-      }
+      auth: { token } 
     });
 
     if (!token) {
@@ -27,7 +26,7 @@ const Chat = () => {
     // 서버 연결 성공 시 채팅방 입장
     socket.current.on('connect', () => {
       console.log('채팅 서버 연결 성공! 채팅방 입장 중..');
-      socket.current.emit('joinRoom', { room });
+      socket.current.emit('joinRoom', { room: room });
       fetchChatHistory();
     });
 
@@ -54,7 +53,7 @@ const Chat = () => {
     };
 
     setMessages((prevMessages) => [...prevMessages, myMessage]);
-    socket.current.emit('message', { room, content: message }); // socket.current 사용
+    socket.current.emit('message', { room: room, content: message }); // socket.current 사용
     setMessage("");
   };
 

@@ -37,7 +37,7 @@ const Plan = () => {
     return (
         <div>
             <Header />
-            <DraggableIcon />
+            <DraggableIcon tripId={tripId} />
             <div className="container">
                 <div className="plan-list">
                     {plans.length > 0 ? (
