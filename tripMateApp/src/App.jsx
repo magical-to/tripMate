@@ -9,6 +9,7 @@ import Chat from './Components/Chat';
 import Mytrip from './Pages/Mytrip';
 import Plan from './Pages/Plan';
 import Calculate from './Pages/calculate';
+import Needs from './Components/Needs';
 
 const App = () => {
   return (
@@ -22,6 +23,7 @@ const App = () => {
         <Route path="/mytrip" element={<Mytrip />} />
         <Route path="/plan" element={<Plan />} />
         <Route path="/calculate" element={<Calculate />} />
+        <Route path="/needs" element={<Needs />} />
       </Routes>
     </BrowserRouter>
   );

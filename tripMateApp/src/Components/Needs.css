@@ -1,0 +1,131 @@
+.needs-open-icon {
+    width: 5vw;
+    height: 5vh;
+    font-size: 1vw;
+    border-radius: 10px;
+    background-color: #ff9ed6;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* 오른쪽 상단에 배치 */
+    position: fixed;
+    top: 60px; 
+    right: 10px;
+}
+
+.needs-open-container {
+    border: 2px solid rgb(196, 196, 196);
+    border-radius: 5px;
+    width: 25%; 
+    height: 60vh;
+    transform: scale(0.8); /* 축소 비율 조정 */
+    /* transform-origin: top left;  */
+    overflow: scroll;
+    /* 오른쪽 상단에 배치 */
+    position: fixed;
+    top: 60px; 
+    right: 10px;
+}
+
+#h3-text {
+    /* border: 1px solid red; */
+    margin-left: 140px;
+    width: 10vw;
+    color: #c9c6c8;
+}
+
+.needs-open-header {
+    display: flex; 
+    align-items: center; 
+    /* justify-content: space-between;  */
+}
+
+/* 창 닫기 버튼 */
+.needs-close-button {
+    border: none;
+    font-size: 20px;
+    color: rgb(126, 126, 126);
+    background-color: #fff;
+    /* 오른쪽 상단에 배치 */
+    position: fixed;
+    right: 0;
+}
+
+/* 전체 준비물 리스트 */
+.needs-list {
+    margin: 20px;
+    margin-top: 40px;
+    /* border: 1px solid red; */
+    width: auto;
+    height: auto;
+}
+
+/* 각각의 준비물 */
+.needs-item {
+    /* border: 1px solid red; */
+    margin-bottom: 10px;
+}
+
+/* 준비물 텍스트 */
+.label {
+    /* border: 1px solid black; */
+    margin: 10px;
+    font-size: 20px;
+}
+
+/* 준비물 삭제 버튼 */
+.needs-delete-button {
+    border: none;
+    width: 3.5vw;
+    height: 2.6vh;
+    border-radius: 5px;
+    background-color: #ff9ed6;
+    position: fixed;
+    right: 15px;
+    color: #fff;
+}
+
+/* 새로운 항목 입력 */
+.needs-add-item {
+    width: 24vw;
+    /* margin: 5px; */
+    /* border: 1px solid blue; */
+    /* 하단에 배치 */
+    position: fixed;
+    bottom: 50px;
+}
+
+/* 새로운 항목 입력 폼 */
+.needs-add-item-form {
+    border-radius: 5px;
+    margin: 10px;
+    width: 20vw;
+    height: 3vh;
+    border: 1px solid rgb(187, 187, 187);
+}
+
+/* 새로운 항목 입력 버튼 */
+.needs-add-button {
+    border-radius: 5px;
+    width: 2vw;
+    height: 3vh;
+    background-color: #ff9ed6;
+    border: none;
+    color: #fff;
+    font-size: 20px;
+}
+
+/* 완료 버튼 */
+.needs-done-button {
+    border-radius: 5px;
+    border: none;
+    color: #ffffff;
+    width: 3vw;
+    height: 3vh;
+    /* 완료버튼 하단에 배치 */
+    position: fixed;
+    bottom: 10px; 
+    right: 160px;
+    background-color: #ff9ed6;
+}

@@ -6,6 +6,7 @@ import axios from "axios";
 import Header from "../Components/Header";
 import Button from "../Components/Button";
 import MapComponent from "../Components/MapComponent";
+import Needs from "../Components/Needs";
 import cal_img from "../assets/계산기.png";
 import "./Plan.css"
 
@@ -37,6 +38,7 @@ const Plan = () => {
     return (
         <div>
             <Header />
+            <Needs />
             <DraggableIcon tripId={tripId} />
             <div className="container">
                 <div className="plan-list">
