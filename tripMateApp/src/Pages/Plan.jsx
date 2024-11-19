@@ -30,6 +30,7 @@ const Plan = () => {
   const [newPlace, setNewPlace] = useState('');
   const queryParams = new URLSearchParams(location.search);
   const tripId = queryParams.get('tripId');
+  const title = queryParams.get('title');
 
   const goCalculate = () => {
     navigate('/calculate');
@@ -116,9 +117,9 @@ const Plan = () => {
   return (
     <div>
       <Header />
-      <Needs tripId={tripId}/>
+      <Needs tripId={tripId} title={title}/>
       <div className="draggable-container">
-        <DraggableIcon tripId={tripId} />
+        <DraggableIcon tripId={tripId} title={title}/>
       </div>
       <div className="map-content">
         <div className="left-container">
@@ -135,13 +136,6 @@ const Plan = () => {
               <p className="title">여행 일정이 없습니다.</p>
             )}
           </div>
-
-          {/* <Button
-            onClick={goCalculate}
-            customClass="go-calculate-button"
-            imageSrc={cal_img}
-            // text="정산"
-          /> */}
           <div className="go-calculate-button" onClick={goCalculate}>
             <img
               src={cal_img}

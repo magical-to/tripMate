@@ -80,7 +80,7 @@ export default function Go() {
     useEffect(() => {
         if (step === 5) {
             const timer = setTimeout(() => {
-                navigate(`/plan?tripId=${tripId}`);
+                navigate(`/plan?tripId=${tripId}&title=${encodeURIComponent(title)}`);
             }, 5000);
             return () => clearTimeout(timer);
         }

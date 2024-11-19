@@ -4,7 +4,7 @@ import Draggable from "react-draggable";
 import './Needs.css';
 import Button from "./Button";
 
-const Needs = ({ tripId }) => {
+const Needs = ({ tripId, title }) => {
     const [isNeedsOpen, setIsNeedsOpen] = useState(false);
     const [items, setItems] = useState([]);
     const [newItem, setNewItem] = useState('');
@@ -83,7 +83,7 @@ const Needs = ({ tripId }) => {
                     /* 열려 있는 상태 */
                     <div className="needs-open-container">
                         <div className="needs-open-header">
-                            <h3 className="needs-title">여행 제목</h3>
+                            <h3 className="needs-title">{title}</h3>
                             <Button
                                 text="x"
                                 customClass="needs-close-button"

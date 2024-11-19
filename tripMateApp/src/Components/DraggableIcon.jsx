@@ -5,7 +5,7 @@ import './DraggableIconChat.css';
 import Button from "./Button";
 import chatImg from "../assets/chat.png"
 
-const DraggableIcon = ({ tripId }) => {
+const DraggableIcon = ({ tripId, title }) => {
     const [isChatOpen, setIsChatOpen] = useState(false);
 
     const handleIconClick = () => {
@@ -21,7 +21,7 @@ const DraggableIcon = ({ tripId }) => {
                 {isChatOpen ? (
                     <div className="chat-container"> 
                         <div className="chat-header">
-                            <h3 className="chat-title">여행 제목</h3>
+                            <h3 className="chat-title">{title}</h3>
                             <Button
                                 text="x"
                                 customClass="chat-close-button"
