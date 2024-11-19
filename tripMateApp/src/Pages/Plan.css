@@ -1,130 +1,143 @@
-/* 전체 컨테이너 스타일 */
+.left-container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 20px;
+}
+
+.title {
+  text-align: center;
+  font-weight: bold;
+}
+
 .plan-list {
-    border: 5px solid #e9e9e9ac;
-    background-color: #f9f9f9; 
-    border-radius: 8px; 
-    max-width: 500px;
-    
+  margin-left: 10px;
+  margin-top: 20px;
+  width: 200px;
+  border: 5px solid #e9e9e9ac;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-sizing: border-box;
 }
 
-/* 각 여행 일정 항목 스타일 */
-.plan-item {
-    background-color: #ffffff; 
-    border: 1px solid #e0e0e0;
-    border-radius: 5px; 
-    padding: 15px;
-}
-
-/* 호버 시 효과 */
-.plan-item:hover {
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* 호버 시 그림자 효과 */
-}
-
-/* 버튼 스타일 */
 .go-calculate-button {
-    display: flex; 
-    align-items: center; 
-    justify-content: center;
-    padding: 10px 20px;
-    background-color: #FFDDEE;
-    color: white; 
-    border: none;
-    border-radius: 5px; 
-    cursor: pointer;
-    transition: background-color 0.3s; /* 호버 효과를 위한 전환 */
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #FFDDEE;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  align-self: flex-start;
 }
 
-/* 버튼 호버 시 효과 */
 .go-calculate-button:hover {
-    background-color: #df88c6; /* 호버 시 배경색 변경 */
+  background-color: #df88c6;
 }
 
+.visit-places-container {
+  margin-right: 50px;
+  margin-left: 50px;
+  margin-top: 20px;
+  width: 250px;
+  background-color: #ffffff;
+  border: 2px solid #e9e9e9;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  height: 500px;
+}
 
+.visit-place-input {
+  width: calc(100% - 20px);
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+}
 
-/* Map css */
-.map-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    padding: 20px;
-  }
-  
-  .map-content {
-    display: flex;
-    width: 100%;
-    max-width: 1200px;
-  }
-  
-  .input-container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 20px;
-    justify-content: center;
-    width: 100%;
-  }
-  
-  
-  .location-list {
-    display: flex;
-    gap: 20px;
-    margin-bottom: 20px;
-  }
-  
-  
-  .places-list {
-    flex: 1;
-    max-width: 300px;
-    background-color: #f8f8f8;
-    padding: 10px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    overflow-y: auto;
-    height: 500px;
-  }
-  
-  .kakao-map-container {
-    flex: 3;
-    margin-left: 20px;
-    width: 100%;
-    height: 500px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  .place-item {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-    cursor: pointer;
-    transition: background-color 0.2s;
-  }
-  
-  .place-item:hover {
-    background-color: #e0e0e0;
-  }
-  
-  .input-container {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-bottom: 20px;
-    align-items: center;
-  }
-  
-  .route-button {
-    margin-top: 10px;
-    padding: 8px 16px;
-    background-color: #ff9ed6;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .route-button:hover {
-    background-color: #ff9ed6;
-  }
-  
+.add-visit-place-button {
+  padding: 10px;
+  background-color: #fcd4f0;
+  padding: 5px 10px;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 10px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.add-visit-place-button:hover {
+  background-color: #ff9ed6;
+}
+
+.visit-places-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 15px;
+  max-height: 350px;
+  overflow-y: auto;
+}
+
+.visit-place-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 5px;
+  border-bottom: 1px solid #ddd;
+}
+
+.visit-place-item:last-child {
+  border-bottom: none;
+}
+
+.place-index {
+  font-weight: bold;
+  font-size: 14px;
+  color: #555;
+  margin-right: 10px;
+}
+
+.place-name {
+  flex: 1;
+  font-size: 14px;
+  color: #333;
+}
+
+.remove-button {
+  padding: 5px 10px;
+  background-color: #fcd4f0;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-weight: bold;
+  text-align: center;
+}
+
+.remove-button:hover {
+  background-color: #d11a1f;
+}
+
+.visit-places-container h4 {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.visit-place-item:hover {
+  background-color: #f9f9f9;
+}
+
+.chat-icon.react-draggable {
+  z-index: 9999;
+}
