@@ -1,79 +1,184 @@
-import React from "react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import DraggableIcon from "../Components/DraggableIcon";
 import axios from "axios";
 import Header from "../Components/Header";
 import Button from "../Components/Button";
 import MapComponent from "../Components/MapComponent";
-import Needs from "../Components/Needs";
 import cal_img from "../assets/계산기.png";
-import "./Plan.css"
+import "./Plan.css";
+
+function parseJwt(token) {
+  const base64Url = token.split('.')[1];
+  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  const jsonPayload = decodeURIComponent(
+    atob(base64)
+      .split('')
+      .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+      .join('')
+  );
+
+  return JSON.parse(jsonPayload);
+}
 
 const Plan = () => {
-    const navigate = useNavigate();
-    const [plans, setPlans] = useState([]); // 여행 일정 데이터를 저장할 상태
+  const navigate = useNavigate();
+  const [plans, setPlans] = useState([]);
+  const [userId, setUserId] = useState('');
+  const [waypoints, setWaypoints] = useState([]);
+  const [newPlace, setNewPlace] = useState('');
+  const queryParams = new URLSearchParams(location.search);
+  const tripId = queryParams.get('tripId');
 
-    const queryParams = new URLSearchParams(location.search);
-    const tripId = queryParams.get('tripId'); // tripId 가져오기
+  const goCalculate = () => {
+    navigate('/calculate');
+  };
 
-    const goCalculate = () => {
-        navigate('/calculate');
+  useEffect(() => {
+    const token = localStorage.getItem('access_token');
+    if (token) {
+      const jwtToken = token.split(' ')[1];
+      try {
+        const decodedToken = parseJwt(jwtToken);
+        setUserId(decodedToken.userid);
+      } catch (error) {
+        console.error("토큰 디코딩 중 오류 발생", error);
+      }
     }
+  }, []);
 
-    // 컴포넌트가 마운트 될 때 API요청을 보내기 위한 useEffect
-    useEffect(() => {
-        const API_URL_PLAN_GET = `https://www.daebak.store/trips/${tripId}`;
-        // API 호출
-        axios.get(API_URL_PLAN_GET)
-            .then((response) => {
-                console.log(plans);
-                setPlans(response.data); // 받아온 데이터를 상태에 저장
-            })
-            .catch((error) => {
-                console.error("Error fetching plans: ", error); // 오류 처리
-            });
-    }, []); 
+  useEffect(() => {
+    const API_URL_PLAN_GET = `https://www.daebak.store/trips/${tripId}`;
+    axios.get(API_URL_PLAN_GET)
+      .then((response) => {
+        setPlans(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching plans: ", error);
+      });
+  }, [tripId]);
 
-    return (
-        <div>
-            <Header />
-            <Needs />
-            <DraggableIcon tripId={tripId} />
-            <div className="container">
-                <div className="plan-list">
-                    {plans.length > 0 ? (
-                        plans.map((plan) => (
-                            <div key={plan.id} className="plan-item">
-                                <h3>{plan.name}</h3>
-                                <p>시작일: {plan.start_date}</p>
-                                <p>종료일: {plan.end_date}</p>
-                            </div>
-                        ))
-                    ) : (
-                        <p>여행 일정이 없습니다.</p>
-                    )}
-                </div>
-                <Button 
-                    onClick={goCalculate}
-                    customClass="go-calculate-button" 
-                    imageSrc={cal_img}
-                />
-            </div>
-            <div className="map-content">
-                <div className="places-list">
-                <h3>검색 결과</h3>
-                <MapComponent />
-                </div>
+  const addVisitPlace = () => {
+    if (!newPlace.trim()) {
+      alert('방문할 장소를 입력해주세요!');
+      return;
+    }
+  
+    setWaypoints((prev) => [...prev, newPlace]);
+  
+    geocoder.addressSearch(newPlace, (result, status) => {
+      if (status === window.kakao.maps.services.Status.OK) {
+        const coords = new window.kakao.maps.LatLng(result[0].y, result[0].x);
+  
+        const markerImage = new window.kakao.maps.MarkerImage(
+          'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png',
+          new window.kakao.maps.Size(30, 40),
+          { offset: new window.kakao.maps.Point(15, 40) }
+        );
+  
+        const marker = new window.kakao.maps.Marker({
+          map: map,
+          position: coords,
+          image: markerImage,
+        });
+  
+        const customOverlayContent = `
+          <div style="padding: 8px 12px; background: rgba(255, 255, 255, 0.9); border-radius: 8px; border: 1px solid #ddd; color: #333;">
+            ${newPlace}
+          </div>
+        `;
+        const overlay = new window.kakao.maps.CustomOverlay({
+          map: map,
+          position: coords,
+          content: customOverlayContent,
+          yAnchor: 1.5,
+        });
+  
+        setMarkers((prevMarkers) => [...prevMarkers, marker]);
+        setInfowindows((prevOverlays) => [...prevOverlays, overlay]);
+  
 
-                <div className="kakao-map-container">
-                <MapComponent />
+        map.setCenter(coords);
+      } else {
+        alert('해당 장소를 찾을 수 없습니다.');
+      }
+    });
+  
+    setNewPlace('');
+  };
+  
+  const removeVisitPlace = (index) => {
+    const updatedWaypoints = waypoints.filter((_, i) => i !== index);
+    setWaypoints(updatedWaypoints);
+  };
+
+  return (
+    <div>
+      <Header />
+      <div className="draggable-container">
+        <DraggableIcon tripId={tripId} />
+      </div>
+      <div className="map-content">
+        <div className="left-container">
+          <div className="plan-list">
+            {plans.length > 0 ? (
+              plans.map((plan) => (
+                <div key={plan.id} className="plan-item">
+                  <h3>{plan.name}</h3>
+                  <p>시작일: {plan.start_date}</p>
+                  <p>종료일: {plan.end_date}</p>
                 </div>
-            </div>
+              ))
+            ) : (
+              <p className="title">여행 일정이 없습니다.</p>
+            )}
+          </div>
+
+          <Button
+            onClick={goCalculate}
+            customClass="go-calculate-button"
+            imageSrc={cal_img}
+          />
+          <div className="visit-places-container">
+            <h4>방문할 장소</h4>
+            <input
+              type="text"
+              placeholder="방문할 장소 입력"
+              value={newPlace}
+              onChange={(e) => setNewPlace(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  addVisitPlace();
+                }
+              }}
+              className="visit-place-input"
+            />
+            <button onClick={addVisitPlace} className="add-visit-place-button">
+              추가
+            </button>
+            <ul className="visit-places-list">
+              {waypoints.map((place, index) => (
+                <li key={index} className="visit-place-item">
+                  <span className="place-index">{index + 1}.</span>
+                  <span className="place-name">{place}</span>
+                  <button
+                    onClick={() => removeVisitPlace(index)}
+                    className="remove-button"
+                  >
+                    삭제
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
-        
-    );
 
-}
+        <div className="kakao-map-container">
+        <MapComponent userId={userId} waypoints={waypoints} setWaypoints={setWaypoints} />
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default Plan;
