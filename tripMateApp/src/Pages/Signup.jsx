@@ -4,7 +4,7 @@ import { signup } from '../Services/authService';
 import Button from '../Components/Button';
 import Form from '../Components/Form';
 import Header from '../Components/Header';
-import './SignUp.css'; 
+import './SignUp.css';
 
 const SignUp = () => {
   const [userid, setUserId] = useState('');
