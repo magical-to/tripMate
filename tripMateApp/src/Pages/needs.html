@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>준비물 목록</title>
+</head>
+<body>
+
+  <h3>준비물 목록</h3>
+  
+  <!-- 준비물 목록을 표시할 곳 -->
+  <ul id="itemList"></ul>
+
+  <!-- 새로운 항목 추가 입력 -->
+  <input type="text" id="newItem" placeholder="새로운 준비물" />
+  <button onclick="addItem()">추가</button>
+
+  <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+  <script>
+    const room = "68";  // 방 번호
+    const socket = io('wss://www.daebak.store/preparations');  // 웹소켓 서버 URL
+
+    // 웹소켓 연결 후, 서버에 입장 요청
+    socket.on('connect', () => {
+      console.log('서버에 연결되었습니다.');
+      socket.emit('joinRoom', { room: room });
+    });
+
+    // 준비물 목록을 클라이언트로 가져오는 이벤트 리스너
+    socket.on('preparationList', (preparations) => {
+      updateItemList(preparations);  // 목록 업데이트 함수 호출
+    });
+
+    // 준비물 항목을 추가하는 함수
+    function addItem() {
+      const newItem = document.getElementById('newItem').value;
+      if (newItem.trim() === '') return;  // 빈 항목 추가 방지
+
+      // 서버에 항목 추가 요청
+      socket.emit('createItem', { room: room, item: newItem });
+
+      // 입력 필드 비우기
+      document.getElementById('newItem').value = '';
+    }
+
+    // 준비물 목록을 화면에 표시하는 함수
+    function updateItemList(items) {
+      const itemList = document.getElementById('itemList');
+      itemList.innerHTML = '';  // 기존 목록 초기화
+
+      // 준비물 목록을 HTML로 출력
+      items.forEach(item => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+          <input type="checkbox" ${item.checked ? 'checked' : ''} onchange="toggleChecked(${item.id})" />
+          ${item.text}
+          <button onclick="deleteItem(${item.id})">삭제</button>
+        `;
+        itemList.appendChild(li);
+      });
+    }
+
+    // 준비물 체크 상태 변경 처리
+    function toggleChecked(itemId) {
+      socket.emit('togglePreparationStatus', { id: itemId, room: room });
+    }
+
+    // 준비물 삭제 처리
+    function deleteItem(itemId) {
+      socket.emit('deletePreparation', { id: itemId, room: room });
+    }
+  </script>
+
+</body>
+</html>

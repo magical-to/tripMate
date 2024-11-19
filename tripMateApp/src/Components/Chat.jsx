@@ -24,9 +24,9 @@ const Chat = ({ tripId }) => {
       return;
     }
 
-    // 서버 연결 성공 시 채팅방 입장
+    // 서버 연결 후 채팅방 입장
     socket.current.on('connect', () => {
-      console.log('채팅 서버 연결 성공! 채팅방 입장 중..');
+      console.log('채팅방 입장 중');
       socket.current.emit('joinRoom', { room: room });
       fetchChatHistory();
     });
