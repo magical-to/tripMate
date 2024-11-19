@@ -33,7 +33,7 @@ const Plan = () => {
   const title = queryParams.get('title');
 
   const goCalculate = () => {
-    navigate('/calculate');
+    navigate(`/calculate?title=${title}`);
   };
 
   useEffect(() => {
