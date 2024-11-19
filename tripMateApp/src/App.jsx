@@ -8,7 +8,7 @@ import Go from './Pages/Go';
 import Chat from './Components/Chat';
 import Mytrip from './Pages/Mytrip';
 import Plan from './Pages/Plan';
-import Calculate from './Pages/calculate';
+import Calculate from './Pages/Calculate';
 import Needs from './Components/Needs';
 
 const App = () => {
