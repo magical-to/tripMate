@@ -11,29 +11,48 @@
 }
 
 .plan-list {
+  margin: 10px;
+  padding-left: 5px;
   margin-left: 10px;
   margin-top: 20px;
-  width: 200px;
-  border: 5px solid #e9e9e9ac;
-  background-color: #f9f9f9;
+  width: 300px;
+  border: 2px solid #e9e9e9ac;
+  background-color: #fff;
   border-radius: 8px;
   box-sizing: border-box;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.plan-item {
+  margin: 10px;
+  font-size: 17px;
+  padding-left: 5px;
 }
 
 .go-calculate-button {
-  margin-top: 20px;
-  padding: 10px 20px;
-  background-color: #FFDDEE;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  align-self: flex-start;
+  /* z-index: 999; */
+  width: 55px;
+  height: 55px;
+  border-radius: 10px;
+  background-color: #FFE3F7;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* 오른쪽 상단에 배치 */
+  position: fixed;
+  top: 70px; 
+  left: 320px;
 }
 
-.go-calculate-button:hover {
-  background-color: #df88c6;
+
+/* .go-calculate-button:hover {
+  background-color: #f97dd8;
+} */
+
+.go-calculate-button img {
+  width: 32px;
+  height: 30px;
 }
 
 .visit-places-container {

@@ -5,7 +5,8 @@ import axios from "axios";
 import Header from "../Components/Header";
 import Button from "../Components/Button";
 import MapComponent from "../Components/MapComponent";
-import cal_img from "../assets/계산기.png";
+import cal_img from "../assets/계산기2.png";
+import Needs from "../Components/Needs";
 import "./Plan.css";
 
 function parseJwt(token) {
@@ -115,6 +116,7 @@ const Plan = () => {
   return (
     <div>
       <Header />
+      <Needs tripId={tripId}/>
       <div className="draggable-container">
         <DraggableIcon tripId={tripId} />
       </div>
@@ -124,9 +126,9 @@ const Plan = () => {
             {plans.length > 0 ? (
               plans.map((plan) => (
                 <div key={plan.id} className="plan-item">
-                  <h3>{plan.name}</h3>
-                  <p>시작일: {plan.start_date}</p>
-                  <p>종료일: {plan.end_date}</p>
+                  <h3 className="plan-name">{plan.name}</h3>
+                  <p className="plan-date">시작일: {plan.start_date}</p>
+                  <p className="plan-date">종료일: {plan.end_date}</p>
                 </div>
               ))
             ) : (
@@ -134,11 +136,18 @@ const Plan = () => {
             )}
           </div>
 
-          <Button
+          {/* <Button
             onClick={goCalculate}
             customClass="go-calculate-button"
             imageSrc={cal_img}
-          />
+            // text="정산"
+          /> */}
+          <div className="go-calculate-button" onClick={goCalculate}>
+            <img
+              src={cal_img}
+            />
+          </div>
+
           <div className="visit-places-container">
             <h4>방문할 장소</h4>
             <input
