@@ -1,5 +1,8 @@
 .chat-container {
-    border: 1px solid #9A9A9A;
+    z-index: 999;
+    background-color: #fff;
+    border: 2px solid rgb(196, 196, 196);
+    border-radius: 5px;
     width: 25%; 
     height: 60vh;
     transform: scale(0.8); /* 축소 비율 조정 */
@@ -31,9 +34,13 @@
 
 .chat-close-button {
     border: none;
+    font-size: 20px;
+    color: rgb(126, 126, 126);
     background-color: rgb(229, 229, 229);
-    margin-left: auto;
-    color: rgb(60, 60, 60);
+    /* 오른쪽 상단에 배치 */
+    position: fixed;
+    top: 5px;
+    right: 0;
 }
 
 .chat-icon {

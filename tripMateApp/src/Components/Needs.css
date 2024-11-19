@@ -1,9 +1,9 @@
 .needs-open-icon {
-    width: 5vw;
-    height: 5vh;
-    font-size: 1vw;
-    border-radius: 10px;
-    background-color: #ff9ed6;
+    z-index: 999;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #FFE3F7;
     color: #fff;
     display: flex;
     justify-content: center;
@@ -15,6 +15,8 @@
 }
 
 .needs-open-container {
+    z-index: 999;
+    background-color: #fff;
     border: 2px solid rgb(196, 196, 196);
     border-radius: 5px;
     width: 25%; 
@@ -28,17 +30,23 @@
     right: 10px;
 }
 
-#h3-text {
-    /* border: 1px solid red; */
-    margin-left: 140px;
-    width: 10vw;
-    color: #c9c6c8;
-}
+
 
 .needs-open-header {
+    background-color: rgb(229, 229, 229);
     display: flex; 
     align-items: center; 
+    height: 5vh;
     /* justify-content: space-between;  */
+}
+
+.needs-title {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    font-weight: 600;
+    color: rgb(60, 60, 60);
+    padding-left: 10vw;
 }
 
 /* 창 닫기 버튼 */
@@ -46,16 +54,17 @@
     border: none;
     font-size: 20px;
     color: rgb(126, 126, 126);
-    background-color: #fff;
+    background-color: rgb(229, 229, 229);
     /* 오른쪽 상단에 배치 */
     position: fixed;
+    top: 5px;
     right: 0;
 }
 
 /* 전체 준비물 리스트 */
 .needs-list {
     margin: 20px;
-    margin-top: 40px;
+    margin-top: 30px;
     /* border: 1px solid red; */
     width: auto;
     height: auto;
@@ -63,16 +72,18 @@
 
 /* 각각의 준비물 */
 .needs-item {
-    /* border: 1px solid red; */
-    margin-bottom: 10px;
+    margin-bottom: 20px;
 }
 
 /* 준비물 텍스트 */
 .label {
-    /* border: 1px solid black; */
-    margin: 10px;
     font-size: 20px;
+    margin: 10px;
 }
+
+/* 준비물 체크 박스 */
+/* .checkbox-style {
+} */
 
 /* 준비물 삭제 버튼 */
 .needs-delete-button {
@@ -117,15 +128,14 @@
 }
 
 /* 완료 버튼 */
-.needs-done-button {
+/* .needs-done-button {
     border-radius: 5px;
     border: none;
     color: #ffffff;
     width: 3vw;
     height: 3vh;
-    /* 완료버튼 하단에 배치 */
     position: fixed;
     bottom: 10px; 
     right: 160px;
     background-color: #ff9ed6;
-}
+} */

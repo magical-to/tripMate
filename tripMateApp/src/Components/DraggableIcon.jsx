@@ -23,7 +23,7 @@ const DraggableIcon = ({ tripId }) => {
                         <div className="chat-header">
                             <h3 className="chat-title">여행 제목</h3>
                             <Button
-                                text="닫기"
+                                text="x"
                                 customClass="chat-close-button"
                                 onClick={handleCloseChat}
                             />
