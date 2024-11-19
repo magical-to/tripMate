@@ -10,6 +10,7 @@ const Chat = ({ tripId }) => {
   const [message, setMessage] = useState("");
   const token = localStorage.getItem('access_token');
   const room = String(tripId);
+  // const room = "68";
   console.log(room);
   const socket = useRef(null); // useRef를 사용하여 socket을 정의
 

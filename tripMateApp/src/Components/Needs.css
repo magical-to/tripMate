@@ -117,15 +117,14 @@
 }
 
 /* 완료 버튼 */
-.needs-done-button {
+/* .needs-done-button {
     border-radius: 5px;
     border: none;
     color: #ffffff;
     width: 3vw;
     height: 3vh;
-    /* 완료버튼 하단에 배치 */
     position: fixed;
     bottom: 10px; 
     right: 160px;
     background-color: #ff9ed6;
-}
+} */

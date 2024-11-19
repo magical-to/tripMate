@@ -38,7 +38,7 @@ const Plan = () => {
     return (
         <div>
             <Header />
-            <Needs />
+            <Needs tripId={tripId} />
             <DraggableIcon tripId={tripId} />
             <div className="container">
                 <div className="plan-list">
