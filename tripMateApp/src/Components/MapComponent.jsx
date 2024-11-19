@@ -4,7 +4,9 @@ import './MapComponent.css';
 const KAKAO_API_KEY = '9aae63ddcd9fcd414ae78bd6cffb5f80';
 const REST_API_KEY = '61f1527120357fb0bb34c3ffe72b4377';
 
-const MapComponent = () => {
+let polyline = null;
+
+const MapComponent = ({ userId, waypoints, setWaypoints }) => {
   const mapRef = useRef(null);
   const [map, setMap] = useState(null);
   const [geocoder, setGeocoder] = useState(null);
@@ -37,130 +39,148 @@ const MapComponent = () => {
     });
   };
 
+  const [infowindows, setInfowindows] = useState([]);
+
+  const createMarkerWithText = (map, latLng, title) => {
+    const markerImage = new window.kakao.maps.MarkerImage(
+      'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png',
+      new window.kakao.maps.Size(30, 40),
+      { offset: new window.kakao.maps.Point(15, 40) }
+    );
+  
+    const marker = new window.kakao.maps.Marker({
+      map,
+      position: latLng,
+      image: markerImage,
+    });
+  
+    const customOverlayContent = `
+      <div style="
+        padding: 8px 12px; 
+        background: rgba(255, 255, 255, 0.9); 
+        border: 2px solid #fcd4f0;
+        border-radius: 8px; 
+        font-size: 10px; 
+        font-weight: bold; 
+        color: #333; 
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); 
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      ">
+        ${title}
+      </div>
+    `;
+  
+    const customOverlay = new window.kakao.maps.CustomOverlay({
+      map,
+      position: latLng,
+      content: customOverlayContent,
+      yAnchor: 2.5,
+    });
+  
+    return { marker, overlay: customOverlay };
+  };
+  
   useEffect(() => {
     loadKakaoMapScript()
       .then(() => {
         window.kakao.maps.load(() => {
-          initMap();
+          const mapContainer = mapRef.current;
+          const mapOption = {
+            center: new window.kakao.maps.LatLng(37.566826, 126.9786567),
+            level: 3,
+          };
+          const kakaoMap = new window.kakao.maps.Map(mapContainer, mapOption);
+          const kakaoGeocoder = new window.kakao.maps.services.Geocoder();
+          setMap(kakaoMap);
+          setGeocoder(kakaoGeocoder);
         });
       })
       .catch((error) => console.error('카카오맵 로딩 오류:', error));
   }, []);
 
-  const initMap = () => {
-    const mapContainer = mapRef.current;
-    const mapOption = {
-      center: new window.kakao.maps.LatLng(37.566826, 126.9786567),
-      level: 3,
-    };
-    const kakaoMap = new window.kakao.maps.Map(mapContainer, mapOption);
-    const kakaoGeocoder = new window.kakao.maps.services.Geocoder();
+  useEffect(() => {
+    if (!map) return;
   
-    setMap(kakaoMap);
-    setGeocoder(kakaoGeocoder);
-  };
+    const handleZoomChange = () => {
+      map.relayout();
+    };
+  
+    window.kakao.maps.event.addListener(map, 'zoom_changed', handleZoomChange);
+  
+    return () => {
+      window.kakao.maps.event.removeListener(map, 'zoom_changed', handleZoomChange);
+    };
+  }, [map]);
+  
 
-  const displayMarker = (latLng, title) => {
-    const marker = new window.kakao.maps.Marker({
-      position: latLng,
-      map: map,
-    });
-    const infowindow = new window.kakao.maps.InfoWindow({
-      content: `<div style="padding:5px;">${title}</div>`,
-    });
-    infowindow.open(map, marker);
-    return marker;
-  };
-
-  const getCoordinates = (address, setCoords, setMarkerTitle) => {
-    return new Promise((resolve, reject) => {
-      if (!geocoder) {
-        console.error('Geocoder가 초기화되지 않았습니다.');
-        return;
-      }
-      
-      geocoder.addressSearch(address, (result, status) => {
+  useEffect(() => {
+    if (!map || !geocoder) return;
+  
+    markers.forEach((marker) => marker.setMap(null));
+    setMarkers([]);
+  
+    waypoints.forEach((waypoint) => {
+      geocoder.addressSearch(waypoint, (result, status) => {
         if (status === window.kakao.maps.services.Status.OK) {
-          const coords = {
-            lat: parseFloat(result[0].y),
-            lng: parseFloat(result[0].x),
-          };
-          setCoords(coords);
-          map.setCenter(new window.kakao.maps.LatLng(coords.lat, coords.lng));
-          displayMarker(new window.kakao.maps.LatLng(coords.lat, coords.lng), setMarkerTitle);
-          resolve();
+          const coords = new window.kakao.maps.LatLng(result[0].y, result[0].x);
+          const { marker, overlay } = createMarkerWithText(map, coords, waypoint);
+  
+          setMarkers((prev) => [...prev, marker]);
         } else {
-          console.error('주소를 찾을 수 없습니다:', address);
-          reject('주소를 찾을 수 없습니다.');
+          console.warn(`경유지를 찾을 수 없습니다: ${waypoint}`);
         }
       });
     });
-  };
+  }, [waypoints, map, geocoder]);
 
-  const handleSearch = async () => {
-    try {
-      if (startAddress) {
-        await getCoordinates(startAddress, setStartCoords, '출발지');
-      }
-      if (endAddress) {
-        await getCoordinates(endAddress, setEndCoords, '목적지');
-      }
-      setTimeout(() => {
-        if (startCoords && endCoords) {
-          handleRoute();
-        }
-      }, 500);
-    } catch (error) {
-      console.error('좌표 설정 오류:', error);
-    }
-  };
+  useEffect(() => {
+    if (!map || !geocoder) return;
 
-  const handleRoute = async () => {
-    if (startCoords && endCoords) {
-      const origin = `${startCoords.lng},${startCoords.lat}`;
-      const destination = `${endCoords.lng},${endCoords.lat}`;
+    markers.forEach((marker) => marker.setMap(null));
+    setMarkers([]);
 
-      try {
-        const response = await fetch(
-          `https://apis-navi.kakaomobility.com/v1/directions?origin=${origin}&destination=${destination}`,
-          {
-            method: 'GET',
-            headers: {
-              Authorization: `KakaoAK ${REST_API_KEY}`,
-              'Content-Type': 'application/json',
-            },
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        const linePath = [];
-
-        data.routes[0].sections[0].roads.forEach((road) => {
-          road.vertexes.forEach((vertex, index) => {
-            if (index % 2 === 0) {
-              linePath.push(new window.kakao.maps.LatLng(road.vertexes[index + 1], vertex));
-            }
+    waypoints.forEach((waypoint) => {
+      geocoder.addressSearch(waypoint, (result, status) => {
+        if (status === window.kakao.maps.services.Status.OK) {
+          const coords = new window.kakao.maps.LatLng(result[0].y, result[0].x);
+          const marker = new window.kakao.maps.Marker({
+            map,
+            position: coords,
           });
-        });
+          setMarkers((prev) => [...prev, marker]);
+        } else {
+          console.warn(`경유지를 찾을 수 없습니다: ${waypoint}`);
+        }
+      });
+    });
+  }, [waypoints, map, geocoder]);
 
-        const polyline = new window.kakao.maps.Polyline({
-          path: linePath,
-          strokeWeight: 5,
-          strokeColor: '#ff0000',
-          strokeOpacity: 0.7,
-          strokeStyle: 'solid',
-        });
-        polyline.setMap(map);
-      } catch (error) {
-        console.error('경로 찾기 오류:', error);
-      }
-    } else {
-      alert('출발지와 목적지를 설정해주세요.');
+  const handleReset = () => {
+    setStartAddress('');
+    setEndAddress('');
+    setWaypoints([]);
+    setStartCoords(null);
+    setEndCoords(null);
+
+    markers.forEach((marker) => marker.setMap(null));
+    setMarkers([]);
+  
+    infowindows.forEach((overlay) => {
+      overlay.setMap(null);
+    });
+    setInfowindows([]);
+  
+    if (polyline) {
+      polyline.setMap(null);
+      polyline = null;
     }
+  
+    if (map) {
+      map.setCenter(new window.kakao.maps.LatLng(37.566826, 126.9786567));
+      map.setLevel(3);
+    }
+  
+    setPlacesList([]);
   };
 
   const handleKeywordSearch = () => {
@@ -168,6 +188,10 @@ const MapComponent = () => {
       alert('키워드를 입력해주세요!');
       return;
     }
+
+    markers.forEach((marker) => marker.setMap(null));
+    setMarkers([]);
+    setPlacesList([]);
 
     const ps = new window.kakao.maps.services.Places();
     ps.keywordSearch(keyword, (data, status) => {
@@ -182,23 +206,161 @@ const MapComponent = () => {
   };
 
   const displayPlaces = (places) => {
-    removeMarkers();
     const bounds = new window.kakao.maps.LatLngBounds();
+  
     const newMarkers = places.map((place) => {
       const placePosition = new window.kakao.maps.LatLng(place.y, place.x);
-      const marker = displayMarker(placePosition, place.place_name);
+      const { marker, overlay } = createMarkerWithText(map, placePosition, place.place_name);
+  
       bounds.extend(placePosition);
       return marker;
     });
-
+  
+    const placesWithAddress = places.map((place) => ({
+      name: place.place_name,
+      address: place.road_address_name || place.address_name || '주소 정보 없음',
+    }));
+  
     setMarkers(newMarkers);
-    setPlacesList(places);
+    setPlacesList(placesWithAddress);
     map.setBounds(bounds);
   };
+  
+  const handleSearch = async () => {
+    try {
+      const startCoords = await getCoordinates(startAddress);
+      const endCoords = await getCoordinates(endAddress);
+  
+      markers.forEach((marker) => marker.setMap(null));
+      infowindows.forEach((overlay) => overlay.setMap(null));
+      setMarkers([]);
+      setInfowindows([]);
+  
+      const { marker: startMarker, overlay: startOverlay } = createMarkerWithText(
+        map,
+        new window.kakao.maps.LatLng(startCoords.lat, startCoords.lng),
+        '출발지'
+      );
+  
+      const { marker: endMarker, overlay: endOverlay } = createMarkerWithText(
+        map,
+        new window.kakao.maps.LatLng(endCoords.lat, endCoords.lng),
+        '목적지'
+      );
+  
+      setMarkers([startMarker, endMarker]);
+      setInfowindows([startOverlay, endOverlay]);
+  
+      map.setCenter(new window.kakao.maps.LatLng(startCoords.lat, startCoords.lng));
+  
+      const waypointCoords = [];
+      const waypointMarkers = [];
+      const waypointOverlays = [];
+  
+      for (const [index, waypoint] of waypoints.entries()) {
+        if (waypoint) {
+          const coords = await getCoordinates(waypoint);
+  
+          const { marker: waypointMarker, overlay: waypointOverlay } = createMarkerWithText(
+            map,
+            new window.kakao.maps.LatLng(coords.lat, coords.lng),
+            `경유지${index + 1}`
+          );
+  
+          waypointMarkers.push(waypointMarker);
+          waypointOverlays.push(waypointOverlay);
+  
+          waypointCoords.push({
+            name: `경유지${index + 1}`,
+            x: coords.lng,
+            y: coords.lat,
+          });
+        }
+      }
+  
+      setMarkers((prev) => [...prev, ...waypointMarkers]);
+      setInfowindows((prev) => [...prev, ...waypointOverlays]);
+  
+      handleRoute(startCoords, endCoords, waypointCoords);
+    } catch (error) {
+      console.error('경로 설정 오류:', error);
+      alert('경로를 설정하는 중 오류가 발생했습니다. 다시 시도해주세요.');
+    }
+  };
 
-  const removeMarkers = () => {
-    markers.forEach((marker) => marker.setMap(null));
-    setMarkers([]);
+  const getCoordinates = (address) =>
+    new Promise((resolve, reject) => {
+      if (!geocoder) {
+        reject('Geocoder가 초기화되지 않았습니다.');
+        return;
+      }
+      geocoder.addressSearch(address, (result, status) => {
+        if (status === window.kakao.maps.services.Status.OK) {
+          resolve({
+            lat: parseFloat(result[0].y),
+            lng: parseFloat(result[0].x),
+          });
+        } else {
+          reject(`주소를 찾을 수 없습니다: ${address}`);
+        }
+      });
+    });
+
+  const handleRoute = async (startCoords, endCoords, waypointCoords) => {
+    const payload = {
+      origin: { x: startCoords.lng, y: startCoords.lat },
+      destination: { x: endCoords.lng, y: endCoords.lat },
+      waypoints: waypointCoords,
+      priority: 'RECOMMEND',
+    };
+
+    try {
+      const response = await fetch(
+        `https://apis-navi.kakaomobility.com/v1/waypoints/directions`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `KakaoAK ${REST_API_KEY}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      const linePath = [];
+
+      data.routes[0].sections.forEach((section) => {
+        section.roads.forEach((road) => {
+          road.vertexes.forEach((vertex, index) => {
+            if (index % 2 === 0) {
+              linePath.push(
+                new window.kakao.maps.LatLng(road.vertexes[index + 1], vertex)
+              );
+            }
+          });
+        });
+      });
+
+      if (polyline) {
+        polyline.setMap(null);
+      }
+
+      polyline = new window.kakao.maps.Polyline({
+        path: linePath,
+        strokeWeight: 5,
+        strokeColor: '#ff0000',
+        strokeOpacity: 0.7,
+        strokeStyle: 'solid',
+      });
+      polyline.setMap(map);
+    } catch (error) {
+      console.error('경로 탐색 중 오류 발생:', error);
+    }
   };
 
   return (
@@ -225,21 +387,46 @@ const MapComponent = () => {
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
         />
-        <button onClick={handleKeywordSearch} className="route-button">
+        <button onClick={handleKeywordSearch} className="place-button">
           장소 검색
         </button>
+        <button onClick={handleReset} className="reset-button">
+          초기화
+        </button>
       </div>
+
       <ul className="places-list">
-        {placesList.map((place, index) => (
-          <li key={index} className="place-item">
-            {place.place_name}
-          </li>
-        ))}
-      </ul>
-      <div ref={mapRef} className="kakao-map"></div>
+  {userId && (
+    <li className="place-item user-recommendation-title">
+      <span className="highlight-user-id">{userId}</span>님을 위한 장소 추천!
+    </li>
+  )}
+  {placesList.map((place, index) => (
+    <li
+      key={index}
+      className="place-item"
+      onClick={() => {
+        navigator.clipboard
+          .writeText(place.address)
+          .then(() => {
+            alert(`${place.address}가 클립보드에 복사되었습니다!`);
+          })
+          .catch((err) => {
+            console.error('주소 복사 중 오류 발생:', err);
+            alert('주소 복사에 실패했습니다. 다시 시도해주세요.');
+          });
+      }}
+    >
+      <strong>{place.name}</strong>
+      <br />
+      {place.address}
+    </li>
+  ))}
+</ul>
+
+      <div ref={mapRef} className="kakao-map" style={{ width: '100%', height: '500px' }}></div>
     </div>
   );
-  
 };
 
 export default MapComponent;
