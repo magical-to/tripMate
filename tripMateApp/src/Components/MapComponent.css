@@ -9,6 +9,7 @@
 .map-content {
   display: flex;
   width: 100%;
+  height: 100%;
   max-width: 1200px;
 }
 
@@ -16,8 +17,8 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 20px;
+  gap: 5px;
+  margin-bottom: -5px;
   justify-content: center;
   width: 100%;
 }
@@ -26,9 +27,16 @@
   flex: 1;
 }
 
-
 .input-container input[type="text"] {
   flex: 1;
+  width: 120px; 
+  padding: 8px;
+  border: 1px solid #ddd;
+  margin-right: 10px;
+  box-sizing: border-box;
+  margin-top: 10px;
+  font-weight: bold;
+  text-align: center;
 }
 
 .input-container .route-button:last-child {
@@ -36,35 +44,195 @@
 }
 
 .route-button {
+  width: 65px;
   height: 35px;
-  padding: 0 15px;
+  padding: 0;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  margin-right: 5px;
+  background-color: #fcd4f0;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-size: 12px;
+  text-align: center;
+  line-height: 35px;
+  box-sizing: border-box;
+  overflow: hidden;
+  white-space: nowrap;
+  font-weight: bold;
+  text-align: center;
+}
+
+.route-input {
+  flex: 1;
+  width: 120px; 
+  padding: 8px;
+  border: 1px solid #ddd;
+  margin-right: 10px;
+  box-sizing: border-box;
+  margin-top: 10px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.route-add-button {
+  width: 65px;
+  height: 35px;
+  padding: 0;
+  margin-bottom: 10px;
+  margin-right: 5px;
+  background-color: #fcd4f0;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-size: 12px;
+  text-align: center;
+  line-height: 35px;
+  box-sizing: border-box;
+  overflow: hidden;
+  white-space: nowrap;
+  font-weight: bold;
+  text-align: center;
+}
+
+.reset-button {
+  width: 50px;
+  height: 35px;
+  padding: 0;
+  margin-top: 10px;
+  margin-left: 5px;
+  background-color: #fcd4f0;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-size: 12px;
+  text-align: center;
+  line-height: 35px;
+  box-sizing: border-box;
+  overflow: hidden;
+  white-space: nowrap;
+  font-weight: bold;
+  text-align: center;
+}
+
+.place-button {
+  width: 65px;
+  height: 35px;
+  padding: 0;
+  margin-top: 10px;
+  margin-left: -5px;
+  background-color: #fcd4f0;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-size: 12px;
+  text-align: center;
+  line-height: 35px;
+  box-sizing: border-box;
+  overflow: hidden;
+  white-space: nowrap;
+  font-weight: bold;
+  text-align: center;
 }
 
 .kakao-map {
   flex: 1;
-  height: 500px;
+  height: 550px;
 }
 
 .places-list {
-  width: 230px;
-  max-height: 500px;
+  margin-top: 230px;
+  width: 300px;
+  max-height: 543px;
   overflow-y: auto;
   position: absolute;
   left: 0;
   top: 0;
-  background-color: #f9f9f9;
+  background-color: #ffffff;
   padding: 10px;
+  border-radius: 8px;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
   z-index: 1;
-  margin-top: 100px;
 }
 
 .place-item {
-  padding: 5px;
+  display: flex;
+  align-items: flex-start;
+  padding: 10px;
   border-bottom: 1px solid #ddd;
   cursor: pointer;
+  transition: background-color 0.3s;
 }
 
 .place-item:hover {
-  background-color: #f0f0f0;
+  background-color: #f4f4f4;
+}
+
+.place-index {
+  font-weight: bold;
+  color: #555;
+  margin-right: 10px;
+  font-size: 14px;
+}
+
+.place-info {
+  flex: 1;
+}
+
+.place-name {
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.place-address {
+  font-size: 12px;
+  color: #666;
+  margin: 0;
+}
+
+.highlight-user-id {
+  color: #fcd4f0;
+  font-weight: bold;
+  font-size: 1.2em;
+  text-shadow: 
+    -1px -1px 0 #707070,
+    1px -1px 0 #707070,
+    -1px  1px 0 #707070,
+    1px  1px 0 #707070;
+  }
+
+.place-item.user-recommendation-title {
+  font-weight: bold;
+  text-align: center;
+  font-size: 1.2em;
+  margin-top: 10px;
+}
+
+.guj {
+  margin-top: -10px;
+  margin-bottom: 5px;;
+}
+
+.waypoints-container {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.waypoint-item {
+  display: flex;
+  align-items: center;
 }
