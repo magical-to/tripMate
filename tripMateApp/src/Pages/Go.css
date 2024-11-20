@@ -36,8 +36,9 @@
     box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
 }
 
+
 .next-button {
-    background-color: pink;
+    background-color: #ff9ed6;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -48,11 +49,11 @@
     border-bottom-right-radius: 30px;
     border-bottom-left-radius: 30px;
     transition: background-color 0.3s;
-    margin-left: 200px;
+    align-items: center;
 }
 
 .next-button2 {
-    background-color: pink;
+    background-color: #ff9ed6;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -102,4 +103,53 @@
     border: 2px solid #ddd;
     border-radius: 5px;
     font-size: 1rem;
+}
+
+
+
+
+
+.friend-invite-form {
+    width: 100%;
+    display: flex; 
+    /* align-items: center;  */
+    gap: 10px; 
+}
+
+.friend-invite-input {
+    width: 90%;
+    /* border: 10px solid black; */
+}
+
+.friend-invite-button {
+    background-color: #ff9ed6;
+    width: 10%;
+    height: 4.5vh;
+    color: white;
+    border: none;
+    border-radius: 10%;
+
+}
+
+.friends-list {
+    display: block;    
+}
+
+.one-friend-list {
+    border-bottom: 1px solid rgb(194, 191, 191);
+    display: flex;
+    align-items: center; 
+    justify-content: space-between; 
+    margin: 5px;
+    padding: 2px;
+}
+
+
+.friend-remove-button {
+    background-color: #ff9ed6;
+    width: 30px;
+    height: 20px;
+    color: white;
+    border: none;
+    border-radius: 10%;
 }
