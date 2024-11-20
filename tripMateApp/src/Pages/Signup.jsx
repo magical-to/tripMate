@@ -15,29 +15,24 @@ const SignUp = () => {
 
   // API 관련 함수
   const handleSignUp = async (event) => {
-    event.preventDefault(); // 폼 제출 시 페이지 리프레시 방지
-
+    event.preventDefault(); // 폼 제출 기본 동작 방지
+  
     if (password !== confirmPassword) {
-      console.error('비밀번호가 일치하지 않습니다!');
+      alert("비밀번호가 일치하지 않습니다!");
       return;
     }
-
-    try {
-      const data = await signup(userid, password, useremail); // authService에서 회원가입 함수 호출
-
-      // 서버에서 반환된 데이터 출력
-      console.log('회원가입 성공: ', data);
-
-      // 회원가입 성공 후 로그인 페이지로 리다이렉트
-      navigate('/login');
-
-    } catch (error) {
-      // 에러 처리
-      console.error('회원가입 에러: ', error);
-      // 사용자에게 오류 메시지 표시를 위한 로직 추가 가능
+  
+    // 회원가입 API 호출
+    const result = await signup(userid, password, useremail);
+  
+    if (result.success) {
+      alert("회원가입 완료!");
+      navigate('/login'); // 로그인 페이지로 이동
+    } else {
+      alert(result.message); // 오류 메시지 표시
     }
   };
-
+  
   return (
     <div>
       <Header showButton={false} /> {/* Header에서 Button 제외 */}

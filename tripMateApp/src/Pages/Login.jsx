@@ -19,8 +19,9 @@ const Login = () => {
       navigate('/'); // (after login) main 페이지로 리다이렉트
     } 
     catch (error) {
-      console.error('로그인 에러: ', error);
-      // 로그인 실패 후의 처리 (예: 에러 메시지 표시)
+      console.error(error);
+      // 로그인 실패 후의 처리 
+      alert('로그인 실패!');
     }
   };
 

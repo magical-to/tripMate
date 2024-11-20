@@ -30,31 +30,36 @@ export const login = async (userid, password) => {
   } 
 
   catch (error) {
-    throw new Error('Login failed: ' + error.message);
+    throw new Error("로그인 실패");
   }
 };
 
 // 회원가입 함수
 export const signup = async (userid, password, useremail) => {
-  try {
-    const response = await fetch(API_URL_SIGNUP, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ userid: userid, password: password, useremail: useremail })
-    });
+  const response = await fetch(API_URL_SIGNUP, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ userid: userid, password: password, useremail: useremail }),
+  });
 
-    if (!response.ok) {
-      throw new Error('서버 응답이 성공적이지 않습니다.');
-    }
+  const data = response;
 
-    const data = await response.json();
-    console.log("회원가입 응답: ");
-    console.log(data);
-
-  } catch (error) {
-    throw new Error('Sign-up failed: ' + error.message);
+  // 서버에서 반환된 상태 코드에 따른 처리
+  if (data.status === 201) {
+    console.log("회원가입 성공");
+    return { success: true, message: data.message }; // 성공적인 응답
+  } else if (data.status === 409) {
+    console.log("이미 존재하는 userid입니다!");
+    return { success: false, message: "이미 존재하는 userid입니다!" }; // 중복된 ID
+  } else if (data.status === 500) {
+    console.log("회원가입에 실패하였습니다!");
+    return { success: false, message: "회원가입에 실패하였습니다!" }; // 서버 오류
+  } else {
+    // 예상치 못한 상태 코드 처리
+    console.log("알 수 없는 오류:", data);
+    return { success: false, message: "알 수 없는 오류가 발생했습니다." };
   }
 };
 
@@ -78,21 +83,19 @@ export const validateFriendId = async (freindId) => {
 
 // 로그인 체크 함수
 export const loginCheck = async (access_token) => {
-  try {
-    const response = await fetch(API_URL_LOGIN_CHECK, {
-      method: 'GET',
-      headers: {
-        'Authorization': `${access_token}`,  // 
-      },
-    });
+  const response = await fetch(API_URL_LOGIN_CHECK, {
+    method: 'GET',
+    headers: {
+      'Authorization': `${access_token}`,  
+    },
+  });
 
-    if (!response.ok) {
-      const data = await response.json();
-      throw new Error(data.message || '존재하지 않는 아이디입니다.');
-    }
-    return await response.json(); // 유효한 경우 데이터 반환
+  const data = response;
+  console.log("로그인체크 응답: ", data);
 
-  } catch (error) {
-    throw new Error(error.message || '서버에 문제가 발생했습니다.');
+  if (data.status == 409) {
+    alert('사용자 세션이 만료되었습니다. 다시 로그인을 진행해주세요!');
+    return { success: false }
   }
+  return await response.json();
 };
