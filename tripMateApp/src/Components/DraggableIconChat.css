@@ -4,10 +4,10 @@
     border: 2px solid rgb(196, 196, 196);
     border-radius: 5px;
     width: 25%; 
-    height: 60vh;
+    height: 61vh;
     transform: scale(0.8); /* 축소 비율 조정 */
     transform-origin: top left; /* 변환 기준점 설정 */
-    overflow: scroll;
+    
     /* 오른쪽 하단에 배치 */
     position: fixed; 
     bottom: 10px; 

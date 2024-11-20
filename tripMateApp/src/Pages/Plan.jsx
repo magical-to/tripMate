@@ -31,10 +31,16 @@ const Plan = () => {
   const queryParams = new URLSearchParams(location.search);
   const tripId = queryParams.get('tripId');
   const title = queryParams.get('title');
+  
+  // 전역변수로 설정
+  let end_date;
+  let start_date;
 
-  const goCalculate = () => {
-    navigate(`/calculate?title=${title}`);
-  };
+  plans.forEach((plan) => {
+    end_date = plan.end_date;
+    start_date = plan.start_date;
+  });
+  
 
   useEffect(() => {
     const token = localStorage.getItem('access_token');
@@ -59,6 +65,10 @@ const Plan = () => {
         console.error("Error fetching plans: ", error);
       });
   }, [tripId]);
+  
+  const goCalculate = () => {
+    navigate(`/calculate?title=${title}&start_date=${start_date}&end_date=${end_date}`);
+  };
 
   const addVisitPlace = () => {
     if (!newPlace.trim()) {
