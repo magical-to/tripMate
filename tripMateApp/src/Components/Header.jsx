@@ -1,28 +1,11 @@
-import React from 'react';
-import logo from '../assets/app_logo.png'
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import logo from '../assets/app_logo.png';
+import userIcon from '../assets/user.png';
 import './Header.css';
 import Button from './Button';
 import Modal from './Modal';
-import userIcon from '../assets/user.png';
-
-
-// 토큰값 디코딩 함수 
-function parseJwt(token) {
-  const base64Url = token.split('.')[1];
-  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-  const jsonPayload = decodeURIComponent(
-    atob(base64)
-      .split('')
-      .map(function(c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-      })
-      .join('')
-  );
-
-  return JSON.parse(jsonPayload);
-}
+import { loginCheck } from '../Services/authService';
 
 const Header = ({ showButton = true }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -44,21 +27,27 @@ const Header = ({ showButton = true }) => {
   // 내 여정으로 가는 함수
   const navigateToJourney = () => {
     navigate('/mytrip'); // 내 여정 페이지로 이동 
-  }
+  };
 
   useEffect(() => {
-    const token = localStorage.getItem('access_token');
-    if (token) {
-      const jwtToken = token.split(' ')[1]; // 'Bearer ' 제거
-      try {
-        const decodedToken = parseJwt(jwtToken);
-        setUserId(decodedToken.userid); // userId 설정
-      } catch (error) {
-        console.error("토큰 디코딩 중 오류 발생", error);
-      }
-    }
-  }, []);
-
+    const fetchUserId = async () => {
+      const token = localStorage.getItem('access_token');
+      if (token) {
+          const result = await loginCheck(token); // 비동기 함수 호출
+          // 서버 응답 처리
+          if (result.success === false) {
+            // 로그인 페이지로 이동
+            alert("사용자 세션이 만료되었습니다. 다시 로그인을 진행해주세요!");
+            navigate("/login"); // 로그인 페이지로 리다이렉트
+          } else {
+            // 성공적으로 userId 설정
+            setUserId(result.userid); // userId 설정
+          }
+        } 
+    };
+    fetchUserId(); 
+  }, [navigate]); 
+  
   return (
     <header className="header">
       <div className="header-left">
