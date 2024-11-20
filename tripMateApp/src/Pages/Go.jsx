@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Modal from '../Components/Modal';
 import Header from '../Components/Header';
 import Calendar from 'react-calendar';
+import Button from '../Components/Button';
 import 'react-calendar/dist/Calendar.css';
 import './Go.css';
 import { validateFriendId } from '../Services/authService'; // API 함수 가져오기
@@ -22,6 +23,17 @@ export default function Go() {
     const [tripId, setTripId] = useState(null); // tripId 상태 변수 추가
     const [error, setError] = useState('');
 
+    // 친구를 제거하는 함수
+    const handleRemoveFriend = (friend) => {
+        // validatedFriends에서 해당 친구를 삭제
+        setValidatedFriends((prevFriends) => prevFriends.filter(f => f !== friend));
+        
+        // 만약 삭제한 친구가 friendId와 일치하면, friendId 상태를 초기화
+        if (friend === friendId) {
+            setFriendId('');
+        }
+    };
+
     const handleOpenModal = (solo) => {
         setIsModalOpen(true);
         setIsSolo(solo);
@@ -31,9 +43,33 @@ export default function Go() {
     const handleCloseModal = () => setIsModalOpen(false);
 
     const handleNextStep = async () => {
-        // 여행 생성
+        /* 여행 생성 */
+        // 1단계
+        if (!isSolo && step == 1) {
+            if (!title) {
+                alert('여행 제목을 입력하세요');
+                return
+            }
+            setStep(step + 1);
+        }
+
+        // 2단계
+        if (!isSolo && step == 2) {
+            if (!selectedRange[0] || !selectedRange[1]) {
+                alert('여행 날짜를 선택하세요');
+                return 
+            }
+            setStep(step + 1);
+        }
+
+        // 3단계
         if (!isSolo && step === 3) {
             console.log("3단계");
+            if (!startTime || !endTime) {
+                alert('여행 시작 시간과 종료 시간을 모두 입력하세요');
+                return 
+            }
+
             try {
                 const tripResponse = await createTrip(title, selectedRange, startTime, endTime);
                 console.log(tripResponse.data);
@@ -48,6 +84,11 @@ export default function Go() {
 
         // 친구 초대 
         else if (!isSolo && step === 4) {
+            if (validatedFriends.length === 0) {
+                alert('친구를 초대해주세요');
+                return 
+            }
+
             console.log("4단계");
             try {
                 await inviteFriend(validatedFriends, tripId); // tripId와 함께 친구 초대
@@ -57,10 +98,6 @@ export default function Go() {
                 setError(error.message); // 에러 처리
             }
         } 
-        
-        else {
-            setStep(step + 1);
-        }
     };
 
     const handlePreviousStep = () => step > 1 && setStep(step - 1);
@@ -165,18 +202,37 @@ export default function Go() {
                         {!isSolo && step === 4 && (
                             <>
                                 <h2>STEP 4: 친구를 초대하세요</h2>
-                                <input
-                                    type="text"
-                                    placeholder="친구 아이디 입력"
-                                    value={friendId}
-                                    onChange={(e) => setFriendId(e.target.value)}
-                                />
-                                <button onClick={handleAddFriend}>친구 초대</button>
-                                <ul>
+                                <div className='friend-invite-form'>
+                                    <input
+                                        className='friend-invite-input'
+                                        type="text"
+                                        placeholder="친구 아이디 입력"
+                                        value={friendId}
+                                        onChange={(e) => setFriendId(e.target.value)}
+                                    />
+                                
+                                    <Button 
+                                        onClick={handleAddFriend}
+                                        text="초대"
+                                        customClass='friend-invite-button'
+                                    />
+                                </div>
+                                
+                                <div className='friends-list'>
                                     {validatedFriends.map((friend, index) => (
-                                        <li key={index}>{friend}</li> // 검증된 친구 아이디 표시
+                                        <div key={index} className='one-friend-list'>
+                                            <span className='friend-id'>
+                                                {friend}
+                                            </span>
+                                            <Button 
+                                                text="x"
+                                                onClick={() => handleRemoveFriend(friend)} // x 버튼 클릭 시 해당 친구 제거
+                                                customClass='friend-remove-button'
+                                            />
+                                        </div>
                                     ))}
-                                </ul>
+                                </div>
+                                
                                 <div className="modal-buttons">
                                     <button className="back-button" onClick={handlePreviousStep}>
                                     </button>
