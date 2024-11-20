@@ -38,7 +38,7 @@ export default function Go() {
                 const tripResponse = await createTrip(title, selectedRange, startTime, endTime);
                 console.log(tripResponse.data);
                 setTripId(tripResponse.data.trip_id); // tripId 상태에 저장
-                console.log('여행 생성 성공:', tripResponse.id);
+                console.log('여행 생성 성공:', tripResponse.trip_id);
                 setStep(step + 1);
             } 
             catch (error) {
