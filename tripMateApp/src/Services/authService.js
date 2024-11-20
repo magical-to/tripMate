@@ -95,6 +95,8 @@ export const loginCheck = async (access_token) => {
 
   if (data.status == 409) {
     alert('사용자 세션이 만료되었습니다. 다시 로그인을 진행해주세요!');
+    // 로컬스토리지에서 쿠키값 삭제하기
+    localStorage.removeItem('access_token');
     return { success: false }
   }
   return await response.json();
