@@ -4,28 +4,31 @@ import { io } from "socket.io-client";
 import "./Calculate.css";
 
 const Calculate = () => {
+    const [days, setDays] = useState([]);
+    const [expenses, setExpenses] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState("");
+    const [selectedDay, setSelectedDay] = useState(1); // 선택된 날을 관리하는 상태 추가
+    const [expenseData, setExpenseData] = useState({
+        price: '',
+        category: '',
+        description: '',
+        day: selectedDay,  // 초기 값으로 설정
+    }); 
+
     const queryParams = new URLSearchParams(location.search);
     const title = queryParams.get('title');
     const start_date = queryParams.get('start_date');
     const end_date = queryParams.get('end_date');
-    const tripId = "42"; // 임시
+    const tripId = "42"; 
 
-    const [selectedDay, setSelectedDay] = useState(1);
-    const [days, setDays] = useState([]);
-    const [expenses, setExpenses] = useState([]); // 경비 데이터를 저장할 상태 추가
-    const [selectedCategory, setSelectedCategory] = useState(""); // 선택된 category 상태 추가
+    const socket = io("https://www.daebak.store/expenses");
 
-    const socket = io("https://www.daebak.store/expenses"); // 서버의 웹소켓 URL
-
-    // 선택된 날짜에 대한 경비 필터링
     const filteredExpenses = selectedCategory
         ? expenses.filter((expense) => expense.category === selectedCategory)
         : expenses;
 
-    // 선택된 날짜의 총 금액 계산
     const totalPriceByDay = filteredExpenses.reduce((sum, expense) => sum + expense.price, 0);
 
-    // 여행 시작일부터 종료일까지의 일자 계산
     useEffect(() => {
         const start = new Date(start_date);
         const end = new Date(end_date);
@@ -34,32 +37,58 @@ const Calculate = () => {
         setDays(dayArray);
     }, [start_date, end_date]);
 
-    // 선택된 날짜 변경 시 해당 날짜의 경비 조회
-    
     useEffect(() => {
         if (tripId && selectedDay) {
-            // 서버에 날짜와 여행 ID 전송
             socket.emit("filterExpensesByDay", { tripId, day: selectedDay });
-    
-            // 서버에서 경비 목록을 받을 때
+
             socket.on("filteredExpenses", (data) => {
-                // 모든 경비의 금액을 정수형으로 변환
                 const intExpenses = data.map(expense => ({
                     ...expense,
                     price: parseInt(expense.price, 10),
                 }));    
-                setExpenses(intExpenses); // 경비 데이터를 상태에 저장
+                setExpenses(intExpenses);
             });
+
+            socket.emit("joinRoom", { room: tripId });
+            socket.emit("getAllExpenses", { tripId });
+            socket.emit("getTotalExpense", { tripId });
+
+            return () => {
+                socket.off("filteredExpenses");
+                socket.off("joinedRoom");
+                socket.off("expenseList");
+                socket.off("totalExpense");
+            };
         }
-    
-        // 컴포넌트 언마운트 시 소켓 연결 해제
-        return () => {
-            socket.off("filteredExpenses");
-        };
     }, [selectedDay, tripId, socket]);
 
-    const handleDayChange = (event) => {
-        setSelectedDay(parseInt(event.target.value, 10));
+    const handleCreateExpenseChange = (e) => {
+        const { name, value } = e.target;
+        setExpenseData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+    };
+
+    const handleCreateExpenseSubmit = (e) => {
+        e.preventDefault();
+        if (!expenseData.price || !expenseData.category || !expenseData.description) {
+            console.log("빈 값이 있어서 경비 추가 안 함.");
+            return;
+        }
+
+        // 경비 추가 요청
+        socket.emit("createExpense", {
+            tripId,
+            expenseData: { ...expenseData, day: selectedDay }, // 선택된 날로 설정
+        });
+
+        setExpenseData({
+            price: '',
+            category: '',
+            description: '',
+            day: selectedDay,  // 기존의 day 값 유지
+        });
     };
 
     return (
@@ -74,31 +103,29 @@ const Calculate = () => {
                     </div>
                 </div>
                 <div className="total-price">
-                    전체 금액
+                    총합: 100,800원 {/* 임시 */}
                 </div>
             </div>
             
-            {/* 드롭다운으로 일자 선택 */}
             <div className="expense-header">
-                <select
-                    id="dayDropdown"
-                    value={selectedDay}
-                    onChange={handleDayChange}
-                    className="select-day"
-                >
-                    {days.map((day) => (
-                        <option key={day} value={day}>
-                            {day}일차 경비
-                        </option>
-                    ))}
-                </select>
-                
+                <div>
+                    <select 
+                        className="select-day"
+                        value={selectedDay} 
+                        onChange={(e) => setSelectedDay(Number(e.target.value))}
+                    >
+                        {days.map((day) => (
+                            <option key={day} value={day}>
+                                {day}일차
+                            </option>
+                        ))}
+                    </select>
+                </div>
                 <div className="day-price">
                     {totalPriceByDay}원
                 </div>
             </div>
 
-            {/* 경비 목록을 테이블 형식으로 표시 */}
             <div className="expense-list">
                 {expenses.length === 0 ? (
                     <p>경비가 없습니다.</p>
@@ -123,6 +150,38 @@ const Calculate = () => {
                     </table>
                 )}
             </div>
+
+            <form onSubmit={handleCreateExpenseSubmit} >
+                <h5 className="expense-form-info">경비 추가</h5>
+                <div className="expense-form">
+                    <input
+                        className="forms"
+                        type="number"
+                        name="price"
+                        value={expenseData.price}
+                        onChange={handleCreateExpenseChange}
+                        placeholder="금액"
+                    />
+                    <input
+                        className="forms"
+                        type="text"
+                        name="category"
+                        value={expenseData.category}
+                        onChange={handleCreateExpenseChange}
+                        placeholder="분류"
+                    />
+                    <input
+                        className="forms"
+                        type="text"
+                        name="description"
+                        value={expenseData.description}
+                        onChange={handleCreateExpenseChange}
+                        placeholder="내용"
+                    />
+                    <button type="submit" className="form-button">+</button>
+                </div>
+                
+            </form>
         </div>
     );
 };

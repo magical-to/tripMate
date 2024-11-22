@@ -21,6 +21,8 @@ export const createTrip = async (title, selectedRange, startTime, endTime) => {
     console.log("tripDate: " + tripData);
 
     try {
+        console.log("토큰::");
+        console.log(token);
         const response = await axios.post(API_URL_MAKE_TRIP, tripData, {
             headers: {
                 'Authorization': `${token}` // 인증 토큰을 헤더에 추가
