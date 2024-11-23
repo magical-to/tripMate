@@ -32,6 +32,8 @@ const Plan = () => {
   const tripId = queryParams.get('tripId');
   const title = queryParams.get('title');
   
+  console.log("title: ", title);
+  
   // 전역변수로 설정
   let end_date;
   let start_date;

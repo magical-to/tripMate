@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Modal from '../Components/Modal';
 import Header from '../Components/Header';
+import Button from '../Components/Button';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import './Go.css';
@@ -32,18 +33,42 @@ export default function Go() {
 
     const handleNextStep = async () => {
         try {
+            /* 여행 생성 */
+            // 1단계
+            if (step === 1) {
+                if (!title) {
+                    alert('여행 제목을 입력하세요');
+                    return;
+                }
+                setStep(step + 1);
+            }
+
+            // 2단계
+            if (step === 2) {
+                if (!selectedRange[0] || !selectedRange[1]) {
+                    alert('여행 날짜를 선택하세요');
+                    return;
+                }
+                setStep(step + 1);
+            }
+
+            // 3단계
             if (step === 3) {
                 const tripResponse = await createTrip(title, selectedRange, startTime, endTime);
                 setTripId(tripResponse.data.trip_id);
-    
+                if (!startTime || !endTime) {
+                    alert('여행 시작 시간과 종료 시간을 모두 입력하세요');
+                    return;
+                }
+
                 if (isSolo) {
                     setStep(5);
                     setTimeout(() => {
-                        navigate(`/plan?tripId=${tripResponse.data.trip_id}`);
+                        navigate(`/plan?tripId=${tripResponse.data.trip_id}&title=${title}`);
                     }, 2000);
                     return;
                 }
-    
+
                 setStep(step + 1);
             } else if (step === 4 && !isSolo) {
                 await inviteFriend(validatedFriends, tripId);
@@ -70,10 +95,17 @@ export default function Go() {
         }
     };
 
+    const handleRemoveFriend = (friend) => {
+        setValidatedFriends((prevFriends) => prevFriends.filter(f => f !== friend));
+        if (friend === friendId) {
+            setFriendId('');
+        }
+    };
+
     useEffect(() => {
         if (step === 5) {
             const timer = setTimeout(() => {
-                navigate(`/plan?tripId=${tripId}`);
+                navigate(`/plan?tripId=${tripId}&title=${title}`);
             }, 2000);
             return () => clearTimeout(timer);
         }
@@ -82,7 +114,7 @@ export default function Go() {
     return (
         <div className="go-container">
             <Header />
-
+    
             <div className="content">
                 <div className="button-container">
                     <button onClick={() => handleOpenModal(true)}>혼자 떠나요!</button>
@@ -112,7 +144,7 @@ export default function Go() {
                                 </div>
                             </>
                         )}
-
+    
                         {step === 2 && (
                             <>
                                 <h2>STEP 2: 여행 일정을 선택하세요</h2>
@@ -123,15 +155,14 @@ export default function Go() {
                                     value={selectedRange}
                                 />
                                 <div className="modal-buttons">
-                                    <button className="back-button" onClick={handlePreviousStep}>
-                                    </button>
+                                    <button className="back-button" onClick={handlePreviousStep}></button>
                                     <button className="next-button" onClick={handleNextStep}>
                                         다음
                                     </button>
                                 </div>
                             </>
                         )}
-
+    
                         {step === 3 && (
                             <div className="time-container">
                                 <h2>STEP 3: 여행 시간을 설정하세요</h2>
@@ -146,47 +177,58 @@ export default function Go() {
                                     onChange={(e) => setEndTime(e.target.value)}
                                 />
                                 <div className="modal-buttons">
-                                    <button className="back-button" onClick={handlePreviousStep}>
-                                    </button>
+                                    <button className="back-button" onClick={handlePreviousStep}></button>
                                     <button className="next-button" onClick={handleNextStep}>
                                         다음
                                     </button>
                                 </div>
                             </div>
                         )}
-
+    
                         {!isSolo && step === 4 && (
                             <>
                                 <h2>STEP 4: 친구를 초대하세요</h2>
-                                <input
-                                    type="text"
-                                    placeholder="친구 아이디 입력"
-                                    value={friendId}
-                                    onChange={(e) => setFriendId(e.target.value)}
-                                />
-                                <button onClick={handleAddFriend}>친구 초대</button>
-                                <ul>
-                                    {validatedFriends.map((friend, index) => (
-                                        <li key={index}>{friend}</li>
-                                    ))}
-                                </ul>
-                                <div className="modal-buttons">
-                                    <button className="back-button" onClick={handlePreviousStep}>
-                                    </button>
-                                    <button className="next-button" onClick={handleNextStep}>
-                                        다음
-                                    </button>
+                                <div className='friend-invite-form'>
+                                    <input
+                                        className='friend-invite-input'
+                                        type="text"
+                                        placeholder="친구 아이디 입력"
+                                        value={friendId}
+                                        onChange={(e) => setFriendId(e.target.value)}
+                                    />
+                                    <Button
+                                        onClick={handleAddFriend}
+                                        text="초대"
+                                        customClass='friend-invite-button'
+                                    />
                                 </div>
+                                
+                                <div className='friends-list'>
+                                    {validatedFriends.map((friend, index) => (
+                                        <div key={index} className='one-friend-list'>
+                                            <span className='friend-id'>
+                                                {friend}
+                                            </span>
+                                            <Button 
+                                                text="x"
+                                                onClick={() => handleRemoveFriend(friend)} // x 버튼 클릭 시 해당 친구 제거
+                                                customClass='friend-remove-button'
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+                                <button className="next-button" onClick={handleNextStep}>
+                                    다음
+                                </button>
                             </>
                         )}
-
+    
                         {step === 5 && (
                             <>
                                 <h2>모든 설정이 완료되었습니다!</h2>
                                 <p>잠시만 기다려 주세요...</p>
                                 <div className="modal-buttons">
-                                    <button className="back-button" onClick={handlePreviousStep}>
-                                    </button>
+                                    <button className="back-button" onClick={handlePreviousStep}></button>
                                 </div>
                             </>
                         )}
@@ -196,3 +238,4 @@ export default function Go() {
         </div>
     );
 }
+

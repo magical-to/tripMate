@@ -39,10 +39,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  /* 오른쪽 상단에 배치 */
   position: fixed;
   top: 70px; 
-  left: 320px;
+  left: 290px;
 }
 
 
