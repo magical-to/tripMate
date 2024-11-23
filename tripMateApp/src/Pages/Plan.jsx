@@ -67,7 +67,7 @@ const Plan = () => {
   }, [tripId]);
   
   const goCalculate = () => {
-    navigate(`/calculate?title=${title}&start_date=${start_date}&end_date=${end_date}`);
+    navigate(`/calculate?title=${title}&start_date=${start_date}&end_date=${end_date}&tripId=${tripId}`);
   };
 
   const addVisitPlace = () => {
