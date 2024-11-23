@@ -41,14 +41,21 @@
 
 /* 경비 테이블 전체 */
 .expense-table {
-    margin: 30px;
-    width: 50%;
+    margin: 10px;
+    width: 97.5%;
+    /* height: 99; */
     border-collapse: collapse;
 }
 
 /* 경비 목록 테이블 스타일 */
 .expense-list {
-    margin-top: 30px;
+    overflow: scroll;
+    margin: 10px 20px;
+    border: 1.5px solid #dbdbdb;
+    width: 50%;
+    padding: 0;
+    height: 50vh;
+
 }
 
 /* 테이블 전체 테두리 */
@@ -63,17 +70,28 @@
     background-color: #FFE3F7;
 }
 
-/* 경비가 없을 때 메시지 스타일 */
+/* 경비 없을 때 추가 문구 */
 .expense-list p {
-    font-size: 18px;
+    font-size: 25px;
     color: #888;
+    margin: 30px;
+    width: 50%;
+
 }
 
-/* 경비 추가 전체 폼 스타일 */
+/* 경비 추가 전체 폼 */
 .expense-form {
+    /* border: 1px solid red; */
+    margin-top: 50px;
+    width: 100%;
+}
+
+/* 경비 추가 입력 폼 */
+.expense-input {
+    margin-bottom: 20px;
     display: inline-block;
     margin: 0 30px;
-    border: 1px solid #dbdbdb;
+    /* border: 2px solid #dbdbdb; */
     width: 50%;
     /* height: 100vh;   */
 }
@@ -84,7 +102,6 @@
     color: rgb(200, 200, 200);
     font-size: 15px;
 }
-
 
 /* 각각 폼 */
 .forms {
