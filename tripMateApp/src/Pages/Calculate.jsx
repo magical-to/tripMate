@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { io } from 'socket.io-client';
 import './Calculate.css';
 import Header from '../Components/Header';
+import Button from '../Components/Button';
 
 const Calculate = () => {
     const [expenses, setExpenses] = useState([]);
@@ -9,6 +10,7 @@ const Calculate = () => {
     const [selectedDay, setSelectedDay] = useState(1); // 선택된 날
     const [days, setDays] = useState([]); // 여행 일수 배열
     const [price, setPrice] = useState([]);
+    const [editingExpenseId, setEditingExpenseId] = useState(null); // 수정 중인 경비 ID
     const [expenseData, setExpenseData] = useState({
         price: '',
         category: '',
@@ -68,7 +70,7 @@ const Calculate = () => {
 
                 // 상태 업데이트
                 setPrice(totalPrice); // price 상태에 합산된 가격 저장
-                
+
                 const intExpenses = data.map(expense => ({
                     ...expense,
                     price: parseInt(expense.price, 10), // 금액을 정수로 변환
@@ -76,7 +78,6 @@ const Calculate = () => {
                 setExpenses(intExpenses); // 상태 업데이트
                 
             });
-            
         }
     
         // 경비 총 금액 응답 수신 (업데이트 될 때마다 새로고침 필요)
@@ -95,6 +96,7 @@ const Calculate = () => {
         };
     }, [selectedDay, tripId, socket]);
 
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setExpenseData((prevData) => ({
@@ -103,28 +105,99 @@ const Calculate = () => {
         }));
     };
 
+    // 경비 추가
     const handleCreateExpense = () => {
         // 입력 데이터 유효성 검사
-        if (!expenseData.price || !expenseData.category || !expenseData.description || !expenseData.day) {
+        if (!expenseData.price || !expenseData.category || !expenseData.description) {
             alert('모든 필드를 입력하세요.');
             return;
         }
-        console.log("보낼 경비 데이터: ", tripId, expenseData);
-
+        
+        console.log("보낼 경비 데이터: ", tripId, { ...expenseData, day: selectedDay });
+    
         // 서버에 경비 생성 요청
         socket.current.emit('createExpense', {
             tripId,
-            expenseData,
+            expenseData: { ...expenseData, day: selectedDay }, // 선택된 날로 설정
         });
-
+    
         // 입력 필드 초기화
         setExpenseData({
             price: '',
             category: '',
             description: '',
-            day: '',
+            day: '', // day는 초기화 필요 없음
         });
     };
+
+    // 경비 수정 핸들러
+    const handleEditExpense = (expense) => {
+        setExpenseData({
+            price: expense.price,
+            category: expense.category,
+            description: expense.description,
+            day: expense.day,
+        });
+        setEditingExpenseId(expense.id); // 수정 중인 경비 ID 설정
+    };
+
+    // 경비 업데이트 요청 처리
+    const handleUpdateExpense = (e) => {
+        e.preventDefault(); // 기본 폼 제출 방지
+        if (!expenseData.price || !expenseData.category || !expenseData.description) {
+            console.log("빈 값이 있어서 경비 수정 안 함."); // 빈 값 체크
+            return;
+        }
+        // 경비 수정 요청
+        socket.current.emit("editExpense", {
+            tripId,
+            expenseId: editingExpenseId,
+            expenseData: expenseData,
+        });
+        // 입력 필드 초기화
+        setExpenseData({
+            price: '',
+            category: '',
+            description: '',
+            day: selectedDay,
+        });
+        setEditingExpenseId(null); // 수정 모드 해제
+
+        // 새로고침
+        window.location.reload()
+    };
+
+    // 경비 삭제 요청 처리
+    const handleDeleteExpense = (expenseId) => {
+        // 서버에 삭제 요청
+        socket.current.emit("deleteExpense", {
+            expenseId,
+            tripId,
+            day: selectedDay,
+        });
+
+        // 삭제 후 즉시 목록 업데이트
+        socket.current.on("expenseList", (updatedExpenses) => {
+            // 업데이트된 경비 목록을 상태에 저장
+            setExpenses(updatedExpenses);
+        });
+
+        // 경비 업데이트
+        socket.current.emit("filterExpensesByDay", { tripId, day: selectedDay });
+
+        // 필터링된 경비 목록 수신
+        const handleFilteredExpenses = (data) => {
+            console.log(data);
+            const totalPrice = data.reduce((acc, expense) => acc + parseInt(expense.price, 10), 0);
+            setPrice(totalPrice); // 상태 업데이트
+        };
+    
+        socket.current.on("filteredExpenses", handleFilteredExpenses);
+        window.location.reload()
+        // day 재설정..?
+    };
+
+    
 
     return (
         <div>
@@ -163,6 +236,8 @@ const Calculate = () => {
                                 <th>카테고리</th>
                                 <th>내용</th>
                                 <th>가격</th>
+                                <th>수정</th>
+                                <th>삭제</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -172,6 +247,20 @@ const Calculate = () => {
                                         <td>{expense.category}</td>
                                         <td>{expense.description}</td>
                                         <td>{expense.price}원</td>
+                                        <td>
+                                            <Button 
+                                                customClass='list-button'
+                                                text="수정"
+                                                onClick={() => handleEditExpense(expense)}
+                                            />
+                                        </td>
+                                        <td>
+                                            <Button 
+                                                customClass='list-button'
+                                                text="삭제"
+                                                onClick={() => handleDeleteExpense(expense.id)}
+                                            />
+                                        </td>
                                     </tr>
                                 ))
                             ) : (
@@ -182,7 +271,15 @@ const Calculate = () => {
                         </tbody>
                     </table>
                 </div>
-                <div className="expense-form">
+                <form className="expense-form" onSubmit={editingExpenseId ? handleUpdateExpense : handleCreateExpense}>
+                    <input
+                        className="expense-input"
+                        type="number"
+                        name="price"
+                        placeholder="가격"
+                        value={expenseData.price}
+                        onChange={handleInputChange}
+                    />
                     <input
                         className="expense-input"
                         type="text"
@@ -202,22 +299,14 @@ const Calculate = () => {
                     <input
                         className="expense-input"
                         type="number"
-                        name="price"
-                        placeholder="가격"
-                        value={expenseData.price}
-                        onChange={handleInputChange}
-                    />
-                    <input
-                        className="expense-input"
-                        type="number"
                         name="day"
                         placeholder="날짜 (지울 예정)"
                         value={selectedDay}
                         onChange={handleInputChange}
                         readOnly
                     />
-                    <button className="form-button" onClick={handleCreateExpense}>+</button>
-                </div>
+                    <button type="submit" className="form-button">{editingExpenseId ? '수정' : '추가'}</button>
+                </form>
             </div>
         </div> 
     );

@@ -147,3 +147,12 @@
     border-radius: 10px;
     margin-left: 60px;
 }
+
+/* 수정, 삭제 버튼 */
+.list-button {
+    border: none;
+    background-color: #FFE3F7;
+    width: 3vw;
+    height: 3vh; 
+    border-radius: 10px;
+}
