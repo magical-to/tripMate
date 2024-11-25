@@ -32,7 +32,7 @@ const DraggableIcon = ({ tripId, title }) => {
                     </div>
                 ) : (
                     <div className="chat-icon" onClick={handleIconClick}>
-                        ✉️
+                        채팅
                     </div>
                 )}
             

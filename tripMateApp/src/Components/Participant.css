@@ -1,0 +1,101 @@
+.participant-container {
+    z-index: 999;
+    background-color: #fff;
+    border: 2px solid rgb(196, 196, 196);
+    border-radius: 5px;
+    width: 25%; 
+    height: 60vh;
+    transform: scale(0.8); /* 축소 비율 조정 */
+    /* transform-origin: top left;  */
+    overflow: scroll;
+    /* 오른쪽 상단에 배치 */
+    position: fixed;
+    top: 60px; 
+    right: 50px;
+}
+
+.participants-icon {
+    /* z-index: 999; */
+    font-size: 14px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #FFE3F7;
+    color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* 오른쪽 상단에 배치 */
+    position: fixed;
+    top: 60px; 
+    right: 70px;
+}
+
+.participant-header {
+    background-color: rgb(229, 229, 229);
+    display: flex; 
+    align-items: center; 
+    height: 5vh;
+}
+
+.participant-list-text {
+    color: black;
+    margin-left: 150px;
+    font-weight: 600;
+}
+
+.participant-close-button {
+    border: none;
+    font-size: 20px;
+    color: rgb(126, 126, 126);
+    background-color: rgb(229, 229, 229);
+    /* 오른쪽 상단에 배치 */
+    position: fixed;
+    top: 5px;
+    right: 0;
+}
+
+/* 참여자 리스트 */
+.participant-list {
+    margin: 25px 20px;
+    padding-left: 15px;
+    font-size: 20px;
+    border-bottom: 1px solid rgb(229, 229, 229);
+}
+
+.participant-delete-button {
+    color: white;
+    background-color: #ff9ed6;
+    border: #ff9ed6;
+    width: 3vw;
+    height: 2.6vh;
+    border-radius: 5px;
+    position: fixed;
+    right: 15px;
+}
+
+/* 참여자 하단 */
+.add-participant-footer {
+    position: fixed;
+    bottom: 10px;
+}
+
+/* 참여자 초대 폼 */
+.add-participant-form {
+    border-radius: 5px;
+    margin: 10px;
+    width: 20vw;
+    height: 3vh;
+    border: 1px solid rgb(187, 187, 187);
+}
+
+/* 참여자 추가 버튼 */
+.participant-add-button {
+    border-radius: 5px;
+    width: 2vw;
+    height: 3vh;
+    background-color: #ff9ed6;
+    border: none;
+    color: #fff;
+    font-size: 20px;
+}

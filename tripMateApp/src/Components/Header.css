@@ -4,8 +4,8 @@
     justify-content: space-between;
     align-items: center;
     /* padding: 10px 50px; */
-    background-color: #fff;
-    border-bottom: 1px solid #bfbfbf;
+    background-color: #fcd4f0;
+    /* border-bottom: 1px solid #bfbfbf; */
     /* position: fixed; */
     width: 100%;
     top: 0;
@@ -27,7 +27,7 @@
   
   .header-left h1 {
     font-size: 24px;
-    color: #f4b6e6;
+    color: #fff;
     margin: 0;
     width: 70px;
   }

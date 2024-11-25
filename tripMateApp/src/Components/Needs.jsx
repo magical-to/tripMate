@@ -126,7 +126,7 @@ const Needs = ({ tripId, title }) => {
                 ) : (
                     /* 닫혀 있는 상태 */
                     <div className="needs-open-icon" onClick={handleOpenClick}>
-                        ✔️
+                        준비물
                     </div>
                 )}
             </Draggable>

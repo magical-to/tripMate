@@ -106,7 +106,8 @@ const Calculate = () => {
     };
 
     // 경비 추가
-    const handleCreateExpense = () => {
+    const handleCreateExpense = (e) => {
+        e.preventDefault(); // 기본 폼 제출 방지
         // 입력 데이터 유효성 검사
         if (!expenseData.price || !expenseData.category || !expenseData.description) {
             alert('모든 필드를 입력하세요.');
@@ -265,7 +266,7 @@ const Calculate = () => {
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan="4" style={{ textAlign: 'center' }}>경비가 없습니다.</td>
+                                    <td colSpan="5" style={{ textAlign: 'center' }}>경비가 없습니다.</td>
                                 </tr>
                             )}
                         </tbody>
@@ -280,14 +281,19 @@ const Calculate = () => {
                         value={expenseData.price}
                         onChange={handleInputChange}
                     />
-                    <input
+                    <select
                         className="expense-input"
-                        type="text"
                         name="category"
-                        placeholder="카테고리"
                         value={expenseData.category}
                         onChange={handleInputChange}
-                    />
+                    >
+                        <option value="">카테고리</option>
+                        <option value="식비">식비</option>
+                        <option value="교통비">교통비</option>
+                        <option value="숙박비">숙박비</option>
+                        <option value="입장료">입장료</option>
+                        <option value="기타">기타</option>
+                    </select>
                     <input
                         className="expense-input"
                         type="text"
@@ -302,11 +308,11 @@ const Calculate = () => {
                         name="day"
                         placeholder="날짜 (지울 예정)"
                         value={selectedDay}
-                        onChange={handleInputChange}
                         readOnly
                     />
                     <button type="submit" className="form-button">{editingExpenseId ? '수정' : '추가'}</button>
                 </form>
+
             </div>
         </div> 
     );

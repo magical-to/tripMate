@@ -8,6 +8,7 @@ import MapComponent from "../Components/MapComponent";
 import cal_img from "../assets/계산기2.png";
 import Needs from "../Components/Needs";
 import "./Plan.css";
+import Participant from "../Components/Participant";
 
 function parseJwt(token) {
   const base64Url = token.split('.')[1];
@@ -190,6 +191,7 @@ const Plan = () => {
 
         <div className="kakao-map-container">
         <MapComponent userId={userId} waypoints={waypoints} setWaypoints={setWaypoints} />
+        <Participant tripId={tripId}/>
         </div>
       </div>
     </div>
