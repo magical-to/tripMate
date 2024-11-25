@@ -306,7 +306,7 @@ const Calculate = () => {
                         className="expense-input"
                         type="number"
                         name="day"
-                        placeholder="날짜 (지울 예정)"
+                        placeholder="일차"
                         value={selectedDay}
                         readOnly
                     />
