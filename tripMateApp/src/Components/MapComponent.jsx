@@ -76,6 +76,8 @@ const MapComponent = ({ userId, waypoints, setWaypoints }) => {
       content: customOverlayContent,
       yAnchor: 2.5,
     });
+
+    setInfowindows((prev) => [...prev, customOverlay]);
   
     return { marker, overlay: customOverlay };
   };
@@ -162,7 +164,9 @@ const MapComponent = ({ userId, waypoints, setWaypoints }) => {
     setStartCoords(null);
     setEndCoords(null);
 
-    markers.forEach((marker) => marker.setMap(null));
+    markers.forEach((marker) => {
+      marker.setMap(null);
+    });
     setMarkers([]);
   
     infowindows.forEach((overlay) => {
@@ -216,25 +220,30 @@ const MapComponent = ({ userId, waypoints, setWaypoints }) => {
       return marker;
     });
   
-    const placesWithAddress = places.map((place) => ({
+    const placesWithDetails = places.map((place) => ({
+      id: place.id,
       name: place.place_name,
       address: place.road_address_name || place.address_name || '주소 정보 없음',
     }));
   
     setMarkers(newMarkers);
-    setPlacesList(placesWithAddress);
+    setPlacesList(placesWithDetails);
     map.setBounds(bounds);
   };
+  
   
   const handleSearch = async () => {
     try {
       const startCoords = await getCoordinates(startAddress);
       const endCoords = await getCoordinates(endAddress);
+
+      infowindows.forEach((overlay) => {
+        overlay.setMap(null);
+      });
+      setInfowindows([]);
   
       markers.forEach((marker) => marker.setMap(null));
-      infowindows.forEach((overlay) => overlay.setMap(null));
       setMarkers([]);
-      setInfowindows([]);
   
       const { marker: startMarker, overlay: startOverlay } = createMarkerWithText(
         map,
@@ -281,6 +290,7 @@ const MapComponent = ({ userId, waypoints, setWaypoints }) => {
       setMarkers((prev) => [...prev, ...waypointMarkers]);
       setInfowindows((prev) => [...prev, ...waypointOverlays]);
   
+
       handleRoute(startCoords, endCoords, waypointCoords);
     } catch (error) {
       console.error('경로 설정 오류:', error);
@@ -403,27 +413,85 @@ const MapComponent = ({ userId, waypoints, setWaypoints }) => {
   )}
   {placesList.map((place, index) => (
     <li
-      key={index}
-      className="place-item"
-      onClick={() => {
-        navigator.clipboard
-          .writeText(place.address)
-          .then(() => {
-            alert(`${place.address}가 클립보드에 복사되었습니다!`);
-          })
-          .catch((err) => {
-            console.error('주소 복사 중 오류 발생:', err);
-            alert('주소 복사에 실패했습니다. 다시 시도해주세요.');
+    key={index}
+    className="place-item"
+    onClick={() => {
+      const address = place.address;
+      const name = place.name;
+      const id = place.id;
+  
+      if (!address) {
+        alert('해당 장소의 주소 정보를 찾을 수 없습니다.');
+        return;
+      }
+  
+      geocoder.addressSearch(address, (result, status) => {
+        if (status === window.kakao.maps.services.Status.OK) {
+          const coords = new window.kakao.maps.LatLng(result[0].y, result[0].x);
+  
+          const markerImage = new window.kakao.maps.MarkerImage(
+            'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png',
+            new window.kakao.maps.Size(30, 40),
+            { offset: new window.kakao.maps.Point(15, 40) }
+          );
+  
+          const marker = new window.kakao.maps.Marker({
+            map: map,
+            position: coords,
+            image: markerImage,
           });
-      }}
-    >
-      <strong>{place.name}</strong>
-      <br />
-      {place.address}
-    </li>
+  
+          const customOverlayContent = `
+            <div style="padding: 8px 12px; background: rgba(255, 255, 255, 0.9); border-radius: 8px; border: 1px solid #ddd; color: #333;">
+              ${address}
+            </div>
+          `;
+          const overlay = new window.kakao.maps.CustomOverlay({
+            map: map,
+            position: coords,
+            content: customOverlayContent,
+            yAnchor: 1.5,
+          });
+  
+          setMarkers((prevMarkers) => [...prevMarkers, marker]);
+          setInfowindows((prevOverlays) => [...prevOverlays, overlay]);
+  
+          map.setCenter(coords);
+        } else {
+          alert('해당 주소를 지도에 추가할 수 없습니다.');
+        }
+      });
+  
+      setWaypoints((prev) => [...prev, address]);
+    }}
+  >
+    <strong>{place.name}</strong>
+    <br />
+    {place.address}
+    <button
+        className="link-button"
+        onClick={(e) => {
+          e.stopPropagation();
+          const kakaoMapLink = `https://map.kakao.com/link/map/${place.id}`;
+          window.open(kakaoMapLink, '_blank');
+        }}
+        style={{
+          marginLeft: '8px',
+          padding: '4px 6px',
+          fontSize: '12px',
+          backgroundColor: '#eee',
+          border: '1px solid #ccc',
+          borderRadius: '4px',
+          cursor: 'pointer',
+        }}
+      >
+      ...
+      </button>
+  </li>
+  
+  
   ))}
 </ul>
-
       <div ref={mapRef} className="kakao-map" style={{ width: '100%', height: '500px' }}></div>
     </div>
   );
