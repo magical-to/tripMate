@@ -151,12 +151,12 @@
 
 .places-list {
   margin-top: 230px;
-  width: 300px;
+  width: 280px;
   max-height: 360px;
   overflow-y: auto;
   position: absolute;
-  left: 0;
-  top: 0;
+  left: 15px;
+  top: 35px;
   background-color: #ffffff;
   padding: 10px;
   border-radius: 8px;
