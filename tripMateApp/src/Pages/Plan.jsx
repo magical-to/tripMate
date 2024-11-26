@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { useNavigate } from 'react-router-dom';
 import DraggableIcon from "../Components/DraggableIcon";
 import axios from "axios";
@@ -35,7 +36,6 @@ const Plan = () => {
   
   console.log("title: ", title);
   
-  // 전역변수로 설정
   let end_date;
   let start_date;
 
@@ -78,53 +78,23 @@ const Plan = () => {
       alert('방문할 장소를 입력해주세요!');
       return;
     }
-  
     setWaypoints((prev) => [...prev, newPlace]);
-  
-    geocoder.addressSearch(newPlace, (result, status) => {
-      if (status === window.kakao.maps.services.Status.OK) {
-        const coords = new window.kakao.maps.LatLng(result[0].y, result[0].x);
-  
-        const markerImage = new window.kakao.maps.MarkerImage(
-          'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png',
-          new window.kakao.maps.Size(30, 40),
-          { offset: new window.kakao.maps.Point(15, 40) }
-        );
-  
-        const marker = new window.kakao.maps.Marker({
-          map: map,
-          position: coords,
-          image: markerImage,
-        });
-  
-        const customOverlayContent = `
-          <div style="padding: 8px 12px; background: rgba(255, 255, 255, 0.9); border-radius: 8px; border: 1px solid #ddd; color: #333;">
-            ${newPlace}
-          </div>
-        `;
-        const overlay = new window.kakao.maps.CustomOverlay({
-          map: map,
-          position: coords,
-          content: customOverlayContent,
-          yAnchor: 1.5,
-        });
-  
-        setMarkers((prevMarkers) => [...prevMarkers, marker]);
-        setInfowindows((prevOverlays) => [...prevOverlays, overlay]);
-  
-
-        map.setCenter(coords);
-      } else {
-        alert('해당 장소를 찾을 수 없습니다.');
-      }
-    });
-  
     setNewPlace('');
   };
-  
+
   const removeVisitPlace = (index) => {
     const updatedWaypoints = waypoints.filter((_, i) => i !== index);
     setWaypoints(updatedWaypoints);
+  };
+
+  const handleDragEnd = (result) => {
+    if (!result.destination) return;
+
+    const items = Array.from(waypoints);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+
+    setWaypoints(items);
   };
 
   return (
@@ -156,42 +126,74 @@ const Plan = () => {
           </div>
 
           <div className="visit-places-container">
-            <h4>방문할 장소</h4>
-            <input
-              type="text"
-              placeholder="방문할 장소 입력"
-              value={newPlace}
-              onChange={(e) => setNewPlace(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  addVisitPlace();
-                }
-              }}
-              className="visit-place-input"
-            />
-            <button onClick={addVisitPlace} className="add-visit-place-button">
-              추가
-            </button>
-            <ul className="visit-places-list">
-              {waypoints.map((place, index) => (
-                <li key={index} className="visit-place-item">
-                  <span className="place-index">{index + 1}.</span>
-                  <span className="place-name">{place}</span>
-                  <button
-                    onClick={() => removeVisitPlace(index)}
-                    className="remove-button"
+            <h4>방문할 장소들의 목록</h4>
+            <DragDropContext onDragEnd={handleDragEnd}>
+              <Droppable droppableId="visit-places-list">
+                {(provided) => (
+                  <ul
+                    className="visit-places-list"
+                    {...provided.droppableProps}
+                    ref={provided.innerRef}
                   >
-                    삭제
-                  </button>
-                </li>
-              ))}
-            </ul>
+                    {waypoints.map((place, index) => (
+                      <Draggable key={place} draggableId={place} index={index}>
+                        {(provided) => (
+                          <li
+                            className="visit-place-item"
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                          >
+                            <div className="place-header">
+                              <input
+                              type="text"
+                              className="info-input"
+                              placeholder="장소명"
+                              />
+                              <input
+                              type="text"
+                              className="time-input"
+                              placeholder="머물 시간"
+                              />
+                              <br/>
+                            <span className="place-index">{index + 1}.</span>
+                            <span className="place-name">{place}</span>
+                            <button
+                              className="delete-button"
+                              onClick={() => {
+                                const updatedWaypoints = waypoints.filter(
+                                  (_, i) => i !== index);
+                                  setWaypoints(updatedWaypoints);
+                                }}
+                                style={{
+                                  marginLeft: "10px",
+                                  marginTop: "4px",
+                                  padding: "4px 8px",
+                                  backgroundColor: "#f44336",
+                                  color: "#fff",
+                                  border: "none",
+                                  borderRadius: "4px",
+                                  cursor: "pointer",
+                                }}
+                                >
+                              X
+                            </button>
+                            </div>
+                          </li>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </ul>
+                )}
+              </Droppable>
+            </DragDropContext>
           </div>
         </div>
 
         <div className="kakao-map-container">
-        <MapComponent userId={userId} waypoints={waypoints} setWaypoints={setWaypoints} />
-        <Participant tripId={tripId}/>
+          <MapComponent userId={userId} waypoints={waypoints} setWaypoints={setWaypoints} />
+          <Participant tripId={tripId}/>
         </div>
       </div>
     </div>
