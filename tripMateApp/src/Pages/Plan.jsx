@@ -54,20 +54,18 @@ const Plan = () => {
     start_date = plan.start_date;
   });
 
+  // 여행 날짜 계산
   useEffect(() => {
-    const start = new Date(start_date);
-    const end = new Date(end_date);
-    const dayCount = Math.ceil((end - start) / (1000 * 60 * 60 * 24)) + 1;
-    const dayArray = Array.from({ length: dayCount }, (_, index) => index + 1);
-    setDays(dayArray);
+    if (plans.length > 0) {
+      const start = new Date(plans[0].start_date); // 여행 시작 날짜
+      const end = new Date(plans[0].end_date);     // 여행 종료 날짜
+      const dayCount = Math.ceil((end - start) / (1000 * 60 * 60 * 24)) + 1;
+      const dayArray = Array.from({ length: dayCount }, (_, index) => index + 1);
+      setDays(dayArray);
+    }
+  }, [plans]);  
 
-    const initialWaypoints = dayArray.reduce((acc, day) => {
-      acc[day] = [];
-      return acc;
-    }, {});
-    setDayWaypoints(initialWaypoints);
-  }, []);
-
+  // 디코딩
   useEffect(() => {
     const token = localStorage.getItem('access_token');
     if (token) {
@@ -81,11 +79,12 @@ const Plan = () => {
     }
   }, []);
 
+  // 여행 조회
   useEffect(() => {
     const API_URL_PLAN_GET = `https://www.daebak.store/trips/${tripId}`;
     axios.get(API_URL_PLAN_GET)
       .then((response) => {
-        setPlans(response.data);
+        setPlans(response.data); // 여행 데이터를 plans 상태에 저장
       })
       .catch((error) => {
         console.error("Error fetching plans: ", error);
