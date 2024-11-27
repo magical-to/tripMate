@@ -31,17 +31,6 @@
 }
 
 .go-calculate-button {
-  width: 55px;
-  height: 55px;
-  border-radius: 10px;
-  background-color: #FFE3F7;
-  color: #fff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: fixed;
-  top: 70px; 
-  left: 275px;
     z-index: 100;
     font-size: 18px;
     width: 50px;
