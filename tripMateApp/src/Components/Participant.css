@@ -1,5 +1,5 @@
 .participant-container {
-    z-index: 999;
+    z-index: 9999;
     background-color: #fff;
     border: 2px solid rgb(196, 196, 196);
     border-radius: 5px;
@@ -20,7 +20,7 @@
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background-color: #FFE3F7;
+    background-color: #fcd4f0;
     color: #fff;
     display: flex;
     justify-content: center;
@@ -36,15 +36,17 @@
 }
 
 .participant-header {
-    background-color: rgb(229, 229, 229);
-    display: flex; 
-    align-items: center; 
+    background-color: rgb(229, 229, 229); 
     height: 5vh;
+    display: flex;
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; 
+    text-align: center; 
 }
 
 .participant-list-text {
     color: black;
-    margin-left: 150px;
     font-weight: 600;
 }
 
@@ -69,8 +71,8 @@
 
 .participant-delete-button {
     color: white;
-    background-color: #ff9ed6;
-    border: #ff9ed6;
+    background-color: #fcd4f0;
+    border: #fcd4f0;
     width: 3vw;
     height: 2.6vh;
     border-radius: 5px;
@@ -98,7 +100,7 @@
     border-radius: 5px;
     width: 2vw;
     height: 3vh;
-    background-color: #ff9ed6;
+    background-color: #fcd4f0;
     border: none;
     color: #fff;
     font-size: 20px;

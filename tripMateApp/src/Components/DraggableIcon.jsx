@@ -21,7 +21,7 @@ const DraggableIcon = ({ tripId, title }) => {
                 {isChatOpen ? (
                     <div className="chat-container"> 
                         <div className="chat-header">
-                            <h3 className="chat-title">{title}</h3>
+                            <h3 className="chat-title">채팅</h3>
                             <Button
                                 text="x"
                                 customClass="chat-close-button"

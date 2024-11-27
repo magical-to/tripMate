@@ -4,7 +4,7 @@
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background-color: #FFE3F7;
+    background-color: #fcd4f0;
     color: #fff;
     display: flex;
     justify-content: center;
@@ -16,7 +16,7 @@
 }
 
 .needs-open-container {
-    z-index: 999;
+    z-index: 999999;
     background-color: #fff;
     border: 2px solid rgb(196, 196, 196);
     border-radius: 5px;
@@ -94,7 +94,7 @@
     width: 3.5vw;
     height: 2.6vh;
     border-radius: 5px;
-    background-color: #ff9ed6;
+    background-color: #fcd4f0;
     position: fixed;
     right: 15px;
     color: #fff;
@@ -124,21 +124,8 @@
     border-radius: 5px;
     width: 2vw;
     height: 3vh;
-    background-color: #ff9ed6;
+    background-color: #fcd4f0;
     border: none;
     color: #fff;
     font-size: 20px;
 }
-
-/* 완료 버튼 */
-/* .needs-done-button {
-    border-radius: 5px;
-    border: none;
-    color: #ffffff;
-    width: 3vw;
-    height: 3vh;
-    position: fixed;
-    bottom: 10px; 
-    right: 160px;
-    background-color: #ff9ed6;
-} */
