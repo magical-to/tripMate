@@ -31,6 +31,9 @@ const Plan = () => {
   const [userId, setUserId] = useState('');
   const [waypoints, setWaypoints] = useState([]);
   const [newPlace, setNewPlace] = useState('');
+  const [dayWaypoints, setDayWaypoints] = useState({});
+  const [days, setDays] = useState([]);
+  const [selectedDay, setSelectedDay] = useState(1);
   const [editingPlanId, setEditingPlanId] = useState(null); // 수정할 계획의 ID
   const [editedPlan, setEditedPlan] = useState({
     name: '',
@@ -50,6 +53,20 @@ const Plan = () => {
     end_date = plan.end_date;
     start_date = plan.start_date;
   });
+
+  useEffect(() => {
+    const start = new Date(start_date);
+    const end = new Date(end_date);
+    const dayCount = Math.ceil((end - start) / (1000 * 60 * 60 * 24)) + 1;
+    const dayArray = Array.from({ length: dayCount }, (_, index) => index + 1);
+    setDays(dayArray);
+
+    const initialWaypoints = dayArray.reduce((acc, day) => {
+      acc[day] = [];
+      return acc;
+    }, {});
+    setDayWaypoints(initialWaypoints);
+  }, []);
 
   useEffect(() => {
     const token = localStorage.getItem('access_token');
@@ -203,6 +220,20 @@ const Plan = () => {
                     )}
                 </div>
                 <div className="visit-places-container">
+                  <div className="day-selector">
+                    <label htmlFor="day-select">일차 선택:</label>
+                    <select
+                    id="day-select"
+                    value={selectedDay}
+                    onChange={(e) => setSelectedDay(Number(e.target.value))}
+                    >
+                      {days.map((day) => (
+                        <option key={day} value={day}>
+                          {day}일차
+                          </option>
+                        ))}
+                        </select>
+                        </div>
                     <h4>방문할 장소들의 목록</h4>
                     <DragDropContext onDragEnd={handleDragEnd}>
                         <Droppable droppableId="visit-places-list">
