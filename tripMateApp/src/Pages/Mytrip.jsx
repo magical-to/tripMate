@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Header from '../Components/Header';
 import { FaBars } from 'react-icons/fa';
-import { getMyTrips, getPersonalTrips, getGroupTrips, getParticipant, leaveTrip } from '../Services/tripService'; 
+import { getMyTrips, getPersonalTrips, getGroupTrips, getParticipant, leaveTrip, deleteTrip } from '../Services/tripService'; 
 import './Mytrip.css';
+import Button from '../Components/Button';
 
 const Mytrip = () => {
     const [trips, setTrips] = useState([]); // 여행 목록 상태
@@ -11,6 +13,7 @@ const Mytrip = () => {
     const [category, setCategory] = useState('전체 일정'); // 카테고리 상태
     const [participants, setParticipants] = useState({}); // 참여자 목록 상태
     const menuRef = useRef(null);
+    const navigate = useNavigate();
 
     const toggleMenu = (index) => {
         setMenuVisible(menuVisible === index ? null : index);
@@ -109,6 +112,25 @@ const Mytrip = () => {
         }
     };
 
+    // 여행 삭제 핸들러
+    const handleDeleteTrip = async (tripId) => {
+        const confirmed = window.confirm("여행을 삭제하시겠습니까?");
+        if (confirmed) {
+            try {
+                await deleteTrip(tripId); // deleteTrip 호출
+                setTrips(prevTrips => prevTrips.filter(trip => trip.id !== tripId)); // 여행 목록에서 해당 여행 제거
+            } catch (error) {
+                console.error("여행 삭제 중 오류 발생:", error);
+                alert("여행 삭제에 실패했습니다. 다시 시도해 주세요."); // 오류 알림
+            }
+        }
+    };
+
+    // 여행 수정 버튼 눌렀을 때 (plan 페이지 이동)
+    const handleNavigateToPlan = (tripId, title) => {
+        navigate(`/plan?tripId=${tripId}&title=${title}`); // 쿼리 파라미터로 tripId 전달
+    };
+
     return (
         <>
             <Header />
@@ -132,14 +154,19 @@ const Mytrip = () => {
                     <div className="trips-list">
                         {trips.map((trip, index) => {
                             const daysLeft = calculateDaysLeft(trip.start_date);
+                            const isPersonalTrip = participants[trip.id] && participants[trip.id].length === 1;
+    
                             return (
                                 <div key={trip.id} className="trip-container">
                                     <div className="trip-days-left">
-                                        <p>{daysLeft >= 0 ? `D-${daysLeft}` : '종료'}</p>
+                                        <p className='dday'>{daysLeft >= 0 ? `D-${daysLeft}` : '종료'}</p>
                                     </div>
     
                                     <div className="trip-info">
                                         <h3 className="trip-title">{trip.name}</h3>
+                                        <p className="trip-type">
+                                            {isPersonalTrip ? '개인 여행' : '단체 여행'}
+                                        </p>
                                         <p className="trip-dates">
                                             날짜: {trip.start_date} ~ {trip.end_date}
                                         </p>
@@ -159,8 +186,27 @@ const Mytrip = () => {
     
                                     {menuVisible === index && (
                                         <div className="trip-menu" ref={menuRef}>
-                                            <button className="menu-item" onClick={() => handleLeaveTrip(trip.id)}>여행 나가기</button>
-                                            <button className="menu-item" onClick={() => handleDeleteTrip(trip.id)}>여행 삭제</button>
+                                            {category === '개인 일정' ? (
+                                                <button className="menu-item" onClick={() => handleDeleteTrip(trip.id)}>여행 삭제</button>
+                                            ) : (
+                                                <>
+                                                    <Button 
+                                                        customClass='menu-item'
+                                                        text="상세보기"
+                                                        onClick={() => handleNavigateToPlan(trip.id, trip.name)}
+                                                    />
+                                                    <Button 
+                                                        customClass='menu-item'
+                                                        onClick={() => handleLeaveTrip(trip.id)}
+                                                        text="여행 나가기"
+                                                    />
+                                                    <Button 
+                                                        customClass='menu-item'
+                                                        onClick={() => handleDeleteTrip(trip.id)}
+                                                        text="여행 삭제"
+                                                    />
+                                                </>
+                                            )}
                                         </div>
                                     )}
                                 </div>

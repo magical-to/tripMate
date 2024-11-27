@@ -108,7 +108,6 @@ export const inviteParticipant = async (tripId, memberIds) => {
         else {
             throw new Error('참여자 강퇴에 실패했습니다: ' + error.message); // 일반 에러 처리
         }
-        
     }
 };
 
@@ -194,3 +193,53 @@ export const leaveTrip = async (tripId) => {
 };
 
 // 여행 삭제하기 함수
+export const deleteTrip = async (tripId) => {
+    try {
+        const response = await fetch(`https://www.daebak.store/trips/${tripId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `${token}`, 
+            },
+        });
+        if (!response.ok) {
+            throw new Error(`여행 삭제 실패: ${response.statusText}`);
+        }
+        alert("여행이 삭제되었습니다."); // 사용자 알림
+    } catch (error) {
+        console.error("여행 삭제 중 오류 발생:", error);
+        alert("여행 삭제에 실패했습니다. 다시 시도해 주세요."); // 오류 알림
+    }
+};
+
+// 여행 수정하기 함수
+export const updateTrip = async (tripId, tripData) => {
+    console.log(tripId);
+    const token = localStorage.getItem('token'); // 로컬 스토리지에서 토큰 가져오기
+
+    // 시간 형식을 HH:mm에서 HHmm으로 변환하는 함수
+    const convertTimeToHHmm = (time) => {
+        if (!time) return ''; // 유효성 검사
+        return time.replace(':', ''); // HH:mm -> HHmm 형식으로 변환
+    };
+
+    // tripData의 start_time과 end_time 변환
+    tripData.start_time = convertTimeToHHmm(tripData.start_time);
+    tripData.end_time = convertTimeToHHmm(tripData.end_time);
+
+    console.log(tripData);
+    // const tripDatas = JSON.stringify(tripData)
+    // console.log("서버가 수신한 tripData: ", tripDatas);
+
+    try {
+        const response = await axios.put(`https://www.daebak.store/trips/${tripId}`, tripData, {
+            headers: {
+                'Authorization': `${token}`
+            }
+        });
+
+        return response.data;
+    }
+    catch (error) {
+        throw new Error('여행 수정 실패' , + error.message);
+    }
+};
