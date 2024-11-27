@@ -183,30 +183,23 @@ const Mytrip = () => {
                                         className="trip-menu-button" 
                                         onClick={() => toggleMenu(index)} 
                                     />
-    
                                     {menuVisible === index && (
                                         <div className="trip-menu" ref={menuRef}>
-                                            {category === '개인 일정' ? (
-                                                <button className="menu-item" onClick={() => handleDeleteTrip(trip.id)}>여행 삭제</button>
-                                            ) : (
-                                                <>
-                                                    <Button 
-                                                        customClass='menu-item'
-                                                        text="상세보기"
-                                                        onClick={() => handleNavigateToPlan(trip.id, trip.name)}
-                                                    />
-                                                    <Button 
-                                                        customClass='menu-item'
-                                                        onClick={() => handleLeaveTrip(trip.id)}
-                                                        text="여행 나가기"
-                                                    />
-                                                    <Button 
-                                                        customClass='menu-item'
-                                                        onClick={() => handleDeleteTrip(trip.id)}
-                                                        text="여행 삭제"
-                                                    />
-                                                </>
-                                            )}
+                                            <Button 
+                                                customClass='menu-item'
+                                                text="상세보기"
+                                                onClick={() => handleNavigateToPlan(trip.id, trip.name)}
+                                            />
+                                            <Button 
+                                                customClass='menu-item'
+                                                onClick={() => handleLeaveTrip(trip.id)}
+                                                text="여행 나가기"
+                                            />
+                                            <Button 
+                                                customClass='menu-item'
+                                                onClick={() => handleDeleteTrip(trip.id)}
+                                                text="여행 삭제"
+                                            />
                                         </div>
                                     )}
                                 </div>

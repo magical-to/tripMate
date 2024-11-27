@@ -214,12 +214,14 @@
   color: #fcd4f0;
   font-weight: bold;
   font-size: 1.2em;
-  text-shadow: 
+  margin-top: -5px;
+  margin-right: 5px;
+  /* text-shadow: 
     -1px -1px 0 #707070,
     1px -1px 0 #707070,
     -1px  1px 0 #707070,
-    1px  1px 0 #707070;
-  }
+    1px  1px 0 #707070; */
+}
 
 .place-item.user-recommendation-title {
   font-weight: bold;
