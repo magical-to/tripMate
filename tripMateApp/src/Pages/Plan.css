@@ -10,18 +10,19 @@
   font-weight: bold;
 }
 
-.plan-list {
-  margin: 10px;
-  padding-left: 5px;
-  margin-left: 10px;
+.plan-lists {
+  padding-left: 10px;
+  margin-left: 23px;
+  margin-right: 0px;
   margin-top: 20px;
-  width: 300px;
+  width: 50%;
   border: 2px solid #e9e9e9ac;
   background-color: #fff;
   border-radius: 8px;
   box-sizing: border-box;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
 
 .plan-item {
   margin: 10px;
@@ -30,24 +31,28 @@
 }
 
 .go-calculate-button {
-  /* z-index: 999; */
-  width: 55px;
-  height: 55px;
-  border-radius: 10px;
-  background-color: #FFE3F7;
-  color: #fff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: fixed;
-  top: 70px; 
-  left: 275px;
+    z-index: 100;
+    font-size: 18px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #FFE3F7;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+
+    /* 오른쪽 상단에 배치 */
+    position: fixed;
+    top: 60px; 
+    right: 130px;
 }
 
 
-/* .go-calculate-button:hover {
+.go-calculate-button:hover {
   background-color: #f97dd8;
-} */
+}
 
 .go-calculate-button img {
   width: 32px;
@@ -55,16 +60,15 @@
 }
 
 .visit-places-container {
-  margin-right: 50px;
-  margin-left: 50px;
-  margin-top: 20px;
-  width: 250px;
+  margin: 20px 30px;
+  width: 500px;
   background-color: #ffffff;
   border: 2px solid #e9e9e9;
   border-radius: 8px;
   padding: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   height: 500px;
+  overflow-x: auto;
 }
 
 .visit-place-input {
@@ -104,11 +108,25 @@
 }
 
 .visit-place-item {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 10px 5px;
   border-bottom: 1px solid #ddd;
+}
+
+.delete-button {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 4px 8px;
+  background-color: #fcd4f0;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 .visit-place-item:last-child {
@@ -117,31 +135,34 @@
 
 .place-index {
   font-weight: bold;
-  font-size: 14px;
+  font-size: 13px;
   color: #555;
   margin-right: 10px;
 }
 
 .place-name {
   flex: 1;
-  font-size: 14px;
+  font-size: 13px;
   color: #333;
 }
 
-.remove-button {
-  padding: 5px 10px;
-  background-color: #fcd4f0;
-  color: white;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  font-weight: bold;
-  text-align: center;
+.info-input {
+  width: 100px;
+  height: 10px;
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
-.remove-button:hover {
-  background-color: #d11a1f;
+.time-input {
+  margin-left: 10px;
+  width: 80px;
+  height: 10px;
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
 .visit-places-container h4 {
@@ -158,4 +179,71 @@
 
 .chat-icon.react-draggable {
   z-index: 9999;
+}
+
+/* 여행 수정 버튼 */
+.plan-detail-button {
+  position: relative;
+  left: 20px;
+  margin-top: 25px;
+  width: 4vw;
+  height: 4vh;
+  border-radius: 10px;
+  background-color: #fcd4f0;
+  border: none;
+  color: #fff;
+}
+
+.plan-info {
+  display: inline-flex;
+}
+
+.plan-date {
+  margin-left: 0px;
+  margin-right: 20px;
+}
+
+.plan-edit-form-title {
+  position: relative;
+  top: 10px;
+  border: 1px solid #c4c4c4;
+  border-radius: 5px;
+  margin-bottom: 0px;
+  width: 90%;
+  height: 3vh;
+  margin-bottom: 5px;
+}
+
+.plan-edit-form-date1 {
+  border: 1px solid #c4c4c4;
+  border-radius: 5px;
+  margin-top: 10px;
+  width: 50%;
+  height: 3vh;
+}
+
+.plan-edit-form-date2 {
+  border: 1px solid #c4c4c4;
+  border-radius: 5px;
+  margin-top: 5px;
+  margin-bottom: 0px;
+  width: 50%;
+  height: 3vh;
+}
+
+.plan-edit-form-time {
+  border: 1px solid #c4c4c4;
+  border-radius: 5px;
+  margin-left: 10px;
+}
+
+.plan-save-button {
+  width: 4vw;
+  height: 4vh;
+  border-radius: 10px;
+  background-color: #fcd4f0;
+  border: none;
+  color: #fff;
+  margin-top: 13px;
+  margin-left: 90px;
 }

@@ -129,6 +129,8 @@ const Calculate = () => {
             description: '',
             day: '', // day는 초기화 필요 없음
         });
+
+        window.location.reload();
     };
 
     // 경비 수정 핸들러
