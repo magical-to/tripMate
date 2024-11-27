@@ -129,6 +129,8 @@ const Calculate = () => {
             description: '',
             day: '', // day는 초기화 필요 없음
         });
+
+        window.location.reload();
     };
 
     // 경비 수정 핸들러
@@ -306,7 +308,7 @@ const Calculate = () => {
                         className="expense-input"
                         type="number"
                         name="day"
-                        placeholder="날짜 (지울 예정)"
+                        placeholder="일차"
                         value={selectedDay}
                         readOnly
                     />

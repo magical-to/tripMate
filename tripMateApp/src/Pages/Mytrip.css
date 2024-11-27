@@ -2,110 +2,156 @@
     padding: 20px;
     max-width: 800px;
     margin: 0 auto;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
+    margin-top: 40px;
+}
+
+.mytrip-page-h1 {
+    text-align: center;
+    font-size: 2em;
+    margin-bottom: 10px;
+}
+
+.mytrip-page-p {
+    text-align: center;
+    font-size: 1.2em;
+    color: #555;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
+.dropbtn {
+    background-color: #fcd4f0;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    min-width: 160px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    border-radius: 5px;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown-content button {
+    color: black;
+    padding: 10px 15px;
+    text-align: left;
+    border: none;
+    background: none;
+    width: 100%;
+    cursor: pointer;
+}
+
+.dropdown-content button:hover {
+    background-color: #f0f0f0;
 }
 
 .trips-list {
-    flex: 1;
-    overflow-y: auto;
-    border: 1px solid #e0e0e0;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    padding: 10px;
-    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 
 .trip-container {
     display: flex;
-    align-items: center;
-    background-color: #f0f0f0;
-    padding: 20px;
-    border-radius: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
+    position: relative;
+    padding: 10px; /* 추가된 패딩 */
 }
 
-.trip-image {
-    width: 150px;
-    height: 150px;
-    border-radius: 10px;
-    margin-right: 20px;
-}
-
-.trip-title {
-    color: black;
-    margin: 0;
-    margin-bottom: 10px;
+.trip-days-left {
+    background-color: #fcd4f0;
+    color: #fff;
+    border-radius: 8px;
+    padding: 10px;
+    font-weight: bold;
+    margin-right: 15px; /* 여행 정보와의 간격 조정 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 50px; /* 최소 너비 설정 */
 }
 
 .trip-info {
     flex: 1;
-    margin-left: 30px;
+    padding-left: 10px; /* 여행 정보와 D-Day 간의 간격 */
 }
 
-.trip-members,
-.trip-dates {
+.trip-title {
+    font-size: 1.4em;
+    margin: 0;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    color: #292929;
+}
+
+.trip-dates,
+.trip-time,
+.trip-member {
     margin: 5px 0;
-}
-
-.trip-days-left {
-    text-align: center;
-    margin-right: 50px;
-    font-size: 24px;
+    color: #777;
 }
 
 .trip-menu-button {
     cursor: pointer;
-}
-
-.trip-container {
-    display: flex;
-    align-items: center;
-    background-color: #f0f0f0;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
-    position: relative;
-}
-
-.trip-container {
-    display: flex;
-    align-items: center;
-    background-color: #f0f0f0;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
-    position: relative;
+    padding: 10px;
 }
 
 .trip-menu {
     position: absolute;
-    top: 110px;
-    right: 0;
+    top: 10px;
+    right: 10px;
     background-color: white;
-    border: 2px solid #fcd4f0;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    z-index: 1;
-    display: flex;
-    flex-direction: column;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
 }
 
 .menu-item {
-    padding: 10px 20px;
+    display: block;
+    padding: 10px 15px;
     border: none;
-    background-color: white;
-    cursor: pointer;
+    background: none;
     text-align: left;
+    cursor: pointer;
     width: 100%;
-    font-size: 16px;
-    transition: background-color 0.2s;
 }
 
 .menu-item:hover {
     background-color: #f0f0f0;
 }
+
+.menu-item:focus {
+    outline: none;
+    background-color: #e0e0e0;
+}
+
+.trip-type {
+    margin-bottom: 5px;
+    margin-top: 7px;
+    color: #777;
+}
+
+.dday {
+    font-size: 25px;
+}
+

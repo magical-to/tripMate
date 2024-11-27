@@ -9,10 +9,7 @@ const Needs = ({ tripId, title }) => {
     const [items, setItems] = useState([]);
     const [newItem, setNewItem] = useState('');
     const room = String(tripId);
-    // const room = "68";
-
-    console.log("방 번호: ", room)
-
+    
     const socket = useRef(null); // useRef를 사용하여 socket을 정의
     useEffect(() => {
         socket.current = io('wss://www.daebak.store/preparations'); 
