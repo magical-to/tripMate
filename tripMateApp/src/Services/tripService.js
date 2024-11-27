@@ -10,6 +10,7 @@ const token = localStorage.getItem('access_token');
 
 // 여행 생성 함수
 export const createTrip = async (title, selectedRange, startTime, endTime) => {
+    console.log("token", token);
     const startDate = selectedRange[0].toISOString().split('T')[0]; // 시작 날짜
     const endDate = selectedRange[1].toISOString().split('T')[0]; // 종료 날짜
 

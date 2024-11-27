@@ -25,6 +25,7 @@ export const login = async (userid, password) => {
     
     // access_token 저장
     const access_token = data.access_token;
+    console.log("저장된 access_token: ", access_token);
     localStorage.setItem('access_token', access_token);
 
   } 
