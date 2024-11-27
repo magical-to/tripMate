@@ -245,7 +245,7 @@ const Plan = () => {
                                                                 marginLeft: "10px",
                                                                 marginTop: "4px",
                                                                 padding: "4px 8px",
-                                                                backgroundColor: "#f44336",
+                                                                backgroundColor: "#fcd4f0",
                                                                 color: "#fff",
                                                                 border: "none",
                                                                 borderRadius: "4px",
