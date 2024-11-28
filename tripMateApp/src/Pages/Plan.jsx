@@ -11,7 +11,6 @@ import Participant from "../Components/Participant";
 import { updateTrip } from '../Services/tripService'; 
 import "./Plan.css";
 
-// 디코딩 함수
 function parseJwt(token) {
   const base64Url = token.split('.')[1];
   const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -33,7 +32,7 @@ const Plan = () => {
   const [dayWaypoints, setDayWaypoints] = useState({});
   const [days, setDays] = useState([]);
   const [selectedDay, setSelectedDay] = useState(1);
-  const [editingPlanId, setEditingPlanId] = useState(null); // 수정할 계획의 ID
+  const [editingPlanId, setEditingPlanId] = useState(null);
   const [editedPlan, setEditedPlan] = useState({
     name: '',
     start_date: '',
@@ -53,18 +52,16 @@ const Plan = () => {
     start_date = plan.start_date;
   });
 
-  // 여행 날짜 계산
   useEffect(() => {
     if (plans.length > 0) {
-      const start = new Date(plans[0].start_date); // 여행 시작 날짜
-      const end = new Date(plans[0].end_date);     // 여행 종료 날짜
+      const start = new Date(plans[0].start_date);
+      const end = new Date(plans[0].end_date);
       const dayCount = Math.ceil((end - start) / (1000 * 60 * 60 * 24)) + 1;
       const dayArray = Array.from({ length: dayCount }, (_, index) => index + 1);
       setDays(dayArray);
     }
   }, [plans]);  
 
-  // 디코딩
   useEffect(() => {
     const token = localStorage.getItem('access_token');
     if (token) {
@@ -78,12 +75,11 @@ const Plan = () => {
     }
   }, []);
 
-  // 여행 조회
   useEffect(() => {
     const API_URL_PLAN_GET = `https://www.daebak.store/trips/${tripId}`;
     axios.get(API_URL_PLAN_GET)
       .then((response) => {
-        setPlans(response.data); // 여행 데이터를 plans 상태에 저장
+        setPlans(response.data);
       })
       .catch((error) => {
         console.error("Error fetching plans: ", error);
@@ -94,25 +90,35 @@ const Plan = () => {
     navigate(`/calculate?title=${title}&start_date=${start_date}&end_date=${end_date}&tripId=${tripId}`);
   };
 
-  // 방문 장소 추가 및 삭제 로직 포함
-const handleAddWaypoint = (newWaypoint) => {
-  const updatedWaypoints = [...waypoints, newWaypoint];
-  setWaypoints(updatedWaypoints);
-  setDayWaypoints((prev) => ({ ...prev, [selectedDay]: updatedWaypoints }));
-};
+  const handleAddWaypoint = (newWaypoint) => {
+    const updatedWaypoints = [...waypoints, newWaypoint];
+    setWaypoints(updatedWaypoints);
+    setDayWaypoints((prev) => ({
+      ...prev,
+      [selectedDay]: updatedWaypoints,
+    }));
+  };
+  
+  const handleDeleteWaypoint = (index) => {
+    const updatedWaypoints = waypoints.filter((_, i) => i !== index);
+    setWaypoints(updatedWaypoints);
+    setDayWaypoints((prev) => ({
+      ...prev,
+      [selectedDay]: updatedWaypoints,
+    }));
+  };
+  
 
-const handleDeleteWaypoint = (index) => {
-  const updatedWaypoints = waypoints.filter((_, i) => i !== index);
-  setWaypoints(updatedWaypoints);
-  setDayWaypoints((prev) => ({ ...prev, [selectedDay]: updatedWaypoints }));
-};
-
-// 일차 선택 시 초기화 및 업데이트
 const handleDayChange = (day) => {
+  setDayWaypoints((prev) => ({
+    ...prev,
+    [selectedDay]: waypoints,
+  }));
+
+  setWaypoints(dayWaypoints[day] || []);
   setSelectedDay(day);
-  setWaypoints([]); // 방문 장소 초기화
-  setDayWaypoints((prev) => ({ ...prev, [day]: [] })); // 일차별 데이터를 초기화
 };
+
 
   
 
@@ -132,10 +138,8 @@ const handleDayChange = (day) => {
     setEditedPlan({ name: plan.name, start_date: plan.start_date, end_date: plan.end_date });
   };
 
-  // 여행 수정 함수
   const handleSaveEdit = async (planId) => { 
     console.log("여행 수정됨");
-    // tripData 형태로 묶기
     const tripData = {
         name: editedPlan.name,
         start_date: editedPlan.start_date, // YYYY-MM-DD 형식
@@ -145,16 +149,14 @@ const handleDayChange = (day) => {
     };
     
     try {
-        // updateTrip 함수를 사용하여 서버에 tripData 전송
         const updatedTrip = await updateTrip(planId, tripData);
         console.log("여행이 수정되었습니다:", updatedTrip);
 
-        // 수정된 여행 정보를 상태에 업데이트
         const updatedPlans = plans.map(plan =>
             plan.id === planId ? { ...plan, ...tripData } : plan
         );
         setPlans(updatedPlans);
-        setEditingPlanId(null); // 수정 모드 종료
+        setEditingPlanId(null);
     } catch (error) {
         console.error("여행 수정 중 오류 발생:", error);
         alert("여행 수정에 실패했습니다. 다시 시도해 주세요.");
@@ -183,15 +185,14 @@ const handleDayChange = (day) => {
                                     <>
                                         <input
                                             className="plan-edit-form-title"
-                                            // type="text"
                                             value={editedPlan.name}
                                             onChange={(e) => setEditedPlan({ ...editedPlan, name: e.target.value })}
                                             placeholder="  여행 제목"
                                         />
                                         <input
                                             className="plan-edit-form-date1"
-                                            type="date" // 년도 포함하는 날짜 입력 필드
-                                            value={editedPlan.start_date} // YYYY-MM-DD 형식으로 설정
+                                            type="date"
+                                            value={editedPlan.start_date}
                                             onChange={(e) => setEditedPlan({ ...editedPlan, start_date: e.target.value })}
                                         />
                                         <input
