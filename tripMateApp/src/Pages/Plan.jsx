@@ -30,7 +30,6 @@ const Plan = () => {
   const [plans, setPlans] = useState([]);
   const [userId, setUserId] = useState('');
   const [waypoints, setWaypoints] = useState([]);
-  const [newPlace, setNewPlace] = useState('');
   const [dayWaypoints, setDayWaypoints] = useState({});
   const [days, setDays] = useState([]);
   const [selectedDay, setSelectedDay] = useState(1);
@@ -95,6 +94,28 @@ const Plan = () => {
     navigate(`/calculate?title=${title}&start_date=${start_date}&end_date=${end_date}&tripId=${tripId}`);
   };
 
+  // 방문 장소 추가 및 삭제 로직 포함
+const handleAddWaypoint = (newWaypoint) => {
+  const updatedWaypoints = [...waypoints, newWaypoint];
+  setWaypoints(updatedWaypoints);
+  setDayWaypoints((prev) => ({ ...prev, [selectedDay]: updatedWaypoints }));
+};
+
+const handleDeleteWaypoint = (index) => {
+  const updatedWaypoints = waypoints.filter((_, i) => i !== index);
+  setWaypoints(updatedWaypoints);
+  setDayWaypoints((prev) => ({ ...prev, [selectedDay]: updatedWaypoints }));
+};
+
+// 일차 선택 시 초기화 및 업데이트
+const handleDayChange = (day) => {
+  setSelectedDay(day);
+  setWaypoints([]); // 방문 장소 초기화
+  setDayWaypoints((prev) => ({ ...prev, [day]: [] })); // 일차별 데이터를 초기화
+};
+
+  
+
   const handleDragEnd = (result) => {
     if (!result.destination) return;
 
@@ -103,6 +124,7 @@ const Plan = () => {
     items.splice(result.destination.index, 0, reorderedItem);
 
     setWaypoints(items);
+    setDayWaypoints((prev) => ({ ...prev, [selectedDay]: items }));
   };
 
   const handleEditClick = (plan) => {
@@ -219,81 +241,70 @@ const Plan = () => {
                     )}
                 </div>
                 <div className="visit-places-container">
-                  <div className="day-selector">
-                    <label htmlFor="day-select">일차 선택:</label>
-                    <select
-                    id="day-select"
-                    value={selectedDay}
-                    onChange={(e) => setSelectedDay(Number(e.target.value))}
-                    >
-                      {days.map((day) => (
-                        <option key={day} value={day}>
-                          {day}일차
-                          </option>
-                        ))}
-                        </select>
-                        </div>
-                    <h4>방문할 장소들의 목록</h4>
-                    <DragDropContext onDragEnd={handleDragEnd}>
-                        <Droppable droppableId="visit-places-list">
-                            {(provided) => (
-                                <ul
-                                    className="visit-places-list"
-                                    {...provided.droppableProps}
-                                    ref={provided.innerRef}
-                                >
-                                    {waypoints.map((place, index) => (
-                                        <Draggable key={place} draggableId={place} index={index}>
-                                            {(provided) => (
-                                                <li
-                                                    className="visit-place-item"
-                                                    ref={provided.innerRef}
-                                                    {...provided.draggableProps}
-                                                    {...provided.dragHandleProps}
-                                                >
-                                                    <div className="place-header">
-                                                        <input
-                                                            type="text"
-                                                            className="info-input"
-                                                            placeholder="장소명"
-                                                        />
-                                                        <input
-                                                            type="text"
-                                                            className="time-input"
-                                                            placeholder="머물 시간"
-                                                        />
-                                                        <br />
-                                                        <span className="place-index">{index + 1}.</span>
-                                                        <span className="place-name">{place}</span>
-                                                        <button
-                                                            className="delete-button"
-                                                            onClick={() => {
-                                                                const updatedWaypoints = waypoints.filter((_, i) => i !== index);
-                                                                setWaypoints(updatedWaypoints);
-                                                            }}
-                                                            style={{
-                                                                marginLeft: "10px",
-                                                                marginTop: "4px",
-                                                                padding: "4px 8px",
-                                                                backgroundColor: "#fcd4f0",
-                                                                color: "#fff",
-                                                                border: "none",
-                                                                borderRadius: "4px",
-                                                                cursor: "pointer",
-                                                            }}
-                                                        >
-                                                            X
-                                                        </button>
-                                                    </div>
-                                                </li>
-                                            )}
-                                        </Draggable>
-                                    ))}
-                                    {provided.placeholder}
-                                </ul>
-                            )}
-                        </Droppable>
-                    </DragDropContext>
+                <div className="day-selector">
+  <label htmlFor="day-select">일차 선택:</label>
+  <select
+    id="day-select"
+    value={selectedDay}
+    onChange={(e) => handleDayChange(Number(e.target.value))}
+  >
+    {days.map((day) => (
+      <option key={day} value={day}>
+        {day}일차
+      </option>
+    ))}
+  </select>
+</div>
+
+<h4>방문할 장소들의 목록</h4>
+<DragDropContext onDragEnd={handleDragEnd}>
+  <Droppable droppableId="visit-places-list">
+    {(provided) => (
+      <ul
+        className="visit-places-list"
+        {...provided.droppableProps}
+        ref={provided.innerRef}
+      >
+        {waypoints.map((place, index) => (
+          <Draggable key={place} draggableId={place} index={index}>
+            {(provided) => (
+              <li
+                className="visit-place-item"
+                ref={provided.innerRef}
+                {...provided.draggableProps}
+                {...provided.dragHandleProps}
+              >
+                <div className="place-header">
+                  <input
+                    type="text"
+                    className="info-input"
+                    placeholder="장소명"
+                  />
+                  <input
+                    type="text"
+                    className="time-input"
+                    placeholder="머물 시간"
+                  />
+                  <br />
+                  <span className="place-index">{index + 1}.</span>
+                  <span className="place-name">{place}</span>
+                  <button
+                    className="delete-button"
+                    onClick={() => handleDeleteWaypoint(index)}
+                  >
+                    X
+                  </button>
+                </div>
+              </li>
+            )}
+          </Draggable>
+        ))}
+        {provided.placeholder}
+      </ul>
+    )}
+  </Droppable>
+</DragDropContext>
+
                 </div>
             </div>
 
