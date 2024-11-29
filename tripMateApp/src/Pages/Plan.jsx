@@ -144,7 +144,7 @@ const Plan = () => {
         <Header />
         <Needs tripId={tripId} title={title} />
         <Button 
-          text="정산"
+          text="경비"
           customClass="go-calculate-button"
           onClick={goCalculate}
         />
