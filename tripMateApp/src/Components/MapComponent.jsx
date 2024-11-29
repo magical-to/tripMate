@@ -113,49 +113,35 @@ const MapComponent = ({ userId, waypoints, setWaypoints }) => {
       window.kakao.maps.event.removeListener(map, 'zoom_changed', handleZoomChange);
     };
   }, [map]);
-  
 
   useEffect(() => {
     if (!map || !geocoder) return;
   
+    // 기존 마커 제거
     markers.forEach((marker) => marker.setMap(null));
     setMarkers([]);
   
+    // waypoints 처리
     waypoints.forEach((waypoint) => {
-      geocoder.addressSearch(waypoint, (result, status) => {
-        if (status === window.kakao.maps.services.Status.OK) {
-          const coords = new window.kakao.maps.LatLng(result[0].y, result[0].x);
-          const { marker, overlay } = createMarkerWithText(map, coords, waypoint);
+      if (waypoint.address) { // address 필드가 있는 경우에만 처리
+        geocoder.addressSearch(waypoint.address, (result, status) => {
+          if (status === window.kakao.maps.services.Status.OK) {
+            const coords = new window.kakao.maps.LatLng(result[0].y, result[0].x);
+            const marker = new window.kakao.maps.Marker({
+              map,
+              position: coords,
+            });
+            setMarkers((prev) => [...prev, marker]);
+          } else {
+            console.warn(`경유지를 찾을 수 없습니다: ${waypoint.address}`);
+          }
+        });
+      } else {
+        console.warn(`주소가 없는 경유지:`, waypoint);
+      }
+    });
+  }, [waypoints, map, geocoder]);
   
-          setMarkers((prev) => [...prev, marker]);
-        } else {
-          console.warn(`경유지를 찾을 수 없습니다: ${waypoint}`);
-        }
-      });
-    });
-  }, [waypoints, map, geocoder]);
-
-  useEffect(() => {
-    if (!map || !geocoder) return;
-
-    markers.forEach((marker) => marker.setMap(null));
-    setMarkers([]);
-
-    waypoints.forEach((waypoint) => {
-      geocoder.addressSearch(waypoint, (result, status) => {
-        if (status === window.kakao.maps.services.Status.OK) {
-          const coords = new window.kakao.maps.LatLng(result[0].y, result[0].x);
-          const marker = new window.kakao.maps.Marker({
-            map,
-            position: coords,
-          });
-          setMarkers((prev) => [...prev, marker]);
-        } else {
-          console.warn(`경유지를 찾을 수 없습니다: ${waypoint}`);
-        }
-      });
-    });
-  }, [waypoints, map, geocoder]);
 
   const handleReset = () => {
     setStartAddress('');
@@ -236,7 +222,7 @@ const MapComponent = ({ userId, waypoints, setWaypoints }) => {
     try {
       const startCoords = await getCoordinates(startAddress);
       const endCoords = await getCoordinates(endAddress);
-
+  
       infowindows.forEach((overlay) => {
         overlay.setMap(null);
       });
@@ -266,37 +252,31 @@ const MapComponent = ({ userId, waypoints, setWaypoints }) => {
       const waypointMarkers = [];
       const waypointOverlays = [];
   
-      for (const [index, waypoint] of waypoints.entries()) {
-        if (waypoint) {
-          const coords = await getCoordinates(waypoint);
-  
-          const { marker: waypointMarker, overlay: waypointOverlay } = createMarkerWithText(
-            map,
-            new window.kakao.maps.LatLng(coords.lat, coords.lng),
-            `경유지${index + 1}`
-          );
-  
-          waypointMarkers.push(waypointMarker);
-          waypointOverlays.push(waypointOverlay);
-  
-          waypointCoords.push({
-            name: `경유지${index + 1}`,
-            x: coords.lng,
-            y: coords.lat,
-          });
+      for (const waypoint of waypoints) {
+        if (waypoint.address) {
+          try {
+            const coords = await getCoordinates(waypoint.address); // address 전달
+            waypointCoords.push({
+              name: waypoint.placeName || `경유지 ${waypoint.id}`,
+              x: coords.lng,
+              y: coords.lat,
+            });
+          } catch (error) {
+            console.error('경유지를 찾을 수 없습니다:', waypoint.address);
+          }
         }
       }
   
       setMarkers((prev) => [...prev, ...waypointMarkers]);
       setInfowindows((prev) => [...prev, ...waypointOverlays]);
   
-
       handleRoute(startCoords, endCoords, waypointCoords);
     } catch (error) {
       console.error('경로 설정 오류:', error);
       alert('경로를 설정하는 중 오류가 발생했습니다. 다시 시도해주세요.');
     }
   };
+  
 
   const getCoordinates = (address) =>
     new Promise((resolve, reject) => {
@@ -315,6 +295,7 @@ const MapComponent = ({ userId, waypoints, setWaypoints }) => {
         }
       });
     });
+  
 
   const handleRoute = async (startCoords, endCoords, waypointCoords) => {
     const payload = {
@@ -462,7 +443,10 @@ const MapComponent = ({ userId, waypoints, setWaypoints }) => {
         }
       });
   
-      setWaypoints((prev) => [...prev, address]);
+      setWaypoints((prev) => [
+        ...prev,
+        { id: prev.length, address: place.address }
+      ]);      
     }}
   >
     <strong>{place.name}</strong>
