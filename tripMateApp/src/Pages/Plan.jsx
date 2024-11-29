@@ -107,6 +107,38 @@ const Plan = () => {
       [selectedDay]: updatedWaypoints,
     }));
   };
+
+  const handleSaveDayWaypoints = async () => {
+    const dataToSave = waypoints.map(({ id, address, placeName, tripTime }, index) => ({
+      tripId, // 사용 중인 tripId를 여기에 추가 (ex: 상태나 URL에서 가져옴)
+      placeName: placeName || '', // 장소명 입력값
+      placeLocation: address || '', // 주소 (address를 placeLocation으로 매핑)
+      order: index + 1, // 리스트의 순서 (1부터 시작)
+      tripTime: tripTime || '', // 머물 시간 입력값
+      day: selectedDay, // 현재 선택된 일차
+    }));
+  
+    try {
+      const response = await axios.post('wss://www.daebak.store/detailTrip', { dataToSave });
+      if (response.status === 200) {
+        alert('저장 성공!');
+      } else {
+        alert('저장 실패: 서버 응답 오류');
+      }
+    } catch (error) {
+      console.error('저장 중 오류 발생:', error);
+      alert('저장 중 오류가 발생했습니다. 다시 시도해주세요.');
+    }
+  };
+  
+
+  const handleInputChange = (id, field, value) => {
+    setWaypoints((prev) =>
+      prev.map((waypoint) =>
+        waypoint.id === id ? { ...waypoint, [field]: value } : waypoint
+      )
+    );
+  };  
   
 
 const handleDayChange = (day) => {
@@ -118,9 +150,6 @@ const handleDayChange = (day) => {
   setWaypoints(dayWaypoints[day] || []);
   setSelectedDay(day);
 };
-
-
-  
 
   const handleDragEnd = (result) => {
     if (!result.destination) return;
@@ -267,7 +296,7 @@ const handleDayChange = (day) => {
         ref={provided.innerRef}
       >
         {waypoints.map((place, index) => (
-          <Draggable key={place} draggableId={place} index={index}>
+          <Draggable key={place.id} draggableId={place.id.toString()} index={index}>
             {(provided) => (
               <li
                 className="visit-place-item"
@@ -280,15 +309,21 @@ const handleDayChange = (day) => {
                     type="text"
                     className="info-input"
                     placeholder="장소명"
+                    value={place.placeName || ''}
+                    onChange={(e) => handleInputChange(place.id, 'placeName', e.target.value)}
                   />
                   <input
                     type="text"
                     className="time-input"
                     placeholder="머물 시간"
+                    value={place.tripTime || ''}
+                    onChange={(e) => handleInputChange(place.id, 'tripTime', e.target.value)}
                   />
                   <br />
-                  <span className="place-index">{index + 1}.</span>
-                  <span className="place-name">{place}</span>
+                  <div className="place-header">
+          <span className="place-index">{index + 1}.</span>
+          <span className="place-name">{place.address}</span>
+        </div>
                   <button
                     className="delete-button"
                     onClick={() => handleDeleteWaypoint(index)}
@@ -301,6 +336,9 @@ const handleDayChange = (day) => {
           </Draggable>
         ))}
         {provided.placeholder}
+        <button className="save-button" onClick={handleSaveDayWaypoints}>
+          저장
+          </button>
       </ul>
     )}
   </Droppable>
