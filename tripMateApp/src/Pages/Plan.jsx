@@ -11,7 +11,6 @@ import Participant from "../Components/Participant";
 import { updateTrip } from '../Services/tripService'; 
 import "./Plan.css";
 
-// 디코딩 함수
 function parseJwt(token) {
   const base64Url = token.split('.')[1];
   const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -30,11 +29,10 @@ const Plan = () => {
   const [plans, setPlans] = useState([]);
   const [userId, setUserId] = useState('');
   const [waypoints, setWaypoints] = useState([]);
-  const [newPlace, setNewPlace] = useState('');
   const [dayWaypoints, setDayWaypoints] = useState({});
   const [days, setDays] = useState([]);
   const [selectedDay, setSelectedDay] = useState(1);
-  const [editingPlanId, setEditingPlanId] = useState(null); // 수정할 계획의 ID
+  const [editingPlanId, setEditingPlanId] = useState(null);
   const [editedPlan, setEditedPlan] = useState({
     name: '',
     start_date: '',
@@ -54,18 +52,16 @@ const Plan = () => {
     start_date = plan.start_date;
   });
 
-  // 여행 날짜 계산
   useEffect(() => {
     if (plans.length > 0) {
-      const start = new Date(plans[0].start_date); // 여행 시작 날짜
-      const end = new Date(plans[0].end_date);     // 여행 종료 날짜
+      const start = new Date(plans[0].start_date);
+      const end = new Date(plans[0].end_date);
       const dayCount = Math.ceil((end - start) / (1000 * 60 * 60 * 24)) + 1;
       const dayArray = Array.from({ length: dayCount }, (_, index) => index + 1);
       setDays(dayArray);
     }
   }, [plans]);  
 
-  // 디코딩
   useEffect(() => {
     const token = localStorage.getItem('access_token');
     if (token) {
@@ -79,12 +75,11 @@ const Plan = () => {
     }
   }, []);
 
-  // 여행 조회
   useEffect(() => {
     const API_URL_PLAN_GET = `https://www.daebak.store/trips/${tripId}`;
     axios.get(API_URL_PLAN_GET)
       .then((response) => {
-        setPlans(response.data); // 여행 데이터를 plans 상태에 저장
+        setPlans(response.data);
       })
       .catch((error) => {
         console.error("Error fetching plans: ", error);
@@ -95,6 +90,67 @@ const Plan = () => {
     navigate(`/calculate?title=${title}&start_date=${start_date}&end_date=${end_date}&tripId=${tripId}`);
   };
 
+  const handleAddWaypoint = (newWaypoint) => {
+    const updatedWaypoints = [...waypoints, newWaypoint];
+    setWaypoints(updatedWaypoints);
+    setDayWaypoints((prev) => ({
+      ...prev,
+      [selectedDay]: updatedWaypoints,
+    }));
+  };
+  
+  const handleDeleteWaypoint = (index) => {
+    const updatedWaypoints = waypoints.filter((_, i) => i !== index);
+    setWaypoints(updatedWaypoints);
+    setDayWaypoints((prev) => ({
+      ...prev,
+      [selectedDay]: updatedWaypoints,
+    }));
+  };
+
+  const handleSaveDayWaypoints = async () => {
+    const dataToSave = waypoints.map(({ id, address, placeName, tripTime }, index) => ({
+      tripId, // 사용 중인 tripId를 여기에 추가 (ex: 상태나 URL에서 가져옴)
+      placeName: placeName || '', // 장소명 입력값
+      placeLocation: address || '', // 주소 (address를 placeLocation으로 매핑)
+      order: index + 1, // 리스트의 순서 (1부터 시작)
+      tripTime: tripTime || '', // 머물 시간 입력값
+      day: selectedDay, // 현재 선택된 일차
+    }));
+  
+    try {
+      const response = await axios.post('wss://www.daebak.store/detailTrip', { dataToSave });
+      if (response.status === 200) {
+        alert('저장 성공!');
+      } else {
+        alert('저장 실패: 서버 응답 오류');
+      }
+    } catch (error) {
+      console.error('저장 중 오류 발생:', error);
+      alert('저장 중 오류가 발생했습니다. 다시 시도해주세요.');
+    }
+  };
+  
+
+  const handleInputChange = (id, field, value) => {
+    setWaypoints((prev) =>
+      prev.map((waypoint) =>
+        waypoint.id === id ? { ...waypoint, [field]: value } : waypoint
+      )
+    );
+  };  
+  
+
+const handleDayChange = (day) => {
+  setDayWaypoints((prev) => ({
+    ...prev,
+    [selectedDay]: waypoints,
+  }));
+
+  setWaypoints(dayWaypoints[day] || []);
+  setSelectedDay(day);
+};
+
   const handleDragEnd = (result) => {
     if (!result.destination) return;
 
@@ -103,6 +159,7 @@ const Plan = () => {
     items.splice(result.destination.index, 0, reorderedItem);
 
     setWaypoints(items);
+    setDayWaypoints((prev) => ({ ...prev, [selectedDay]: items }));
   };
 
   const handleEditClick = (plan) => {
@@ -110,10 +167,8 @@ const Plan = () => {
     setEditedPlan({ name: plan.name, start_date: plan.start_date, end_date: plan.end_date });
   };
 
-  // 여행 수정 함수
   const handleSaveEdit = async (planId) => { 
     console.log("여행 수정됨");
-    // tripData 형태로 묶기
     const tripData = {
         name: editedPlan.name,
         start_date: editedPlan.start_date, // YYYY-MM-DD 형식
@@ -123,16 +178,14 @@ const Plan = () => {
     };
     
     try {
-        // updateTrip 함수를 사용하여 서버에 tripData 전송
         const updatedTrip = await updateTrip(planId, tripData);
         console.log("여행이 수정되었습니다:", updatedTrip);
 
-        // 수정된 여행 정보를 상태에 업데이트
         const updatedPlans = plans.map(plan =>
             plan.id === planId ? { ...plan, ...tripData } : plan
         );
         setPlans(updatedPlans);
-        setEditingPlanId(null); // 수정 모드 종료
+        setEditingPlanId(null);
     } catch (error) {
         console.error("여행 수정 중 오류 발생:", error);
         alert("여행 수정에 실패했습니다. 다시 시도해 주세요.");
@@ -161,15 +214,14 @@ const Plan = () => {
                                     <>
                                         <input
                                             className="plan-edit-form-title"
-                                            // type="text"
                                             value={editedPlan.name}
                                             onChange={(e) => setEditedPlan({ ...editedPlan, name: e.target.value })}
                                             placeholder="  여행 제목"
                                         />
                                         <input
                                             className="plan-edit-form-date1"
-                                            type="date" // 년도 포함하는 날짜 입력 필드
-                                            value={editedPlan.start_date} // YYYY-MM-DD 형식으로 설정
+                                            type="date"
+                                            value={editedPlan.start_date}
                                             onChange={(e) => setEditedPlan({ ...editedPlan, start_date: e.target.value })}
                                         />
                                         <input
@@ -219,81 +271,79 @@ const Plan = () => {
                     )}
                 </div>
                 <div className="visit-places-container">
-                  <div className="day-selector">
-                    <label htmlFor="day-select">일차 선택:</label>
-                    <select
-                    id="day-select"
-                    value={selectedDay}
-                    onChange={(e) => setSelectedDay(Number(e.target.value))}
-                    >
-                      {days.map((day) => (
-                        <option key={day} value={day}>
-                          {day}일차
-                          </option>
-                        ))}
-                        </select>
-                        </div>
-                    <h4>방문할 장소들의 목록</h4>
-                    <DragDropContext onDragEnd={handleDragEnd}>
-                        <Droppable droppableId="visit-places-list">
-                            {(provided) => (
-                                <ul
-                                    className="visit-places-list"
-                                    {...provided.droppableProps}
-                                    ref={provided.innerRef}
-                                >
-                                    {waypoints.map((place, index) => (
-                                        <Draggable key={place} draggableId={place} index={index}>
-                                            {(provided) => (
-                                                <li
-                                                    className="visit-place-item"
-                                                    ref={provided.innerRef}
-                                                    {...provided.draggableProps}
-                                                    {...provided.dragHandleProps}
-                                                >
-                                                    <div className="place-header">
-                                                        <input
-                                                            type="text"
-                                                            className="info-input"
-                                                            placeholder="장소명"
-                                                        />
-                                                        <input
-                                                            type="text"
-                                                            className="time-input"
-                                                            placeholder="머물 시간"
-                                                        />
-                                                        <br />
-                                                        <span className="place-index">{index + 1}.</span>
-                                                        <span className="place-name">{place}</span>
-                                                        <button
-                                                            className="delete-button"
-                                                            onClick={() => {
-                                                                const updatedWaypoints = waypoints.filter((_, i) => i !== index);
-                                                                setWaypoints(updatedWaypoints);
-                                                            }}
-                                                            style={{
-                                                                marginLeft: "10px",
-                                                                marginTop: "4px",
-                                                                padding: "4px 8px",
-                                                                backgroundColor: "#fcd4f0",
-                                                                color: "#fff",
-                                                                border: "none",
-                                                                borderRadius: "4px",
-                                                                cursor: "pointer",
-                                                            }}
-                                                        >
-                                                            X
-                                                        </button>
-                                                    </div>
-                                                </li>
-                                            )}
-                                        </Draggable>
-                                    ))}
-                                    {provided.placeholder}
-                                </ul>
-                            )}
-                        </Droppable>
-                    </DragDropContext>
+                <div className="day-selector">
+  <label htmlFor="day-select">일차 선택:</label>
+  <select
+    id="day-select"
+    value={selectedDay}
+    onChange={(e) => handleDayChange(Number(e.target.value))}
+  >
+    {days.map((day) => (
+      <option key={day} value={day}>
+        {day}일차
+      </option>
+    ))}
+  </select>
+</div>
+
+<h4>방문할 장소들의 목록</h4>
+<DragDropContext onDragEnd={handleDragEnd}>
+  <Droppable droppableId="visit-places-list">
+    {(provided) => (
+      <ul
+        className="visit-places-list"
+        {...provided.droppableProps}
+        ref={provided.innerRef}
+      >
+        {waypoints.map((place, index) => (
+          <Draggable key={place.id} draggableId={place.id.toString()} index={index}>
+            {(provided) => (
+              <li
+                className="visit-place-item"
+                ref={provided.innerRef}
+                {...provided.draggableProps}
+                {...provided.dragHandleProps}
+              >
+                <div className="place-header">
+                  <input
+                    type="text"
+                    className="info-input"
+                    placeholder="장소명"
+                    value={place.placeName || ''}
+                    onChange={(e) => handleInputChange(place.id, 'placeName', e.target.value)}
+                  />
+                  <input
+                    type="text"
+                    className="time-input"
+                    placeholder="머물 시간"
+                    value={place.tripTime || ''}
+                    onChange={(e) => handleInputChange(place.id, 'tripTime', e.target.value)}
+                  />
+                  <br />
+                  <div className="place-header">
+          <span className="place-index">{index + 1}.</span>
+          <span className="place-name">{place.address}</span>
+        </div>
+                  <button
+                    className="delete-button"
+                    onClick={() => handleDeleteWaypoint(index)}
+                  >
+                    X
+                  </button>
+                </div>
+              </li>
+            )}
+          </Draggable>
+        ))}
+        {provided.placeholder}
+        <button className="save-button" onClick={handleSaveDayWaypoints}>
+          저장
+          </button>
+      </ul>
+    )}
+  </Droppable>
+</DragDropContext>
+
                 </div>
             </div>
 
