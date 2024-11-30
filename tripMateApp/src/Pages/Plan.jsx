@@ -136,7 +136,6 @@ const Plan = () => {
       return;
     }
   
-    // 전송할 데이터 구성
     const dataToSave = waypoints.map(({ id, address, placeName, tripTime }, index) => ({
       tripId, // tripId는 상태나 URL에서 가져옵니다.
       placeName: placeName || '',
@@ -146,25 +145,24 @@ const Plan = () => {
       day: selectedDay,
     }));
   
-    console.log('저장 데이터:', dataToSave);
+    console.log('전송할 데이터:', dataToSave);
   
-    // 서버로 데이터 전송 (emit 사용)
-    socket.current.emit('detailTripCreated', { dataToSave });
+    // 각 객체를 개별적으로 전송
+    dataToSave.forEach((data) => {
+      socket.current.emit('detailTripCreated', data);
   
-    // 저장 완료 응답 수신
-    socket.current.on('waypointsSaved', (response) => {
-      if (response.success) {
-        alert('저장 성공!');
-      } else {
-        alert('저장 실패: 서버 오류');
-      }
-      console.log('서버 응답:', response);
+      // 응답 수신 처리
+      socket.current.on('waypointsSaved', (response) => {
+        if (response.success) {
+          console.log(`저장 성공: ${JSON.stringify(data)}`);
+        } else {
+          console.error(`저장 실패: ${JSON.stringify(data)}`);
+        }
+      });
     });
   };
   
   
-  
-
   const handleInputChange = (id, field, value) => {
     setWaypoints((prev) =>
       prev.map((waypoint) =>
