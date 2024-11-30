@@ -93,6 +93,7 @@ const MapComponent = ({ userId, waypoints, setWaypoints }) => {
           };
           const kakaoMap = new window.kakao.maps.Map(mapContainer, mapOption);
           const kakaoGeocoder = new window.kakao.maps.services.Geocoder();
+          console.log(kakaoGeocoder)
           setMap(kakaoMap);
           setGeocoder(kakaoGeocoder);
         });
@@ -121,27 +122,36 @@ const MapComponent = ({ userId, waypoints, setWaypoints }) => {
     markers.forEach((marker) => marker.setMap(null));
     setMarkers([]);
   
-    // waypoints 처리
+    // 경유지 처리
     waypoints.forEach((waypoint) => {
-      if (waypoint.address) { // address 필드가 있는 경우에만 처리
+      if (waypoint.address) {
         geocoder.addressSearch(waypoint.address, (result, status) => {
           if (status === window.kakao.maps.services.Status.OK) {
             const coords = new window.kakao.maps.LatLng(result[0].y, result[0].x);
-            const marker = new window.kakao.maps.Marker({
+            const { marker, overlay } = createMarkerWithText(
               map,
-              position: coords,
-            });
+              coords,
+              waypoint.placeName || waypoint.address
+            );
             setMarkers((prev) => [...prev, marker]);
+            setInfowindows((prev) => [...prev, overlay]);
           } else {
             console.warn(`경유지를 찾을 수 없습니다: ${waypoint.address}`);
           }
         });
-      } else {
-        console.warn(`주소가 없는 경유지:`, waypoint);
       }
     });
   }, [waypoints, map, geocoder]);
   
+  const getAddressByKeyword = async (keyword) => {
+    return new Promise((res, rej) => {
+        const ps = new window.kakao.maps.services.Places();
+        ps.keywordSearch(keyword, (data, status) => {
+            console.log(data)
+        res(data[0].address_name)
+      });
+    })
+}
 
   const handleReset = () => {
     setStartAddress('');
@@ -219,9 +229,18 @@ const MapComponent = ({ userId, waypoints, setWaypoints }) => {
   
   
   const handleSearch = async () => {
+    console.log('Call handleSearch');
     try {
-      const startCoords = await getCoordinates(startAddress);
-      const endCoords = await getCoordinates(endAddress);
+      /**
+       * TEMP
+       */
+      const _startAddress = await getAddressByKeyword(startAddress);
+      const _endAddress = await getAddressByKeyword(endAddress);
+      console.log(_startAddress, _endAddress)
+
+      const startCoords = await getCoordinates(_startAddress);
+      const endCoords = await getCoordinates(_endAddress);
+      console.log(startCoords, endCoords)
   
       infowindows.forEach((overlay) => {
         overlay.setMap(null);
@@ -252,6 +271,7 @@ const MapComponent = ({ userId, waypoints, setWaypoints }) => {
       const waypointMarkers = [];
       const waypointOverlays = [];
   
+      console.log(waypoints)
       for (const waypoint of waypoints) {
         if (waypoint.address) {
           try {
@@ -285,6 +305,9 @@ const MapComponent = ({ userId, waypoints, setWaypoints }) => {
         return;
       }
       geocoder.addressSearch(address, (result, status) => {
+        console.log(result, status)
+        console.log(address)
+        console.log(geocoder)
         if (status === window.kakao.maps.services.Status.OK) {
           resolve({
             lat: parseFloat(result[0].y),
