@@ -137,7 +137,7 @@ const Plan = () => {
     }
   
     const dataToSave = waypoints.map(({ id, address, placeName, tripTime }, index) => ({
-      tripId, // tripId는 상태나 URL에서 가져옵니다.
+      tripId: Number(tripId),
       placeName: placeName || '',
       placeLocation: address || '',
       order: index + 1,
