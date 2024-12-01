@@ -7,10 +7,10 @@ const API_URL_INVITE_PARTICIPANTS = 'https://www.daebak.store/participants';
 const API_URL_MY_ENTIRE_TRIPS = 'https://www.daebak.store/trips/checkmytrips'; 
 
 const token = localStorage.getItem('access_token');
+console.log("꺼낸 token: ", token);
 
 // 여행 생성 함수
 export const createTrip = async (title, selectedRange, startTime, endTime) => {
-    console.log("token", token);
     const startDate = selectedRange[0].toISOString().split('T')[0]; // 시작 날짜
     const endDate = selectedRange[1].toISOString().split('T')[0]; // 종료 날짜
 
