@@ -80,7 +80,7 @@ const Needs = ({ tripId, title }) => {
                     /* 열려 있는 상태 */
                     <div className="needs-open-container">
                         <div className="needs-open-header">
-                            <h3 className="needs-title">{title}</h3>
+                            <h3 className="needs-title">준비물</h3>
                             <Button
                                 text="x"
                                 customClass="needs-close-button"

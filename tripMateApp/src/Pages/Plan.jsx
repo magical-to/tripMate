@@ -1,9 +1,8 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { useNavigate } from 'react-router-dom';
 import DraggableIcon from "../Components/DraggableIcon";
 import axios from "axios";
-import { io } from 'socket.io-client';
 import Header from "../Components/Header";
 import Button from "../Components/Button";
 import MapComponent from "../Components/MapComponent";
@@ -28,8 +27,6 @@ function parseJwt(token) {
 const Plan = () => {
   const navigate = useNavigate();
   const [plans, setPlans] = useState([]);
-  const token = localStorage.getItem('access_token');
-  const socket = useRef(null);
   const [userId, setUserId] = useState('');
   const [waypoints, setWaypoints] = useState([]);
   const [dayWaypoints, setDayWaypoints] = useState({});
@@ -79,25 +76,6 @@ const Plan = () => {
   }, []);
 
   useEffect(() => {
-    // WebSocket 연결 초기화
-    socket.current = io('wss://www.daebak.store/detailTrip', {
-      auth: { token }, // 인증 토큰
-    });
-  
-    // 연결 성공 시
-    socket.current.on('connect', () => {
-      console.log('WebSocket 연결 성공');
-      socket.current.emit('joinRoom', { tripId }); // 방에 참가
-    });
-  
-    // WebSocket 해제
-    return () => {
-      socket.current.disconnect();
-    };
-  }, [tripId, token]);
-  
-
-  useEffect(() => {
     const API_URL_PLAN_GET = `https://www.daebak.store/trips/${tripId}`;
     axios.get(API_URL_PLAN_GET)
       .then((response) => {
@@ -130,39 +108,30 @@ const Plan = () => {
     }));
   };
 
-  const handleSaveDayWaypoints = () => {
-    if (!socket.current) {
-      console.error('WebSocket 연결이 초기화되지 않았습니다.');
-      return;
-    }
-  
+  const handleSaveDayWaypoints = async () => {
     const dataToSave = waypoints.map(({ id, address, placeName, tripTime }, index) => ({
-      tripId: Number(tripId),
-      placeName: placeName || '',
-      placeLocation: address || '',
-      order: index + 1,
-      tripTime: tripTime || '',
-      day: selectedDay,
+      tripId, // 사용 중인 tripId를 여기에 추가 (ex: 상태나 URL에서 가져옴)
+      placeName: placeName || '', // 장소명 입력값
+      placeLocation: address || '', // 주소 (address를 placeLocation으로 매핑)
+      order: index + 1, // 리스트의 순서 (1부터 시작)
+      tripTime: tripTime || '', // 머물 시간 입력값
+      day: selectedDay, // 현재 선택된 일차
     }));
   
-    console.log('전송할 데이터:', dataToSave);
-  
-    // 각 객체를 개별적으로 전송
-    dataToSave.forEach((data) => {
-      socket.current.emit('detailTripCreated', data);
-  
-      // 응답 수신 처리
-      socket.current.on('waypointsSaved', (response) => {
-        if (response.success) {
-          console.log(`저장 성공: ${JSON.stringify(data)}`);
-        } else {
-          console.error(`저장 실패: ${JSON.stringify(data)}`);
-        }
-      });
-    });
+    try {
+      const response = await axios.post('wss://www.daebak.store/detailTrip', { dataToSave });
+      if (response.status === 200) {
+        alert('저장 성공!');
+      } else {
+        alert('저장 실패: 서버 응답 오류');
+      }
+    } catch (error) {
+      console.error('저장 중 오류 발생:', error);
+      alert('저장 중 오류가 발생했습니다. 다시 시도해주세요.');
+    }
   };
   
-  
+
   const handleInputChange = (id, field, value) => {
     setWaypoints((prev) =>
       prev.map((waypoint) =>
@@ -228,7 +197,7 @@ const handleDayChange = (day) => {
         <Header />
         <Needs tripId={tripId} title={title} />
         <Button 
-          text="정산"
+          text="경비"
           customClass="go-calculate-button"
           onClick={goCalculate}
         />
@@ -281,7 +250,7 @@ const handleDayChange = (day) => {
                                     </>
                                 ) : (
                                     <>
-                                        <h3 className="plan-name">{plan.name}</h3>
+                                        <h3 className="plan-name">제목: {plan.name}</h3>
                                         <div className="plan-info">
                                           <div className="plan-date">
                                             <p>시작일: {plan.start_date}</p>

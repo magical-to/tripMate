@@ -6,6 +6,7 @@ import Button from '../Components/Button';
 
 const Calculate = () => {
     const [expenses, setExpenses] = useState([]);
+    const [getAllExpenses, setGetAllExpenses] = useState(0);
     const [totalExpense, setTotalExpense] = useState(0);
     const [selectedDay, setSelectedDay] = useState(1); // 선택된 날
     const [days, setDays] = useState([]); // 여행 일수 배열
@@ -45,16 +46,19 @@ const Calculate = () => {
         // 소켓 초기화가 완료된 후에만 이벤트 리스너 등록
         socket.current.on('connect', () => {
             console.log('서버에 연결됨');
+            // 방 입장
             socket.current.emit('joinRoom', { tripId });
-            socket.current.emit('getTotalExpense', { tripId });
+            // 전체 경비 요청
             socket.current.emit('getAllExpenses', { tripId });
         });
 
         // 전체 경비 목록 수신
-        // socket.current.on('expenseList', (expenses) => {
-        //     console.log("수신된 전체 경비 목록: ", expenses);
-        //     setExpenses(expenses);
-        // });
+        socket.current.on('expenseList', (expenses) => {
+            console.log('Received expenses:', expenses);
+            const pricesArray = expenses.map(expense => expense.price);
+            console.log('Prices array:', pricesArray);
+            setGetAllExpenses(expenses); // 상태 업데이트
+        });
 
         // 날짜 별로 경비 목록 수신
         if (tripId && selectedDay) {
@@ -63,15 +67,14 @@ const Calculate = () => {
 
             // 필터링된 경비 목록 수신
             socket.current.on("filteredExpenses", (data) => {
-                console.log(data);
                 
                 // 선택한 일차의 모든 가격을 합산
-                const totalPrice = data.reduce((acc, expense) => acc + parseInt(expense.price, 10), 0);
+                const totalPrice = data.expenses.reduce((acc, expense) => acc + parseInt(expense.price, 10), 0);
 
                 // 상태 업데이트
                 setPrice(totalPrice); // price 상태에 합산된 가격 저장
 
-                const intExpenses = data.map(expense => ({
+                const intExpenses = data.expenses.map(expense => ({
                     ...expense,
                     price: parseInt(expense.price, 10), // 금액을 정수로 변환
                 }));    
@@ -79,17 +82,23 @@ const Calculate = () => {
                 
             });
         }
-    
-        // 경비 총 금액 응답 수신 (업데이트 될 때마다 새로고침 필요)
-        socket.current.on('totalExpense', (data) => {
-            setTotalExpense(data.total);
-        });
 
-        // 새로운 경비가 생성되었을 때 처리
+        // 새 경비 추가 시 실시간 총 경비 계산
         socket.current.on('expenseCreated', (response) => {
-            setExpenses((prevExpenses) => [...prevExpenses, response.newExpense]);
+            setExpenses((prevExpenses) => {
+                const updatedExpenses = [...prevExpenses, response.newExpense];
+        
+                // 유효한 값만 필터링
+                const validExpenses = updatedExpenses.filter(expense => expense && expense.price !== undefined);
+        
+                // 총 경비를 계산하고 상태 업데이트
+                const updatedTotal = validExpenses.reduce((sum, expense) => sum + expense.price, 0);
+                setTotalExpense(updatedTotal);
+        
+                return validExpenses; // 유효한 값만 상태에 저장
+            });
         });
-
+        
         // 컴포넌트 언마운트 시 소켓 연결 해제
         return () => {
             socket.current.disconnect();
@@ -99,9 +108,13 @@ const Calculate = () => {
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
+    
+        // 가격 입력값을 정수로 변환
+        const updatedValue = name === 'price' ? parseInt(value, 10) || '' : value;
+    
         setExpenseData((prevData) => ({
             ...prevData,
-            [name]: value,
+            [name]: updatedValue,
         }));
     };
 
@@ -130,7 +143,7 @@ const Calculate = () => {
             day: '', // day는 초기화 필요 없음
         });
 
-        window.location.reload();
+        // window.location.reload();
     };
 
     // 경비 수정 핸들러
@@ -144,6 +157,7 @@ const Calculate = () => {
         setEditingExpenseId(expense.id); // 수정 중인 경비 ID 설정
     };
 
+
     // 경비 업데이트 요청 처리
     const handleUpdateExpense = (e) => {
         e.preventDefault(); // 기본 폼 제출 방지
@@ -151,12 +165,26 @@ const Calculate = () => {
             console.log("빈 값이 있어서 경비 수정 안 함."); // 빈 값 체크
             return;
         }
-        // 경비 수정 요청
+    
+        // 서버에 수정 요청
         socket.current.emit("editExpense", {
             tripId,
             expenseId: editingExpenseId,
-            expenseData: expenseData,
+            expenseData: {
+                ...expenseData,
+                price: parseInt(expenseData.price, 10) // 가격을 정수로 변환
+            },
         });
+    
+        // 상태 직접 업데이트
+        setExpenses((prevExpenses) =>
+            prevExpenses.map((expense) =>
+                expense.id === editingExpenseId
+                    ? { ...expense, ...expenseData, price: parseInt(expenseData.price, 10) } // 수정된 가격 반영
+                    : expense
+            )
+        );
+    
         // 입력 필드 초기화
         setExpenseData({
             price: '',
@@ -165,11 +193,8 @@ const Calculate = () => {
             day: selectedDay,
         });
         setEditingExpenseId(null); // 수정 모드 해제
-
-        // 새로고침
-        window.location.reload()
     };
-
+    
     // 경비 삭제 요청 처리
     const handleDeleteExpense = (expenseId) => {
         // 서버에 삭제 요청
@@ -190,17 +215,12 @@ const Calculate = () => {
 
         // 필터링된 경비 목록 수신
         const handleFilteredExpenses = (data) => {
-            console.log(data);
-            const totalPrice = data.reduce((acc, expense) => acc + parseInt(expense.price, 10), 0);
+            const totalPrice = data.expenses.reduce((acc, expense) => acc + parseInt(expense.price, 10), 0);
             setPrice(totalPrice); // 상태 업데이트
         };
     
         socket.current.on("filteredExpenses", handleFilteredExpenses);
-        window.location.reload()
-        // day 재설정..?
     };
-
-    
 
     return (
         <div>
@@ -212,7 +232,7 @@ const Calculate = () => {
                         <p className="plan-date">시작일: {start_date}</p>
                         <p className="plan-date">종료일: {end_date}</p>
                     </div>
-                    <p className='total-price'>총합: {totalExpense}원</p>
+                    {/* <p className='total-price'>총합: {totalExpense}원</p> */}
                 </div>
 
                 <div className='expense-set'>
@@ -227,10 +247,17 @@ const Calculate = () => {
                             </option>
                         ))}
                     </select>
-                    <div className='day-price'>
-                        {price}원
+                    {expenses.length > 0 ? (
+                        <>
+                            <div className='day-price'>
+                                {/* expenses 배열의 가격을 모두 더한 값을 표시 */}
+                                {expenses.reduce((acc, expense) => acc + expense.price, 0)}원
+                            </div>
+                        </>
+                    ) : (
+                        <div className="day-price">경비가 없습니다.</div>
+                    )}
                     </div>
-                </div>
                 
                 <div className='expense-list'>
                     <table className="expense-table">
@@ -314,8 +341,11 @@ const Calculate = () => {
                     />
                     <button type="submit" className="form-button">{editingExpenseId ? '수정' : '추가'}</button>
                 </form>
-
             </div>
+            <Button 
+                customClass='total-price-button'
+                text="총 금액 확인"
+            />
         </div> 
     );
 };
