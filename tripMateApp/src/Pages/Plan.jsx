@@ -250,7 +250,7 @@ const handleDayChange = (day) => {
                                     </>
                                 ) : (
                                     <>
-                                        <h3 className="plan-name">{plan.name}</h3>
+                                        <h3 className="plan-name">제목: {plan.name}</h3>
                                         <div className="plan-info">
                                           <div className="plan-date">
                                             <p>시작일: {plan.start_date}</p>

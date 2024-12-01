@@ -195,6 +195,7 @@
 }
 
 .plan-info {
+  margin-top: -10px;
   display: inline-flex;
 }
 
