@@ -171,3 +171,10 @@
     font-size: 15px;
     border-radius: 10px;
 }
+
+.total-price {
+    position: relative;
+    left: 1020px;
+    bottom: 875px;
+    font-size: 35px;
+}

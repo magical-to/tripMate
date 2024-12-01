@@ -3,11 +3,12 @@ import { io } from 'socket.io-client';
 import './Calculate.css';
 import Header from '../Components/Header';
 import Button from '../Components/Button';
+import { getTotalExpenses } from '../Services/tripService';
 
 const Calculate = () => {
     const [expenses, setExpenses] = useState([]);
     const [getAllExpenses, setGetAllExpenses] = useState(0);
-    const [totalExpense, setTotalExpense] = useState(0);
+    const [totalExpenses, setTotalExpenses] = useState(null);
     const [selectedDay, setSelectedDay] = useState(1); // 선택된 날
     const [days, setDays] = useState([]); // 여행 일수 배열
     const [price, setPrice] = useState([]);
@@ -52,14 +53,6 @@ const Calculate = () => {
             socket.current.emit('getAllExpenses', { tripId });
         });
 
-        // 전체 경비 목록 수신
-        socket.current.on('expenseList', (expenses) => {
-            console.log('Received expenses:', expenses);
-            const pricesArray = expenses.map(expense => expense.price);
-            console.log('Prices array:', pricesArray);
-            setGetAllExpenses(expenses); // 상태 업데이트
-        });
-
         // 날짜 별로 경비 목록 수신
         if (tripId && selectedDay) {
             // 선택된 날에 따른 경비 필터링 요청
@@ -90,11 +83,7 @@ const Calculate = () => {
         
                 // 유효한 값만 필터링
                 const validExpenses = updatedExpenses.filter(expense => expense && expense.price !== undefined);
-        
-                // 총 경비를 계산하고 상태 업데이트
-                const updatedTotal = validExpenses.reduce((sum, expense) => sum + expense.price, 0);
-                setTotalExpense(updatedTotal);
-        
+
                 return validExpenses; // 유효한 값만 상태에 저장
             });
         });
@@ -222,17 +211,34 @@ const Calculate = () => {
         socket.current.on("filteredExpenses", handleFilteredExpenses);
     };
 
+    // 총 경비 get 함수
+    const handleButtonClick = async () => {
+        console.log("총 경비 반환 함수 호출");
+        try {
+            const total = await getTotalExpenses(tripId); // API 호출
+            setTotalExpenses(total); // 상태에 총 금액 저장
+        } catch (err) {
+            // 서버에서 반환한 에러 메시지 출력
+            if (err.response && err.response.data && err.response.data.message) {
+                console.error("Error from server:", err.response.data.message);
+                alert(`서버 에러: ${err.response.data.message}`);
+            } else {
+                console.error("Unknown error:", err);
+                alert("알 수 없는 에러가 발생했습니다.");
+            }
+        }
+    };
+
     return (
         <div>
             <Header />
             <div className="expense-entire">
                 <div className="calculate-header">
                     <div className="plan-list">
-                        <h3 className="plan-name">{title}</h3>
+                        <h3 className="plan-name">제목: {title}</h3>
                         <p className="plan-date">시작일: {start_date}</p>
                         <p className="plan-date">종료일: {end_date}</p>
                     </div>
-                    {/* <p className='total-price'>총합: {totalExpense}원</p> */}
                 </div>
 
                 <div className='expense-set'>
@@ -345,7 +351,11 @@ const Calculate = () => {
             <Button 
                 customClass='total-price-button'
                 text="총 금액 확인"
+                onClick={handleButtonClick}
             />
+            {totalExpenses && (
+                <p className='total-price'>{totalExpenses}원</p>
+            )}
         </div> 
     );
 };

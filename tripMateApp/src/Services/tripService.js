@@ -251,3 +251,23 @@ export const updateTrip = async (tripId, tripData) => {
         throw new Error('여행 수정 실패' , + error.message);
     }
 };
+
+// 전체 경비 받아오는 함수
+export const getTotalExpenses = async (tripId) => {
+    try {
+      // URL 구성
+      const url = `https://www.daebak.store/expenses/${tripId}/total`;
+  
+      // GET 요청 보내기
+      const response = await axios.get(url);
+  
+      console.log("성공적으로 받은 데이터 반환: ", response.data);
+      
+      // 성공적으로 받은 데이터 반환
+      return response.data; // 총 경비 데이터 반환
+    } catch (error) {
+      // 에러 처리
+      console.error("Error fetching total expenses:", error);
+      throw error; // 필요 시 호출한 쪽에서 에러 처리
+    }
+  };
