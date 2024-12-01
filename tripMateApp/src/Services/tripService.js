@@ -11,6 +11,9 @@ console.log("꺼낸 token: ", token);
 
 // 여행 생성 함수
 export const createTrip = async (title, selectedRange, startTime, endTime) => {
+    const token = localStorage.getItem('access_token');
+    console.log("꺼낸 token2: ", token);
+
     const startDate = selectedRange[0].toISOString().split('T')[0]; // 시작 날짜
     const endDate = selectedRange[1].toISOString().split('T')[0]; // 종료 날짜
 
