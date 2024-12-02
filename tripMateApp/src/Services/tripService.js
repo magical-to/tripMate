@@ -1,10 +1,11 @@
 
 import axios from 'axios';
-const API_URL_MAKE_TRIP = 'https://www.daebak.store/trips';
-const API_URL_GET_PARTICIPANTS = 'https://www.daebak.store/chat/participants';
-const API_URL_DELETE_PARTICIPANTS = 'https://www.daebak.store/participants';
-const API_URL_INVITE_PARTICIPANTS = 'https://www.daebak.store/participants'; 
-const API_URL_MY_ENTIRE_TRIPS = 'https://www.daebak.store/trips/checkmytrips'; 
+import { SERVER_API_URL } from './api';
+const API_URL_MAKE_TRIP = `${SERVER_API_URL}/trips`;
+const API_URL_GET_PARTICIPANTS = `${SERVER_API_URL}/chat/participants`;
+const API_URL_DELETE_PARTICIPANTS = `${SERVER_API_URL}/participants`;
+const API_URL_INVITE_PARTICIPANTS = `${SERVER_API_URL}/participants`; 
+const API_URL_MY_ENTIRE_TRIPS = `${SERVER_API_URL}/trips/checkmytrips`; 
 
 // 여행 생성 함수
 export const createTrip = async (title, selectedRange, startTime, endTime) => {
@@ -42,7 +43,7 @@ export const inviteFriend = async (memberIds, tripId) => {
         memberIds: memberIds
     }
     try {
-        const response = await axios.post(`https://www.daebak.store/participants/${tripId}/invite`, memberData, {
+        const response = await axios.post(`${SERVER_API_URL}/participants/${tripId}/invite`, memberData, {
             headers: {
                 'Authorization': `${token}` // 인증 토큰을 헤더에 추가
             }
@@ -133,7 +134,7 @@ export const getMyTrips = async () => {
 export const getPersonalTrips = async () => {
     const token = localStorage.getItem('access_token');
     try {
-        const response = await fetch('https://www.daebak.store/trips/checkpersonaltrips', {
+        const response = await fetch(`${SERVER_API_URL}/trips/checkpersonaltrips`, {
             method: 'GET', // GET 요청
             headers: {
                 'Content-Type': 'application/json',
@@ -157,7 +158,7 @@ export const getPersonalTrips = async () => {
 export const getGroupTrips = async () => {
     const token = localStorage.getItem('access_token');
     try {
-        const response = await fetch('https://www.daebak.store/trips/checkgrouptrips', {
+        const response = await fetch(`${SERVER_API_URL}/trips/checkgrouptrips`, {
             method: 'GET', // GET 요청
             headers: {
                 'Content-Type': 'application/json',
@@ -181,7 +182,7 @@ export const getGroupTrips = async () => {
 export const leaveTrip = async (tripId) => {
     const token = localStorage.getItem('access_token');
     try {
-        const response = await axios.delete(`https://www.daebak.store/participants/${tripId}/escape`, {
+        const response = await axios.delete(`${SERVER_API_URL}/participants/${tripId}/escape`, {
             headers: {
                 Authorization: `${token}` // 인증 헤더 추가
             }
@@ -203,7 +204,7 @@ export const leaveTrip = async (tripId) => {
 export const deleteTrip = async (tripId) => {
     const token = localStorage.getItem('access_token');
     try {
-        const response = await fetch(`https://www.daebak.store/trips/${tripId}`, {
+        const response = await fetch(`${SERVER_API_URL}/trips/${tripId}`, {
             method: 'DELETE',
             headers: {
                 'Authorization': `${token}`, 
@@ -239,7 +240,7 @@ export const updateTrip = async (tripId, tripData) => {
     // console.log("서버가 수신한 tripData: ", tripDatas);
 
     try {
-        const response = await axios.put(`https://www.daebak.store/trips/${tripId}`, tripData, {
+        const response = await axios.put(`${SERVER_API_URL}/trips/${tripId}`, tripData, {
             headers: {
                 'Authorization': `${token}`
             }

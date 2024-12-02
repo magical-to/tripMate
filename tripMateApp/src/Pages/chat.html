@@ -1,42 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Chat Test</title>
     <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
-</head>
-<body>
+  </head>
+  <body>
     <div id="messages"></div>
     <input id="messageInput" placeholder="Type a message" />
     <button onclick="sendMessage()">Send</button>
 
     <script>
-        const socket = io('wss://www.daebak.store/chat', {
-            auth: {
-                token: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEwLCJ1c2VyaWQiOiJjaG9pIiwidXNlcmVtYWlsIjoiY2hvZXl1bnNlbzQwNjBAbmF2ZXIuY29tIiwiaWF0IjoxNzMxNDU4ODg4LCJleHAiOjE3MzE0OTQ4ODh9.6AYIAGTcMF1_SgZeThzR6ndH9ffp33wjgsMOqEOeSXs'
-            }
-        });
+      const socket = io(`${SERVER_WS_URL}/chat`, {
+        auth: {
+          token:
+            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEwLCJ1c2VyaWQiOiJjaG9pIiwidXNlcmVtYWlsIjoiY2hvZXl1bnNlbzQwNjBAbmF2ZXIuY29tIiwiaWF0IjoxNzMxNDU4ODg4LCJleHAiOjE3MzE0OTQ4ODh9.6AYIAGTcMF1_SgZeThzR6ndH9ffp33wjgsMOqEOeSXs",
+        },
+      });
 
-        socket.on('connect', () => {
-            console.log('소켓 연결 성공!');
-            socket.emit('joinRoom', { room: "70" });
-            console.log("testRoom 번째 방 입장 중..");
-        });
+      socket.on("connect", () => {
+        console.log("소켓 연결 성공!");
+        socket.emit("joinRoom", { room: "70" });
+        console.log("testRoom 번째 방 입장 중..");
+      });
 
-        // 메세지 수신
-        socket.on('emitmessage', (msg) => {
-            const messagesDiv = document.getElementById('messages');
-            const messageElement = document.createElement('p');
-            messageElement.textContent = `${msg.sender}: ${msg.content}`;
-            messagesDiv.appendChild(messageElement);
-        });
+      // 메세지 수신
+      socket.on("emitmessage", (msg) => {
+        const messagesDiv = document.getElementById("messages");
+        const messageElement = document.createElement("p");
+        messageElement.textContent = `${msg.sender}: ${msg.content}`;
+        messagesDiv.appendChild(messageElement);
+      });
 
-        function sendMessage() {
-            const messageInput = document.getElementById('messageInput');
-            socket.emit('message', { room: '70', content: messageInput.value });
-            messageInput.value = '';
-        }
+      function sendMessage() {
+        const messageInput = document.getElementById("messageInput");
+        socket.emit("message", { room: "70", content: messageInput.value });
+        messageInput.value = "";
+      }
     </script>
-</body>
+  </body>
 </html>
