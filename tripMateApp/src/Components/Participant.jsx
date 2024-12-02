@@ -76,7 +76,7 @@ const Participant = ({ tripId }) => {
             {isParticipantOpen ? (
                 <div className='participant-container'>
                     <div className='participant-header'>
-                        <h3 className='participant-list-text'>참여자 목록</h3>
+                        <h3 className='participant-list-text'>참여자</h3>
                         <Button 
                             text="x"
                             onClick={handleCloseClick}

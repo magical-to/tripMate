@@ -22,7 +22,7 @@
 }
 
 .button-container button {
-    background-color: #fcd4f0;
+    background-color: #FFE3F7;
     color: black;
     width: 150px;
     height: 50px;
@@ -38,33 +38,20 @@
 
 
 .next-button {
-    background-color: #ff9ed6;
+    margin-left: 220px;
+    border: 1px solid red;
+    margin-top: 30px;
+    background-color: #FFE3F7;
     color: white;
     border: none;
     padding: 10px 20px;
     cursor: pointer;
     border-radius: 30px;
-    border-top-left-radius: 30px;
-    border-top-right-radius: 30px;
-    border-bottom-right-radius: 30px;
-    border-bottom-left-radius: 30px;
-    transition: background-color 0.3s;
     align-items: center;
 }
 
-.next-button2 {
-    background-color: #ff9ed6;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    border-radius: 30px;
-    border-top-left-radius: 30px;
-    border-top-right-radius: 30px;
-    border-bottom-right-radius: 30px;
-    border-bottom-left-radius: 30px;
-    transition: background-color 0.3s;
-    margin-right: 0px;
+.next-button:hover {
+    background-color: #FFB2E6; /* hover 시 변경할 배경색 */
 }
 
 .back-button {
@@ -74,7 +61,7 @@
 }
 
 .back-button:hover {
-    background-color: #ff9ed6;
+    background-color: #FFE3F7;
     transform: scale(1.05);
 }
 
@@ -105,10 +92,6 @@
     font-size: 1rem;
 }
 
-
-
-
-
 .friend-invite-form {
     width: 100%;
     display: flex; 
@@ -122,7 +105,7 @@
 }
 
 .friend-invite-button {
-    background-color: #ff9ed6;
+    background-color: #FFE3F7;
     width: 10%;
     height: 4.5vh;
     color: white;
@@ -146,10 +129,41 @@
 
 
 .friend-remove-button {
-    background-color: #ff9ed6;
+    background-color: #FFE3F7;
     width: 30px;
     height: 20px;
     color: white;
     border: none;
     border-radius: 10%;
+}
+
+.calender-custom {
+    border: 2px solid #FFE3F7;
+    margin-left: 70px;
+}
+
+/* step5 스타일 */
+.modal-image-container {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+}
+
+/* 회전 애니메이션 */
+.rotating-image {
+    width: 60px; 
+    height: 60px;
+    animation: rotate 2s linear infinite;
+}
+
+/* 애니메이션 정의 */
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }

@@ -1,7 +1,9 @@
-const API_URL_LOGIN = 'https://www.daebak.store/auth/login';
-const API_URL_SIGNUP = 'https://www.daebak.store/member';
-const API_URL_USER_SESSION = 'https://www.daebak.store/participants/searchparticipant?searchedname=';
-const API_URL_LOGIN_CHECK = 'https://www.daebak.store/auth/logincheck';
+import { SERVER_API_URL } from "./api";
+
+const API_URL_LOGIN = `${SERVER_API_URL}/auth/login`;
+const API_URL_SIGNUP = `${SERVER_API_URL}/member`;
+const API_URL_USER_SESSION = `${SERVER_API_URL}/participants/searchparticipant?searchedname=`;
+const API_URL_LOGIN_CHECK = `${SERVER_API_URL}/auth/logincheck`;
 
 // 로그인 함수
 export const login = async (userid, password) => {

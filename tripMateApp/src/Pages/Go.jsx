@@ -8,6 +8,7 @@ import 'react-calendar/dist/Calendar.css';
 import './Go.css';
 import { validateFriendId } from '../Services/authService';
 import { createTrip, inviteFriend } from '../Services/tripService';
+import timerImage from "../assets/timer.png";
 
 export default function Go() {
     const navigate = useNavigate();
@@ -137,11 +138,9 @@ export default function Go() {
                                     value={title}
                                     onChange={(e) => setTitle(e.target.value)}
                                 />
-                                <div className="modal-buttons">
                                     <button className="next-button" onClick={handleNextStep}>
                                         다음
                                     </button>
-                                </div>
                             </>
                         )}
     
@@ -164,6 +163,7 @@ export default function Go() {
                         )}
     
                         {step === 3 && (
+                            <>
                             <div className="time-container">
                                 <h2>STEP 3: 여행 시간을 설정하세요</h2>
                                 <input
@@ -176,13 +176,15 @@ export default function Go() {
                                     value={endTime}
                                     onChange={(e) => setEndTime(e.target.value)}
                                 />
-                                <div className="modal-buttons">
+                                
+                            </div>
+                            <div className="modal-buttons">
                                     <button className="back-button" onClick={handlePreviousStep}></button>
                                     <button className="next-button" onClick={handleNextStep}>
                                         다음
                                     </button>
                                 </div>
-                            </div>
+                            </>
                         )}
     
                         {!isSolo && step === 4 && (
@@ -224,14 +226,21 @@ export default function Go() {
                         )}
     
                         {step === 5 && (
-                            <>
-                                <h2>모든 설정이 완료되었습니다!</h2>
-                                <p>잠시만 기다려 주세요...</p>
-                                <div className="modal-buttons">
-                                    <button className="back-button" onClick={handlePreviousStep}></button>
-                                </div>
-                            </>
-                        )}
+                        <>
+                            <h2>모든 설정이 완료되었습니다!</h2>
+                            {/* <p className='wait-text'>잠시만 기다려 주세요...</p> */}
+                            <div className="modal-image-container">
+                                <img 
+                                    src={timerImage} 
+                                    alt="로딩 이미지" 
+                                    className="rotating-image"
+                                />
+                            </div>
+                            <div className="modal-buttons">
+                                <button className="back-button" onClick={handlePreviousStep}></button>
+                            </div>
+                        </>
+                    )}
                     </Modal>
                 )}
             </div>

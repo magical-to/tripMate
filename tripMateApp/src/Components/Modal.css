@@ -58,23 +58,6 @@
   margin-top: 20px;
 }
 
-/* 다음 버튼 */
-.next-button {
-  background-color: pink;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  cursor: pointer;
-  border-radius: 30px;
-  transition: background-color 0.3s;
-  margin-left: 200px;
-}
-
-/* 버튼에 마우스를 올렸을 때의 효과 */
-.next-button:hover {
-  background-color: darkpink;
-}
-
 /* 친구 목록 스타일 */
 ul {
   list-style-type: none;
@@ -85,6 +68,3 @@ ul li {
   padding: 5px 0;
   border-bottom: 1px solid #ddd;
 }
-
-
-
